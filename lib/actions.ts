@@ -84,18 +84,30 @@ export async function signupAction(formData: FormData) {
         const passwordHash = await bcrypt.hash(password, 10)
 
         // Create
-        // Create
-        await prisma.customer.create({
+        // Create user
+        const newUser = await prisma.customer.create({
             data: {
                 name: sanitizedName,
                 email: sanitizedEmail,
                 phone: sanitizedPhone,
                 passwordHash,
                 role: 'customer'
-            }
+            },
         })
 
-        return { success: true }
+        // Send Welcome Email
+        if (newUser.email) {
+            const { getWelcomeEmailTemplate } = await import('@/lib/mail-templates');
+            const { sendEmail } = await import('@/lib/mail');
+
+            await sendEmail({
+                to: newUser.email,
+                subject: 'أهلاً بك في BloB.JO! 🎨',
+                html: getWelcomeEmailTemplate(newUser.name),
+            });
+        }
+
+        return { success: true, message: 'تم إنشاء الحساب بنجاح' }
     } catch (error) {
         console.error('Signup error:', error)
         return { error: 'Failed to create account.' }

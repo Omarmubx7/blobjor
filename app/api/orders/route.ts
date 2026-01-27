@@ -233,7 +233,6 @@ export async function POST(request: Request) {
         customerCity,
         totalPrice,
         shippingCost,
-        shippingCost,
         paymentMethod,
         notes: notes || null,
         couponId: validCouponId,

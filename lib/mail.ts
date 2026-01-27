@@ -1,0 +1,36 @@
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+const FROM_EMAIL = 'onboarding@resend.dev'; // Use this for testing until domain is verified.
+// Once you verify domain 'blob.jo', change to 'info@blob.jo'
+
+export async function sendEmail({
+    to,
+    subject,
+    html,
+}: {
+    to: string;
+    subject: string;
+    html: string;
+}) {
+    if (!process.env.RESEND_API_KEY) {
+        console.error("❌ RESEND_API_KEY is missing");
+        return { success: false, error: "Missing API Key" };
+    }
+
+    try {
+        const data = await resend.emails.send({
+            from: `BloB.JO <${FROM_EMAIL}>`,
+            to: [to],
+            subject: subject,
+            html: html,
+        });
+
+        console.log(`✅ Email sent to ${to}:`, data);
+        return { success: true, data };
+    } catch (error) {
+        console.error("❌ Failed to send email:", error);
+        return { success: false, error };
+    }
+}
