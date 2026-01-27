@@ -1,0 +1,24 @@
+import { Metadata } from "next"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
+import DesignerWrapper from "@/components/designer/designer-wrapper"
+
+export const metadata: Metadata = {
+  title: "Design Lab - صمم بنفسك | BloB.JO",
+  description: "صمم هودي أو كوب مخصص بأسلوبك الخاص. أداة تصميم احترافية مع معاينة واقعية فورية.",
+  openGraph: {
+    title: "Design Lab - صمم بنفسك | BloB.JO",
+    description: "أداة تصميم احترافية مع معاينة واقعية لمنتجاتك المخصصة",
+    images: ["/og-design-lab.png"],
+  },
+}
+
+export default function DesignLabPage() {
+  return (
+    <main className="min-h-screen bg-slate-900">
+      <Header />
+      <DesignerWrapper />
+      <Footer />
+    </main>
+  )
+}

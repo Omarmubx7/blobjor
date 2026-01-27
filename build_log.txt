@@ -1,0 +1,32 @@
+
+> my-v0-project@0.1.0 build
+> next build
+
+   Γû▓ Next.js 16.0.10 (Turbopack)
+   - Environments: .env
+
+ ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./app/design-lab/page.tsx:6:27
+Ecmascript file had an error
+   4 | import dynamic from 'next/dynamic'
+   5 |
+>  6 | const CustomDesignerPro = dynamic(
+     |                           ^^^^^^^^
+>  7 |   () => import('@/components/designer').then((mod) => mod.CustomDesignerPro),
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  8 |   { ssr: false }
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  9 | )
+     | ^^
+  10 |
+  11 | export const metadata: Metadata = {
+  12 |   title: "Design Lab - ╪╡┘à┘à ╪¿┘å┘ü╪│┘â | BloB.JO",
+
+`ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a Client Component.
+
+
+    at <unknown> (./app/design-lab/page.tsx:6:27)
