@@ -621,8 +621,8 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="font-body text-sm text-muted-foreground">التوصيل</span>
-                    <span className={`font-body text-sm ${deliveryFee === 0 ? "text-success" : "text-foreground"}`}>
-                      {deliveryFee === 0 ? "مجاني" : `${deliveryFee} JD`}
+                    <span className={`font-body text-sm ${Number(deliveryFee) === 0 ? "text-success" : "text-foreground"}`}>
+                      {Number(deliveryFee) === 0 ? "مجاني" : `${deliveryFee} JD`}
                     </span>
                   </div>
 
