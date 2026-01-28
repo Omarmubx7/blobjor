@@ -23,7 +23,7 @@ export interface CustomDesignData {
 }
 
 export interface CartItem {
-  id: number
+  id: string | number
   title: string
   titleAr: string
   price: number
@@ -39,8 +39,8 @@ export interface CartItem {
 interface CartContextType {
   items: CartItem[]
   addItem: (item: Omit<CartItem, "quantity">) => void
-  removeItem: (id: number, size: string) => void
-  updateQuantity: (id: number, size: string, quantity: number) => void
+  removeItem: (id: string | number, size: string) => void
+  updateQuantity: (id: string | number, size: string, quantity: number) => void
   clearCart: () => void
   isCartOpen: boolean
   setIsCartOpen: (open: boolean) => void
@@ -100,13 +100,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsCartOpen(true)
   }
 
-  const removeItem = (id: number, size: string) => {
+  const removeItem = (id: string | number, size: string) => {
     setItems((currentItems) =>
       currentItems.filter((item) => !(item.id === id && item.size === size))
     )
   }
 
-  const updateQuantity = (id: number, size: string, quantity: number) => {
+  const updateQuantity = (id: string | number, size: string, quantity: number) => {
     if (quantity <= 0) {
       removeItem(id, size)
       return
