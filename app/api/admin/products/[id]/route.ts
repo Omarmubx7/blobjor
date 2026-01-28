@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params
-    
+
     const product = await prisma.product.findUnique({
       where: { id },
       include: {
@@ -99,7 +99,7 @@ export async function PUT(
     const oldPublicIds = existingProduct.images
       .filter((img: { publicId: string | null }) => img.publicId)
       .map((img: { publicId: string | null }) => img.publicId!)
-    
+
     const newPublicIds = images
       ?.filter((img: { publicId?: string }) => img.publicId)
       .map((img: { publicId: string }) => img.publicId) || []
@@ -117,7 +117,12 @@ export async function PUT(
       where: { productId: id },
     })
 
-    // Update product with new images
+    // Delete existing variants
+    await prisma.productVariant.deleteMany({
+      where: { productId: id },
+    })
+
+    // Update product with new images and variants
     const product = await prisma.product.update({
       where: { id },
       data: {
@@ -138,10 +143,20 @@ export async function PUT(
             sortOrder: img.sortOrder,
           })),
         } : undefined,
+        variants: body.variants?.length > 0 ? {
+          create: body.variants.map((v: { color: string; size: string; stock: number; sku?: string; isActive?: boolean }) => ({
+            color: v.color,
+            size: v.size,
+            stock: v.stock,
+            sku: v.sku || `${slug}-${v.color}-${v.size}`.toUpperCase(),
+            isActive: v.isActive ?? true,
+          }))
+        } : undefined,
       },
       include: {
         category: true,
         images: true,
+        variants: true,
       },
     })
 

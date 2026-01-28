@@ -88,10 +88,20 @@ export async function POST(request: Request) {
             sortOrder: img.sortOrder,
           })),
         } : undefined,
+        variants: body.variants?.length > 0 ? {
+          create: body.variants.map((v: { color: string; size: string; stock: number; sku?: string; isActive?: boolean }) => ({
+            color: v.color,
+            size: v.size,
+            stock: v.stock,
+            sku: v.sku || `${slug}-${v.color}-${v.size}`.toUpperCase(),
+            isActive: v.isActive ?? true,
+          }))
+        } : undefined,
       },
       include: {
         category: true,
         images: true,
+        variants: true,
       },
     })
 

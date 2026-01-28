@@ -1,0 +1,21 @@
+Testing database connection...
+Initial Admin User Count: 1
+Admin exists: admin@blob.jo
+Tables found: [
+  { table_name: 'admin_users' },
+  { table_name: 'admin_sessions' },
+  { table_name: 'product_variants' },
+  { table_name: 'product_images' },
+  { table_name: 'customers' },
+  { table_name: 'orders' },
+  { table_name: 'coupons' },
+  { table_name: 'categories' },
+  { table_name: 'status_history' },
+  { table_name: 'homepage_sections' },
+  { table_name: 'faqs' },
+  { table_name: 'settings' },
+  { table_name: 'media' },
+  { table_name: 'custom_designs' },
+  { table_name: 'products' },
+  { table_name: 'order_items' }
+]

@@ -8,12 +8,14 @@ import { useCart } from "@/contexts/cart-context"
 import { useToast } from "@/contexts/toast-context"
 import { SizeChartModal } from "@/components/designer/size-chart-modal"
 
+import { Product as PrismaProduct, ProductImage, Category as PrismaCategory } from "@prisma/client"
+
 type Category = "hoodies" | "mugs" | "scarves" | "keychains" | "oldmoney"
 type SortOption = "newest" | "price-low" | "price-high" | "popular"
 type SubCategory = "all" | "anime" | "movies" | "series" | "sports" | "jordan" | "other"
 
-interface Product {
-  id: number
+export interface ProductDisplay {
+  id: string
   title: string
   titleAr: string
   category: Category
@@ -24,72 +26,13 @@ interface Product {
   sale: boolean
   isBestseller?: boolean
   isNew?: boolean
+  colors?: string[] // JSON string or array
+  sizes?: string[] // JSON string or array
 }
 
-const products: Product[] = [
-  // Anime
-  { id: 1, title: "Naruto", titleAr: "هودي ناروتو", category: "hoodies", subCategory: "anime", price: 12, originalPrice: null, image: "/images/Naruto.png", sale: false, isBestseller: true },
-  { id: 2, title: "One Piece Black", titleAr: "هودي ون بيس أسود", category: "hoodies", subCategory: "anime", price: 12, originalPrice: null, image: "/images/One%20piece%20black.png", sale: false },
-  { id: 3, title: "One Piece", titleAr: "هودي ون بيس", category: "hoodies", subCategory: "anime", price: 12, originalPrice: null, image: "/images/One%20piece.png", sale: false },
-  { id: 4, title: "One Piece White", titleAr: "هودي ون بيس أبيض", category: "hoodies", subCategory: "anime", price: 12, originalPrice: null, image: "/images/onepeice%20white.png", sale: false, isNew: true },
-
-  // Movies
-  { id: 6, title: "Batman Black", titleAr: "هودي باتمان أسود", category: "hoodies", subCategory: "movies", price: 12, originalPrice: null, image: "/images/Batman%20Black.png", sale: false },
-  { id: 7, title: "Batman White", titleAr: "هودي باتمان أبيض", category: "hoodies", subCategory: "movies", price: 12, originalPrice: null, image: "/images/Batman%20White.png", sale: false },
-  { id: 8, title: "Harry Potter", titleAr: "هودي هاري بوتر", category: "hoodies", subCategory: "movies", price: 12, originalPrice: null, image: "/images/Harry%20Potter.png", sale: false, isBestseller: true },
-  { id: 9, title: "Spider-Man", titleAr: "هودي سبايدر مان", category: "hoodies", subCategory: "movies", price: 12, originalPrice: null, image: "/images/Spider-man%20hoodie.png", sale: false, isNew: true },
-  { id: 10, title: "Minecraft", titleAr: "هودي ماينكرافت", category: "hoodies", subCategory: "movies", price: 12, originalPrice: null, image: "/images/minecraft%20front.png", sale: false },
-
-  // Series
-  { id: 11, title: "Friends Black", titleAr: "هودي فريندز أسود", category: "hoodies", subCategory: "series", price: 12, originalPrice: null, image: "/images/frends%20hoodie%20black.png", sale: false },
-  { id: 12, title: "Friends Hoodie", titleAr: "هودي فريندز", category: "hoodies", subCategory: "series", price: 12, originalPrice: null, image: "/images/Friends%20hoodie%20black.%20.png", sale: false },
-  { id: 13, title: "Friends Classic", titleAr: "هودي فريندز كلاسيك", category: "hoodies", subCategory: "series", price: 12, originalPrice: null, image: "/images/frinends%20hoodie%20black.png", sale: false, isBestseller: true },
-  { id: 14, title: "Game of Thrones", titleAr: "هودي صراع العروش", category: "hoodies", subCategory: "series", price: 12, originalPrice: null, image: "/images/Game%20of%20Thrones.png", sale: false },
-  { id: 15, title: "Game of Thrones Quote", titleAr: "هودي اقتباس صراع العروش", category: "hoodies", subCategory: "series", price: 12, originalPrice: null, image: "/images/Game%20of%20ThronesQuote%20.png", sale: false },
-  { id: 16, title: "Stranger Things", titleAr: "هودي أشياء غريبة", category: "hoodies", subCategory: "series", price: 12, originalPrice: null, image: "/images/Stranger%20things%20Hoodie.png", sale: false },
-  { id: 17, title: "Breaking Bad", titleAr: "هودي بريكنج باد", category: "hoodies", subCategory: "series", price: 12, originalPrice: null, image: "/images/Breaking%20Bad.png", sale: false },
-  { id: 18, title: "I Am The Danger", titleAr: "هودي أنا الخطر", category: "hoodies", subCategory: "series", price: 12, originalPrice: null, image: "/images/I'm%20not%20a%20danger,%20I%20am%20the%20danger.png", sale: false },
-  { id: 19, title: "Say My Name", titleAr: "هودي قل اسمي", category: "hoodies", subCategory: "series", price: 12, originalPrice: null, image: "/images/Say%20my%20name.png", sale: false },
-
-  // Sports
-  { id: 20, title: "Barcelona Black", titleAr: "هودي برشلونة أسود", category: "hoodies", subCategory: "sports", price: 12, originalPrice: null, image: "/images/Barcelona%20Black.png", sale: false },
-  { id: 21, title: "Barcelona White", titleAr: "هودي برشلونة أبيض", category: "hoodies", subCategory: "sports", price: 12, originalPrice: null, image: "/images/Barcelona%20White.png", sale: false },
-  { id: 22, title: "Real Madrid", titleAr: "هودي ريال مدريد", category: "hoodies", subCategory: "sports", price: 12, originalPrice: null, image: "/images/Real%20Madrid.png", sale: false },
-  { id: 23, title: "Real Madrid Kit", titleAr: "هودي طقم ريال مدريد", category: "hoodies", subCategory: "sports", price: 12, originalPrice: null, image: "/images/Real%20Madrid%20kit.png", sale: false, isNew: true },
-  { id: 24, title: "CR7", titleAr: "هودي كريستيانو رونالدو", category: "hoodies", subCategory: "sports", price: 12, originalPrice: null, image: "/images/CR7%20front.png", sale: false, isBestseller: true },
-  { id: 25, title: "Messi", titleAr: "هودي ميسي", category: "hoodies", subCategory: "sports", price: 12, originalPrice: null, image: "/images/messi%20front.png", sale: false, isBestseller: true },
-  { id: 26, title: "Mercedes F1 Black", titleAr: "هودي مرسيدس F1 أسود", category: "hoodies", subCategory: "sports", price: 12, originalPrice: null, image: "/images/Mercedes%20f1.png", sale: false },
-  { id: 27, title: "Mercedes F1 White", titleAr: "هودي مرسيدس F1 أبيض", category: "hoodies", subCategory: "sports", price: 12, originalPrice: null, image: "/images/Mercedes%20white.png", sale: false },
-  { id: 28, title: "Red Bull F1", titleAr: "هودي ريد بول F1", category: "hoodies", subCategory: "sports", price: 12, originalPrice: null, image: "/images/Redbull%20f1.png", sale: false, isNew: true },
-  { id: 29, title: "Jordan Team", titleAr: "هودي منتخب الأردن", category: "hoodies", subCategory: "sports", price: 12, originalPrice: null, image: "/images/JordanTeam.png", sale: false },
-
-  // Jordan/Palestine
-  { id: 30, title: "Palestine", titleAr: "هودي فلسطين", category: "hoodies", subCategory: "jordan", price: 12, originalPrice: null, image: "/images/Palestine%20Front.png", sale: false, isBestseller: true },
-]
-
-const mugProducts: Product[] = [
-  { id: 101, title: "Anime Mug", titleAr: "كوب أنمي", category: "mugs", subCategory: "anime", price: 3, originalPrice: null, image: "/images/anime%20mug.png", sale: false },
-  { id: 102, title: "Baby Yoda Mug", titleAr: "كوب بيبي يودا", category: "mugs", subCategory: "movies", price: 3, originalPrice: null, image: "/images/baby%20yuda%20mug.png", sale: false, isBestseller: true },
-  { id: 103, title: "Batman Mug", titleAr: "كوب باتمان", category: "mugs", subCategory: "movies", price: 3, originalPrice: null, image: "/images/batman%20mug.png", sale: false },
-  { id: 104, title: "Friends Mug", titleAr: "كوب فريندز", category: "mugs", subCategory: "series", price: 3, originalPrice: null, image: "/images/friends%20mug.png", sale: false, isBestseller: true },
-  { id: 105, title: "Heisenberg Mug", titleAr: "كوب هايزنبرج", category: "mugs", subCategory: "series", price: 3, originalPrice: null, image: "/images/Heisenberg%20Mug.png", sale: false },
-  { id: 106, title: "Hellfire Club Mug", titleAr: "كوب نادي الجحيم", category: "mugs", subCategory: "series", price: 3, originalPrice: null, image: "/images/Hellfire%20mug.png", sale: false, isNew: true },
-  { id: 107, title: "Quote Mug", titleAr: "كوب اقتباس", category: "mugs", subCategory: "other", price: 3, originalPrice: null, image: "/images/quote%20mug.png", sale: false },
-  { id: 108, title: "Stranger Things Mug", titleAr: "كوب أشياء غريبة", category: "mugs", subCategory: "series", price: 3, originalPrice: null, image: "/images/Stranger%20things%20mug.png", sale: false },
-  { id: 109, title: "Stranger Things Red Mug", titleAr: "كوب أشياء غريبة أحمر", category: "mugs", subCategory: "series", price: 3, originalPrice: null, image: "/images/Stranger%20thingsred%20mug.png", sale: false },
-]
-
-const scarfProducts: Product[] = [
-  // Scarves - add your scarf products here
-]
-
-const keychainProducts: Product[] = [
-  // Keychains - add your keychain products here
-]
-
-const oldmoneyProducts: Product[] = [
-  // Old Money - add your old money products here
-]
+interface ProductsProps {
+  products: ProductDisplay[]
+}
 
 const subCategories: { value: SubCategory; label: string; labelEn: string }[] = [
   { value: "all", label: "الكل", labelEn: "All" },
@@ -130,7 +73,7 @@ function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue
 }
 
-export function Products() {
+export function Products({ products = [] }: ProductsProps) {
   const { ref, isVisible } = useScrollAnimation()
   const { addItem } = useCart()
   const { addToast } = useToast()
@@ -140,23 +83,30 @@ export function Products() {
   const [searchQuery, setSearchQuery] = useState("")
   const [showFilters, setShowFilters] = useState(false)
   const [gridCols, setGridCols] = useState<3 | 4>(4)
-  const [lightboxProduct, setLightboxProduct] = useState<Product | null>(null)
+  const [lightboxProduct, setLightboxProduct] = useState<ProductDisplay | null>(null)
   const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE)
-  const [addToCartProduct, setAddToCartProduct] = useState<Product | null>(null)
+  const [addToCartProduct, setAddToCartProduct] = useState<ProductDisplay | null>(null)
   const [selectedSize, setSelectedSize] = useState("")
-  const [showAddedFeedback, setShowAddedFeedback] = useState<number | null>(null)
+  const [showAddedFeedback, setShowAddedFeedback] = useState<string | null>(null)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [showSizeChart, setShowSizeChart] = useState(false)
 
   // Debounced search query
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
-  const allProducts = activeCategory === "hoodies" ? products : activeCategory === "mugs" ? mugProducts : activeCategory === "scarves" ? scarfProducts : activeCategory === "keychains" ? keychainProducts : oldmoneyProducts
-  const hoodiesCount = products.length
-  const mugsCount = mugProducts.length
-  const scarvesCount = scarfProducts.length
-  const keychainsCount = keychainProducts.length
-  const oldmoneyCount = oldmoneyProducts.length
+  // Filter products by category first
+  const allProducts = useMemo(() => {
+    return products.filter(p => p.category === activeCategory)
+  }, [products, activeCategory])
+
+  const currentCategoryCount = allProducts.length
+
+  // Calculate counts for badges
+  const hoodiesCount = products.filter(p => p.category === "hoodies").length
+  const mugsCount = products.filter(p => p.category === "mugs").length
+  const scarvesCount = products.filter(p => p.category === "scarves").length
+  const keychainsCount = products.filter(p => p.category === "keychains").length
+  const oldmoneyCount = products.filter(p => p.category === "oldmoney").length
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -185,11 +135,11 @@ export function Products() {
         result.sort((a, b) => b.price - a.price)
         break
       case "popular":
-        result.sort((a, b) => (b.isBestseller ? 1 : 0) - (a.isBestseller ? 1 : 0))
+        result.sort((a, b) => (Number(b.isBestseller) || 0) - (Number(a.isBestseller) || 0))
         break
       case "newest":
       default:
-        result.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0))
+        result.sort((a, b) => (Number(b.isNew) || 0) - (Number(a.isNew) || 0))
         break
     }
 
@@ -214,7 +164,7 @@ export function Products() {
     setVisibleItems(ITEMS_PER_PAGE)
   }
 
-  const openLightbox = (product: Product) => {
+  const openLightbox = (product: ProductDisplay) => {
     setLightboxProduct(product)
   }
 
@@ -222,7 +172,7 @@ export function Products() {
     setLightboxProduct(null)
   }
 
-  const openAddToCartModal = (product: Product) => {
+  const openAddToCartModal = (product: ProductDisplay) => {
     setAddToCartProduct(product)
     setSelectedSize(product.category === "mugs" ? "Standard" : "")
   }
@@ -258,7 +208,7 @@ export function Products() {
     closeAddToCartModal()
   }
 
-  const handleQuickAdd = (product: Product, e: React.MouseEvent) => {
+  const handleQuickAdd = (product: ProductDisplay, e: React.MouseEvent) => {
     e.stopPropagation()
     if (product.category === "mugs") {
       // Mugs don't need size selection
@@ -738,7 +688,11 @@ export function Products() {
               )}
 
               <div className="flex flex-wrap gap-2">
-                {(addToCartProduct.category === "hoodies" ? hoodieSizes : mugSizes).map((size) => (
+                {/* Use product specific sizes if available, else fall back to defaults */}
+                {(addToCartProduct.sizes && Array.isArray(addToCartProduct.sizes) && addToCartProduct.sizes.length > 0
+                  ? addToCartProduct.sizes
+                  : (addToCartProduct.category === "hoodies" ? hoodieSizes : mugSizes)
+                ).map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
