@@ -1,6 +1,8 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const dynamic = 'force-dynamic'
 import Image from 'next/image'
 import prisma from '@/lib/prisma'
 import { Card, CardContent } from '@/components/ui/card'

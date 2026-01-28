@@ -1,5 +1,7 @@
 import { Suspense } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+
+export const dynamic = 'force-dynamic'
 import { Skeleton } from '@/components/ui/skeleton'
 import prisma from '@/lib/prisma'
 import {
@@ -143,7 +145,7 @@ async function DashboardContent() {
         />
         <StatCard
           title="معدل الإنجاز"
-          value={stats.totalOrders > 0 
+          value={stats.totalOrders > 0
             ? `${Math.round((stats.completedOrders / stats.totalOrders) * 100)}%`
             : '0%'
           }

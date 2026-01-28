@@ -1,6 +1,8 @@
 import { ProductForm } from '@/components/admin/product-form'
 import prisma from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 async function getCategories() {
   return prisma.category.findMany({
     where: { isActive: true },
