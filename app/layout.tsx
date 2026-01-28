@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { Montserrat, Cairo } from 'next/font/google'
 import { CartProvider } from '@/contexts/cart-context'
 import { ToastProvider } from '@/contexts/toast-context'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { defaultMetadata, getOrganizationSchema, getWebsiteSchema, getLocalBusinessSchema } from '@/lib/seo-config'
 import './globals.css'
@@ -79,6 +80,7 @@ export default async function RootLayout({
             <AuthProvider>
               <MainLayout user={user}>
                 {children}
+                <SpeedInsights />
               </MainLayout>
             </AuthProvider>
           </CartProvider>
