@@ -30,8 +30,8 @@ interface Category {
 interface ProductImage {
   id?: string
   url: string
-  publicId?: string
-  altText?: string
+  publicId?: string | null
+  altText?: string | null
   sortOrder: number
 }
 
@@ -40,7 +40,7 @@ interface ProductVariant {
   color: string
   size: string
   stock: number
-  sku?: string
+  sku?: string | null
   isActive: boolean
 }
 
@@ -479,8 +479,8 @@ export function ProductForm({ categories, product }: ProductFormProps) {
               <div
                 {...getRootProps()}
                 className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${isDragActive
-                    ? 'border-primary bg-primary/5'
-                    : 'border-muted-foreground/25 hover:border-primary/50'
+                  ? 'border-primary bg-primary/5'
+                  : 'border-muted-foreground/25 hover:border-primary/50'
                   } ${uploadingImages ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <input {...getInputProps()} />
