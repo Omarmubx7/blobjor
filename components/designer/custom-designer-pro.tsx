@@ -809,41 +809,16 @@ export default function CustomDesignerPro() {
             )}
           </div>
         </aside>
-        <Maximize2 size={16} /> جدول المقاسات
-      </button>
+      </div>
+
+      {/* Modals */}
+      <SizeChartModal
+        open={sizeChartOpen}
+        onClose={() => setSizeChartOpen(false)}
+        productType={productType}
+      />
+
     </div>
-  )
-}
-
-{/* Summary */ }
-<div className="mt-auto bg-white/5 rounded-xl p-4 border border-white/10">
-  <div className="flex justify-between items-center mb-2">
-    <span className="text-sm text-white/50">سعر المنتج</span>
-    <span className="font-medium">{currentProduct.price} JD</span>
-  </div>
-  <div className="flex justify-between items-center mb-2">
-    <span className="text-sm text-white/50">الطباعة</span>
-    <span className="font-medium text-cyan-400">مجاناً</span>
-  </div>
-  <div className="h-px bg-white/10 my-3" />
-  <div className="flex justify-between items-center">
-    <span className="font-bold">المجموع</span>
-    <span className="text-xl font-bold">{currentProduct.price} JD</span>
-  </div>
-</div>
-
-        </aside >
-
-      </div >
-
-  {/* Modals */ }
-  < SizeChartModal
-open = { sizeChartOpen }
-onClose = {() => setSizeChartOpen(false)}
-productType = { productType }
-  />
-
-    </div >
   )
 }
 
