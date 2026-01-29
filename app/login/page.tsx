@@ -59,7 +59,12 @@ export default function LoginPage() {
                     <div>
                         <div className="flex justify-between items-center mb-2">
                             <label className="block text-xs font-bold text-slate-500 uppercase">كلمة المرور</label>
-                            <a href="#" className="text-xs text-cyan-500 hover:text-cyan-600">نسيت كلمة المرور؟</a>
+                            <Link
+                                href="/forgot-password"
+                                className="text-xs text-cyan-600 hover:text-cyan-700 font-medium"
+                            >
+                                نسيت كلمة المرور؟
+                            </Link>
                         </div>
                         <input
                             name="password"

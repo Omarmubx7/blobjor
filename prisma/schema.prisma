@@ -146,6 +146,8 @@ model Customer {
   passwordHash  String?        @map("password_hash") // Optional because existing users might not have it
   role          String         @default("customer") // customer, admin
   emailVerified DateTime?      @map("email_verified")
+  resetToken    String?        @unique @map("reset_token")
+  resetTokenExpiry DateTime?   @map("reset_token_expiry")
   image         String?
   address       String?
   city          String         @default("عمّان")

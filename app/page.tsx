@@ -63,9 +63,14 @@ export default async function Home() {
     }
   })
 
+  const heroSection = await prisma.homepageSection.findUnique({
+    where: { sectionKey: 'hero' },
+    select: { title: true, subtitle: true }
+  })
+
   return (
     <main className="min-h-screen">
-      <Hero />
+      <Hero content={heroSection} />
       <HowItWorks />
       <WhyBlob />
       <Products products={mappedProducts} />

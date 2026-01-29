@@ -5,7 +5,15 @@ import { Rocket, Sparkles, Truck, BadgePercent, ChevronDown, Star } from "lucide
 import { useEffect, useState } from "react"
 
 // Force rebuild
-export function Hero() {
+
+interface HeroProps {
+  content?: {
+    title?: string
+    subtitle?: string
+  } | null
+}
+
+export function Hero({ content }: HeroProps) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -22,6 +30,17 @@ export function Hero() {
   const handleScrollToCustom = () => {
     window.location.href = "/design-lab"
   }
+
+  const defaultTitle = (
+    <>
+      <span className="block text-foreground mb-2">Sports & Anime Hoodies</span>
+      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+        for fans, gamers, and athletes
+      </span>
+    </>
+  )
+
+  const defaultSubtitle = "Sports & Anime Streetwear for Jordan and the Middle East"
 
   return (
     <section id="hero" className="relative min-h-[90vh] overflow-hidden bg-background pt-24 lg:pt-32">
@@ -41,14 +60,15 @@ export function Hero() {
 
           {/* Headlines */}
           <h1 className="font-sans font-black text-5xl md:text-7xl lg:text-8xl leading-tight mb-6">
-            <span className="block text-foreground mb-2">Sports & Anime Hoodies</span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-              for fans, gamers, and athletes
-            </span>
+            {content?.title ? (
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+                {content.title}
+              </span>
+            ) : defaultTitle}
           </h1>
 
           <p className="font-sans text-lg md:text-2xl font-bold uppercase tracking-widest text-muted-foreground mb-10">
-            Sports & Anime Streetwear for Jordan and the Middle East
+            {content?.subtitle || defaultSubtitle}
           </p>
 
           {/* CTAs */}
@@ -77,3 +97,4 @@ export function Hero() {
     </section>
   )
 }
+

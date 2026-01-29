@@ -29,6 +29,7 @@ const navigation = [
   // Admin Navigation Links
   { name: 'لوحة التحكم', href: '/admin', icon: LayoutDashboard },
   { name: 'المنتجات', href: '/admin/products', icon: Package },
+  { name: 'تخصيص المتجر', href: '/admin/homepage', icon: FileImage },
   { name: 'الطلبات', href: '/admin/orders', icon: ShoppingCart },
   { name: 'الإعدادات', href: '/admin/settings', icon: Settings },
 ]
