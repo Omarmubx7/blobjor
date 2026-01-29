@@ -1,24 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { join } from 'path'
-import { writeFile, mkdir } from 'fs/promises'
+import { uploadBase64Image } from '@/lib/cloudinary'
 
 export async function POST(request: NextRequest) {
     try {
         const formData = await request.formData()
 
-        // Prepare directory
-        const uploadDir = join(process.cwd(), 'public', 'uploads', 'designs')
-        await mkdir(uploadDir, { recursive: true })
+        // Helper to upload file to Cloudinary
+        const uploadFile = async (file: File, folder: string = 'designs') => {
+            const buffer = Buffer.from(await file.arrayBuffer())
+            const base64 = buffer.toString('base64')
+            const mimeType = file.type || 'image/png'
+            const dataURI = `data:${mimeType};base64,${base64}`
+            return await uploadBase64Image(dataURI, folder)
+        }
 
         // Save Preview Image (Mockup)
         const previewFile = formData.get('preview_image') as File
         let previewPath = ''
 
         if (previewFile) {
-            const buffer = Buffer.from(await previewFile.arrayBuffer())
-            const filename = previewFile.name || `preview-${Date.now()}.png`
-            await writeFile(join(uploadDir, filename), buffer)
-            previewPath = `/uploads/designs/${filename}`
+            const result = await uploadFile(previewFile, 'designs/previews')
+            previewPath = result.url
         }
 
         // Save Print Image (High-Res Design Only)
@@ -26,27 +28,23 @@ export async function POST(request: NextRequest) {
         let printPath = ''
 
         if (printFile) {
-            const buffer = Buffer.from(await printFile.arrayBuffer())
-            const filename = printFile.name || `print-${Date.now()}.png`
-            await writeFile(join(uploadDir, filename), buffer)
-            printPath = `/uploads/designs/${filename}`
+            const result = await uploadFile(printFile, 'designs/prints')
+            printPath = result.url
         }
 
         // Save Uploaded Images (Assets)
         const uploadedImagesPaths: string[] = []
         for (const [key, value] of formData.entries()) {
             if (key.startsWith('uploaded_image_') && value instanceof File) {
-                const buffer = Buffer.from(await value.arrayBuffer())
-                const filename = value.name || `asset-${Date.now()}-${Math.random().toString(36).slice(7)}.png`
-                await writeFile(join(uploadDir, filename), buffer)
-                uploadedImagesPaths.push(`/uploads/designs/${filename}`)
+                const result = await uploadFile(value, 'designs/assets')
+                uploadedImagesPaths.push(result.url)
             }
         }
 
         // Get Metadata
-        const designJson = formData.get('design_json')
-        const productType = formData.get('product_type')
-        const price = formData.get('price')
+        // const designJson = formData.get('design_json')
+        // const productType = formData.get('product_type')
+        // const price = formData.get('price')
 
         return NextResponse.json({
             success: true,
