@@ -21,19 +21,23 @@ const FONTS = {
 }
 
 const PRODUCTS = {
-  colors: [
-    { id: 'purple', hex: '#8B5CF6', name: 'أرجواني', image: '/images/hoodie-purple.png' },
-    { id: 'maroon', hex: '#7F1D1D', name: 'أحمر داكن', image: '/images/hoodie-maroon.png' },
-    { id: 'olive', hex: '#3F4C3A', name: 'زيتي', image: '/images/hoodie-olive.png' }, // Approximate hex for olive
-    { id: 'blue', hex: '#2563EB', name: 'أزرق ملكي', image: '/images/hoodie-blue.png' },
-    { id: 'navy', hex: '#1E3A8A', name: 'كحلي', image: '/images/hoodie-navy.png' },
-    { id: 'grey', hex: '#9CA3AF', name: 'رمادي', image: '/images/hoodie-grey.png' },
-    { id: 'white', hex: '#ffffff', name: 'أبيض', image: '/images/hoodie-white.png' },
-    { id: 'black', hex: '#1a1a1a', name: 'أسود', image: '/images/hoodie-black.png' }
-  ],
-  sizes: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'],
-  printArea: { width: 260, height: 320 } // px
-},
+  hoodie: {
+    id: 'hoodie',
+    name: 'هودي',
+    price: 12,
+    colors: [
+      { id: 'purple', hex: '#8B5CF6', name: 'أرجواني', image: '/images/hoodie-purple.png' },
+      { id: 'maroon', hex: '#7F1D1D', name: 'أحمر داكن', image: '/images/hoodie-maroon.png' },
+      { id: 'olive', hex: '#3F4C3A', name: 'زيتي', image: '/images/hoodie-olive.png' }, // Approximate hex for olive
+      { id: 'blue', hex: '#2563EB', name: 'أزرق ملكي', image: '/images/hoodie-blue.png' },
+      { id: 'navy', hex: '#1E3A8A', name: 'كحلي', image: '/images/hoodie-navy.png' },
+      { id: 'grey', hex: '#9CA3AF', name: 'رمادي', image: '/images/hoodie-grey.png' },
+      { id: 'white', hex: '#ffffff', name: 'أبيض', image: '/images/hoodie-white.png' },
+      { id: 'black', hex: '#1a1a1a', name: 'أسود', image: '/images/hoodie-black.png' }
+    ],
+    sizes: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'],
+    printArea: { width: 260, height: 320 } // px
+  },
   mug: {
     id: 'mug',
     name: 'كوب',
