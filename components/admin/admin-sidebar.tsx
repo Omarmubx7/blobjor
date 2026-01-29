@@ -30,8 +30,7 @@ const navigation = [
   { name: 'لوحة التحكم', href: '/admin', icon: LayoutDashboard },
   { name: 'المنتجات', href: '/admin/products', icon: Package },
   { name: 'الطلبات', href: '/admin/orders', icon: ShoppingCart },
-  // { name: 'الصفحة الرئيسية', href: '/admin/homepage', icon: Home }, // TODO: Create this page
-  // { name: 'الإعدادات', href: '/admin/settings', icon: Settings }, // TODO: Create this page
+  { name: 'الإعدادات', href: '/admin/settings', icon: Settings },
 ]
 
 export function AdminSidebar({ admin }: AdminSidebarProps) {
