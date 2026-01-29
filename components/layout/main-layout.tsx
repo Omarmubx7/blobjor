@@ -19,7 +19,7 @@ export function MainLayout({ children, user }: MainLayoutProps) {
         <>
             {!isAdmin && <Header user={user} />}
             {children}
-            {!isAdmin && <Footer />}
+            {!isAdmin && !pathname?.startsWith('/design-lab') && <Footer />}
             {!isAdmin && <CartDrawer />}
         </>
     )

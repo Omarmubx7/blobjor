@@ -9,7 +9,7 @@ export async function sendEmail({
     subject,
     html,
 }: {
-    to: string;
+    to: string | string[];
     subject: string;
     html: string;
 }) {
@@ -21,7 +21,7 @@ export async function sendEmail({
     try {
         const data = await resend.emails.send({
             from: `blobjor.me <${FROM_EMAIL}>`,
-            to: [to],
+            to: Array.isArray(to) ? to : [to],
             subject: subject,
             html: html,
         });

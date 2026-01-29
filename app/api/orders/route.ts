@@ -281,10 +281,10 @@ export async function POST(request: Request) {
           });
         }
 
-        // 2. Send New Order Notification to Admin
-        const ADMIN_EMAIL = 'omarmubaidin@proton.me'; // Updated per user request
+        // 2. Send New Order Notification to Admins
+        const ADMIN_EMAILS = ['omarmubaidin@proton.me', 'Hassanemad8877@gmail.com'];
         await sendEmail({
-          to: ADMIN_EMAIL,
+          to: ADMIN_EMAILS,
           subject: `طلب جديد: #${order.id} - ${customerName}`,
           html: getAdminNewOrderEmailTemplate(order, { name: customerName, phone: customerPhone, address: customerAddress, city: customerCity }),
         });
