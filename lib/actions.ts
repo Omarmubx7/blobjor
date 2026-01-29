@@ -18,7 +18,7 @@ export async function loginAction(formData: FormData) {
         await signIn('credentials', {
             email: formData.get('email'),
             password: formData.get('password'),
-            redirectTo: '/',
+            redirectTo: 'https://www.blobjor.me/',
         })
     } catch (error) {
         if (error instanceof AuthError) {

@@ -24,7 +24,7 @@ export const authConfig = {
             } else if (isLoggedIn) {
                 // Redirect logged-in users away from auth pages
                 if (nextUrl.pathname.startsWith('/login') || nextUrl.pathname.startsWith('/signup')) {
-                    return Response.redirect(new URL('/profile', nextUrl));
+                    return Response.redirect(new URL('https://www.blobjor.me/profile'));
                 }
             }
             return true;
