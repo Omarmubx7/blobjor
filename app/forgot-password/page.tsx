@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader2, Mail, CheckCircle2, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('')
@@ -32,7 +34,8 @@ export default function ForgotPasswordPage() {
                 throw new Error(data.error || 'حدث خطأ ما')
             }
 
-            setIsSubmitted(true)
+            toast.success('تم إرسال رمز التحقق إلى بريدك الإلكتروني')
+            router.push(`/reset-password?email=${encodeURIComponent(email)}`)
         } catch (err: any) {
             setError(err.message)
         } finally {

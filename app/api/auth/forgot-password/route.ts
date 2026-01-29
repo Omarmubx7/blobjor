@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { Resend } from 'resend'
 import { getResetPasswordEmailTemplate } from '@/lib/mail-templates'
-import crypto from 'crypto'
+// crypto removed
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -25,27 +25,25 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: true, message: 'إذا كان البريد الإلكتروني مسجلاً، فسيتم إرسال رابط إعادة التعيين.' })
         }
 
-        // 2. Generate Token
-        const resetToken = crypto.randomBytes(32).toString('hex')
-        const resetTokenExpiry = new Date(Date.now() + 3600000) // 1 hour from now
+        // 2. Generate OTP (6 digits)
+        const otp = Math.floor(100000 + Math.random() * 900000).toString()
+        const resetTokenExpiry = new Date(Date.now() + 3600000) // 1 hour
 
-        // 3. Save to DB
+        // 3. Save to DB (using resetToken field to store OTP)
         await prisma.customer.update({
             where: { id: customer.id },
             data: {
-                resetToken,
+                resetToken: otp,
                 resetTokenExpiry
             }
         })
 
         // 4. Send Email
-        const resetLink = `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password?token=${resetToken}`
-
         await resend.emails.send({
             from: 'BloB.JO <info@blob.jo>',
             to: customer.email!,
-            subject: 'إعادة تعيين كلمة المرور - BloB.JO',
-            html: getResetPasswordEmailTemplate(resetLink),
+            subject: 'رمز التحقق لإعادة تعيين كلمة المرور - BloB.JO',
+            html: getResetPasswordEmailTemplate(otp),
         })
 
         return NextResponse.json({ success: true, message: 'تم إرسال رابط إعادة التعيين' })

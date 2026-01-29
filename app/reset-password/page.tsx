@@ -12,10 +12,13 @@ import { useRouter, useSearchParams } from 'next/navigation'
 function ResetPasswordForm() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const token = searchParams.get('token')
+    const email = searchParams.get('email')
 
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+    const [formData, setFormData] = useState({
+        otp: '',
+        password: '',
+        confirmPassword: ''
+    })
     const [isLoading, setIsLoading] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
     const [error, setError] = useState('')
@@ -24,18 +27,18 @@ function ResetPasswordForm() {
         e.preventDefault()
         setError('')
 
-        if (password !== confirmPassword) {
+        if (formData.password !== formData.confirmPassword) {
             setError('كلمات المرور غير متطابقة')
             return
         }
 
-        if (password.length < 8) {
+        if (formData.password.length < 8) {
             setError('كلمة المرور يجب أن تكون 8 أحرف على الأقل')
             return
         }
 
-        if (!token) {
-            setError('رابط غير صالح. يرجى طلب رابط جديد.')
+        if (!email) {
+            setError('البريد الإلكتروني مفقود. يرجى البدء من جديد.')
             return
         }
 
@@ -45,7 +48,11 @@ function ResetPasswordForm() {
             const res = await fetch('/api/auth/reset-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token, newPassword: password })
+                body: JSON.stringify({
+                    email,
+                    otp: formData.otp,
+                    newPassword: formData.password
+                })
             })
 
             const data = await res.json()
@@ -66,18 +73,15 @@ function ResetPasswordForm() {
         }
     }
 
-    if (!token) {
+    if (!email) {
         return (
             <div className="text-center">
                 <div className="rounded-full bg-red-100 p-3 mx-auto w-fit mb-4 dark:bg-red-900/30">
                     <AlertCircle className="h-8 w-8 text-red-600" />
                 </div>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">رابط غير صالح</h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    الرابط الذي استخدمته غير صالح أو مفقود. يرجى طلب إعادة تعيين كلمة المرور مرة أخرى.
-                </p>
                 <Link href="/forgot-password">
-                    <Button>طلب رابط جديد</Button>
+                    <Button>العودة</Button>
                 </Link>
             </div>
         )
@@ -93,9 +97,6 @@ function ResetPasswordForm() {
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
                     تم تحديث كلمة المرور بنجاح. سيتم تحويلك لصفحة الدخول...
                 </p>
-                <Link href="/login">
-                    <Button className="w-full">تسجيل الدخول الآن</Button>
-                </Link>
             </div>
         )
     }
@@ -107,12 +108,28 @@ function ResetPasswordForm() {
                     تعيين كلمة مرور جديدة
                 </h2>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                    أدخل كلمة المرور الجديدة أدناه.
+                    أدخل رمز التحقق المرسل إلى {email}
                 </p>
             </div>
 
             <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="space-y-4">
+                    <div>
+                        <Label htmlFor="otp">رمز التحقق (OTP)</Label>
+                        <Input
+                            id="otp"
+                            name="otp"
+                            type="text"
+                            required
+                            className="mt-1 text-center text-lg tracking-widest bg-muted/50 font-mono"
+                            placeholder="123456"
+                            maxLength={6}
+                            value={formData.otp}
+                            onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
+                            disabled={isLoading}
+                        />
+                    </div>
+
                     <div>
                         <Label htmlFor="password">كلمة المرور الجديدة</Label>
                         <div className="relative mt-1">
@@ -121,8 +138,8 @@ function ResetPasswordForm() {
                                 name="password"
                                 type="password"
                                 required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={formData.password}
+                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                 disabled={isLoading}
                                 className="pr-10"
                                 placeholder="••••••••"
@@ -142,8 +159,8 @@ function ResetPasswordForm() {
                                 name="confirmPassword"
                                 type="password"
                                 required
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                value={formData.confirmPassword}
+                                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                                 disabled={isLoading}
                                 className="pr-10"
                                 placeholder="••••••••"
