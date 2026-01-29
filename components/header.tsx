@@ -20,7 +20,7 @@ const navLinks: NavLink[] = [
   { href: "#hero", label: "الرئيسية", labelEn: "Home" },
   { href: "#shop", label: "منتجاتنا", labelEn: "Products" },
   { href: "#how-it-works", label: "كيف يعمل", labelEn: "How It Works" },
-  { href: "/about", label: "من نحن", labelEn: "About Us", isPage: true },
+  { href: "/design-lab", label: "صمم منتجك", labelEn: "Design Lab", isPage: true },
   { href: "#contact", label: "اتصل", labelEn: "Contact" },
 ]
 
