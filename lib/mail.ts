@@ -2,8 +2,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM_EMAIL = 'onboarding@resend.dev'; // Use this for testing until domain is verified.
-// Once you verify domain 'blob.jo', change to 'info@blob.jo'
+const FROM_EMAIL = 'info@blobjor.me'; // Verified Domain
 
 export async function sendEmail({
     to,
