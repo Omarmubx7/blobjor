@@ -15,7 +15,11 @@ export async function POST(request: Request) {
             process.env.CLOUDINARY_API_SECRET
         )
 
-        return NextResponse.json({ signature })
+        return NextResponse.json({
+            signature,
+            apiKey: process.env.CLOUDINARY_API_KEY,
+            cloudName: process.env.CLOUDINARY_CLOUD_NAME
+        })
     } catch (error) {
         return NextResponse.json({ error: 'Signing failed' }, { status: 500 })
     }

@@ -310,10 +310,7 @@ export default function CustomDesignerPro() {
 
   // Helper: Upload to Cloudinary (Client-Side)
   const uploadToCloudinary = async (blob: Blob, folder: string = 'designs'): Promise<string> => {
-    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'YOUR_CLOUD_NAME'
-    const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || 'YOUR_API_KEY'
-
-    // 1. Get Signature
+    // 1. Get Signature & Config from Server
     const timestamp = Math.round((new Date).getTime() / 1000)
     const signParams = {
       timestamp: timestamp,
@@ -326,8 +323,11 @@ export default function CustomDesignerPro() {
       body: JSON.stringify({ paramsToSign: signParams })
     })
 
-    const { signature } = await signResponse.json()
-    if (!signature) throw new Error('Failed to sign upload request')
+    const { signature, apiKey, cloudName } = await signResponse.json()
+
+    if (!signature || !apiKey || !cloudName) {
+      throw new Error('Failed to sign upload request or missing config')
+    }
 
     // 2. Upload
     const formData = new FormData()
