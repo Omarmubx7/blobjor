@@ -17,14 +17,14 @@ export const getWelcomeEmailTemplate = (name: string) => `
 <body>
   <div class="container">
     <div class="header">
-      <a href="https://blobjor.me" class="logo">blobjor.me</a>
+      <a href="https://www.blobjor.me" class="logo">blobjor.me</a>
     </div>
     <div class="content">
       <h2>أهلاً بك يا ${name}! 👋</h2>
       <p>شكراً لانضمامك إلى عائلة blobjor.me. نحن سعيدون جداً بوجودك معنا.</p>
       <p>اكتشف مجموعتنا المميزة من المنتجات المصممة خصيصاً لك، أو ابدأ في تصميم منتجك الخاص الآن.</p>
       <div style="text-align: center;">
-        <a href="https://blobjor.me/products" class="button">تصفح المنتجات</a>
+        <a href="https://www.blobjor.me/products" class="button">تصفح المنتجات</a>
       </div>
     </div>
     <div class="footer">
@@ -68,7 +68,7 @@ export const getOrderConfirmationEmailTemplate = (order: any) => {
 <body>
   <div class="container">
     <div class="header">
-      <a href="https://blobjor.me" class="logo">blobjor.me</a>
+      <a href="https://www.blobjor.me" class="logo">blobjor.me</a>
     </div>
     <div class="content">
       <h2>شكراً لطلبك! 🎉</h2>
@@ -118,7 +118,7 @@ export const getResetPasswordEmailTemplate = (otp: string) => `
 <body>
   <div class="container">
     <div class="header">
-      <a href="https://blobjor.me" class="logo">blobjor.me</a>
+      <a href="https://www.blobjor.me" class="logo">blobjor.me</a>
     </div>
     <div class="content">
       <h2>إعادة تعيين كلمة المرور 🔒</h2>
@@ -186,7 +186,7 @@ export const getAdminNewOrderEmailTemplate = (order: any, customer: any) => `
     </div>
 
     <div style="margin-top: 20px; text-align: center;">
-      <a href="https://blobjor.me/admin/orders/${order.id}" style="background: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">عرض الطلب في لوحة التحكم</a>
+      <a href="https://www.blobjor.me/admin/orders/${order.id}" style="background: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">عرض الطلب في لوحة التحكم</a>
     </div>
   </div>
 </body>
