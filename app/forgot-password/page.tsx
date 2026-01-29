@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 export default function ForgotPasswordPage() {
+    const router = useRouter()
     const [email, setEmail] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
