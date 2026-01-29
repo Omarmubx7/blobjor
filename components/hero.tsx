@@ -8,8 +8,8 @@ import { useEffect, useState } from "react"
 
 interface HeroProps {
   content?: {
-    title?: string
-    subtitle?: string
+    title?: string | null
+    subtitle?: string | null
   } | null
 }
 
