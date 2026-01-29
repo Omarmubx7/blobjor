@@ -11,12 +11,20 @@ interface UserMenuProps {
         email?: string | null
         image?: string | null
     }
+    iconOnly?: boolean
 }
 
-export function UserMenu({ user }: UserMenuProps) {
+export function UserMenu({ user, iconOnly }: UserMenuProps) {
     const [isOpen, setIsOpen] = useState(false)
 
     if (!user) {
+        if (iconOnly) {
+            return (
+                <Link href="/login" className="hover:opacity-70 transition-opacity">
+                    <UserIcon size={22} strokeWidth={1.5} />
+                </Link>
+            )
+        }
         return (
             <div className="flex items-center gap-2">
                 <Link
@@ -40,11 +48,18 @@ export function UserMenu({ user }: UserMenuProps) {
         <div className="relative">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-all border border-transparent hover:border-primary/30"
+                className={`flex items-center justify-center transition-all ${iconOnly
+                        ? 'hover:opacity-70'
+                        : 'h-10 w-10 rounded-full bg-primary/10 text-primary hover:bg-primary/20'
+                    }`}
             >
-                <span className="font-bold text-sm">
-                    {user.name ? user.name.charAt(0).toUpperCase() : <User size={18} />}
-                </span>
+                {iconOnly ? (
+                    <UserIcon size={22} strokeWidth={1.5} />
+                ) : (
+                    <span className="font-bold text-sm">
+                        {user.name ? user.name.charAt(0).toUpperCase() : <User size={18} />}
+                    </span>
+                )}
             </button>
 
             {isOpen && (

@@ -422,7 +422,7 @@ export function Products({ products = [] }: ProductsProps) {
                     </span>
                   </div>
                   <p className="font-body text-xs text-zinc-500 font-medium">
-                    {product.category.toUpperCase()} • {product.subCategory.toUpperCase()}
+                    {product.category.toUpperCase()} {product.subCategory ? `• ${product.subCategory.toUpperCase()}` : ''}
                   </p>
 
                   {/* Mobile Quick Add */}
