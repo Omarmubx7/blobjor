@@ -1,204 +1,97 @@
 "use client"
-
-import { Instagram, MessageCircle, Mail, MapPin, Phone, ArrowUp, Heart } from "lucide-react"
+import { Instagram, MessageCircle, ArrowUp } from "lucide-react"
 import Image from "next/image"
-
-const footerLinks = {
-  quickLinks: [
-    { href: "#hero", label: "الرئيسية", labelEn: "Home" },
-    { href: "#shop", label: "منتجاتنا", labelEn: "Products" },
-    { href: "/design-lab", label: "تصميم مخصص", labelEn: "Custom Design" },
-    { href: "/size-charts", label: "جدول المقاسات", labelEn: "Size Guide" },
-    { href: "#faq", label: "الأسئلة الشائعة", labelEn: "FAQ" },
-  ],
-  products: [
-    { href: "#shop", label: "هوديز", labelEn: "Hoodies" },
-    { href: "#shop", label: "أكواب", labelEn: "Mugs" },
-    { href: "/design-lab", label: "تصميم خاص", labelEn: "Custom" },
-  ],
-  legal: [
-    { href: "#", label: "سياسة الخصوصية" },
-    { href: "#", label: "الشروط والأحكام" },
-    { href: "#", label: "سياسة الاسترجاع" },
-  ],
-}
+import Link from "next/link"
 
 export function Footer() {
-  const handleNavClick = (href: string) => {
-    if (href.startsWith("#")) {
-      const element = document.querySelector(href)
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" })
-      }
-    }
-  }
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   return (
-    <footer className="relative bg-foreground text-primary-foreground">
-      {/* Decorative top border */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
+    <footer className="bg-black text-white pt-24 pb-12 border-t border-zinc-900">
+      <div className="container-custom mx-auto px-6">
 
-      {/* Main Footer Content */}
-      <div className="mx-auto max-w-[1400px] px-4 py-16 lg:px-8 lg:py-20">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+        {/* Top Section with Logo & Tagline */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8">
+          <div className="flex flex-col gap-4">
+            <Link href="/" className="font-heading font-black text-4xl uppercase tracking-tighter text-white">
+              BLOBJOR.ME
+            </Link>
+            <p className="font-heading font-bold text-sm tracking-[0.2em] text-zinc-500 uppercase">
+              BE BOLD. BE YOU. BE BLOBJOR.
+            </p>
+          </div>
 
-          {/* Brand Column */}
-          <div className="lg:col-span-1">
-            <a href="#hero" onClick={(e) => { e.preventDefault(); handleNavClick("#hero"); }} className="inline-flex items-center gap-3 group">
-              <Image
-                src="/Bloblogo.png"
-                alt="BloB Logo"
-                width={56}
-                height={56}
-                className="h-14 w-14 object-contain transition-transform group-hover:scale-110"
-              />
-              <div className="flex flex-col">
-                <span className="font-sans text-3xl font-black text-primary-foreground">
-                  blobjor.me
-                </span>
-                <span className="text-xs font-medium tracking-wider text-primary-foreground/60">
-                  PRINT ON DEMAND
-                </span>
-              </div>
+          {/* Socials */}
+          <div className="flex items-center gap-4">
+            <a href="https://instagram.com/blob.jor" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors">
+              <Instagram size={20} strokeWidth={1.5} />
             </a>
-            <p className="mt-6 max-w-xs font-body text-sm leading-relaxed text-primary-foreground/70">
-              طباعة حسب الطلب - حول أفكارك لواقع. جودة عالية، توصيل سريع، أسعار مناسبة.
-            </p>
-            <p className="mt-2 font-body text-sm font-semibold text-accent">
-              BE BOLD. BE YOU. BE BLOBJOR.ME
-            </p>
-
-            {/* Social Icons */}
-            <div className="mt-6 flex gap-3">
-              <a
-                href="https://instagram.com/blob.jor"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-foreground/10 text-primary-foreground transition-all hover:bg-primary hover:scale-110"
-                aria-label="Instagram"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="https://wa.me/962787257247"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-foreground/10 text-primary-foreground transition-all hover:bg-green-500 hover:scale-110"
-                aria-label="WhatsApp"
-              >
-                <MessageCircle size={20} />
-              </a>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="mb-6 font-sans text-sm font-bold uppercase tracking-wider text-primary-foreground">
-              روابط سريعة
-            </h3>
-            <nav className="flex flex-col gap-3">
-              {footerLinks.quickLinks.map((link) => (
-                <button
-                  key={link.label}
-                  onClick={() => handleNavClick(link.href)}
-                  className="group flex items-center gap-2 font-body text-sm text-primary-foreground/70 transition-colors hover:text-accent"
-                >
-                  <span className="h-px w-0 bg-accent transition-all group-hover:w-4" />
-                  {link.label}
-                </button>
-              ))}
-            </nav>
-          </div>
-
-          {/* Products */}
-          <div>
-            <h3 className="mb-6 font-sans text-sm font-bold uppercase tracking-wider text-primary-foreground">
-              منتجاتنا
-            </h3>
-            <nav className="flex flex-col gap-3">
-              {footerLinks.products.map((link) => (
-                <button
-                  key={link.label}
-                  onClick={() => handleNavClick(link.href)}
-                  className="group flex items-center gap-2 font-body text-sm text-primary-foreground/70 transition-colors hover:text-accent"
-                >
-                  <span className="h-px w-0 bg-accent transition-all group-hover:w-4" />
-                  {link.label}
-                </button>
-              ))}
-            </nav>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h3 className="mb-6 font-sans text-sm font-bold uppercase tracking-wider text-primary-foreground">
-              تواصل معنا
-            </h3>
-            <div className="flex flex-col gap-4">
-              <a
-                href="https://wa.me/962787257247"
-                className="flex items-center gap-3 font-body text-sm text-primary-foreground/70 transition-colors hover:text-accent"
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-foreground/10">
-                  <Phone size={18} />
-                </div>
-                <span dir="ltr">+962 78 725 7247</span>
-              </a>
-
-              <div className="flex items-center gap-3 font-body text-sm text-primary-foreground/70">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-foreground/10">
-                  <MapPin size={18} />
-                </div>
-                عمّان، الأردن
-              </div>
-            </div>
-
-            {/* CTA */}
-            <a
-              href="https://instagram.com/blob.jor"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 font-body text-sm font-semibold text-primary-foreground transition-all hover:scale-105 hover:bg-primary/90"
-            >
-              <Instagram size={18} />
-              تابعنا على Instagram
+            <a href="https://wa.me/962787257247" target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors">
+              <MessageCircle size={20} strokeWidth={1.5} />
             </a>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-primary-foreground/10">
-        <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-4 px-4 py-6 lg:flex-row lg:px-8">
-          <p className="flex items-center gap-1 font-body text-xs text-primary-foreground/50">
-            صُنع بـ <Heart size={14} className="text-destructive fill-destructive" /> في الأردن © 2025 blobjor.me
+        {/* 4 Column Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20 border-t border-zinc-900 pt-12">
+
+          {/* Column 1: Products */}
+          <div className="flex flex-col gap-6">
+            <h4 className="font-bold text-sm uppercase tracking-widest text-zinc-500">المنتجات</h4>
+            <div className="flex flex-col gap-3">
+              <Link href="/#shop" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">هوديز</Link>
+              <Link href="/#shop" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">أكواب</Link>
+              <Link href="/#shop" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">تيشيرتات</Link>
+              <Link href="/design-lab" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">تصميم خاص</Link>
+            </div>
+          </div>
+
+          {/* Column 2: Quick Links */}
+          <div className="flex flex-col gap-6">
+            <h4 className="font-bold text-sm uppercase tracking-widest text-zinc-500">روابط سريعة</h4>
+            <div className="flex flex-col gap-3">
+              <Link href="/" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">الرئيسية</Link>
+              <Link href="/track-order" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">تتبع الطلب</Link>
+              <Link href="/size-charts" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">جدول المقاسات</Link>
+              <Link href="/faq" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">الأسئلة الشائعة</Link>
+            </div>
+          </div>
+
+          {/* Column 3: Contact */}
+          <div className="flex flex-col gap-6">
+            <h4 className="font-bold text-sm uppercase tracking-widest text-zinc-500">تواصل معنا</h4>
+            <div className="flex flex-col gap-3">
+              <span className="text-sm font-medium text-zinc-300">عمّان، الأردن</span>
+              <span className="text-sm font-medium text-zinc-300" dir="ltr">+962 78 725 7247</span>
+              <span className="text-sm font-medium text-zinc-300">info@blobjor.me</span>
+            </div>
+          </div>
+
+          {/* Column 4: Newsletter (Simplified) */}
+          <div className="flex flex-col gap-6">
+            <h4 className="font-bold text-sm uppercase tracking-widest text-zinc-500">النشرة البريدية</h4>
+            <p className="text-sm text-zinc-400">اشترك للحصول على آخر العروض والتصاميم الحصرية.</p>
+            <div className="flex gap-2">
+              <input type="email" placeholder="بريدك الإلكتروني" className="bg-zinc-900 border-none text-white text-sm px-4 py-3 w-full focus:ring-1 focus:ring-white" />
+              <button className="bg-white text-black text-sm font-bold uppercase px-4 py-3 hover:bg-gray-200">اشترك</button>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-zinc-900">
+          <p className="text-xs text-zinc-600 font-medium">
+            © 2025 blobjor.me · صُنع في الأردن 🇯🇴
           </p>
-
-          <div className="flex items-center gap-6">
-            {footerLinks.legal.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="font-body text-xs text-primary-foreground/50 transition-colors hover:text-accent"
-              >
-                {link.label}
-              </a>
-            ))}
+          <div className="flex gap-6">
+            <Link href="#" className="text-xs text-zinc-600 hover:text-white transition-colors">سياسة الخصوصية</Link>
+            <Link href="#" className="text-xs text-zinc-600 hover:text-white transition-colors">الشروط والأحكام</Link>
           </div>
-
-          {/* Scroll to top */}
-          <button
-            onClick={scrollToTop}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-foreground/10 text-primary-foreground transition-all hover:bg-accent hover:scale-110"
-            aria-label="Scroll to top"
-          >
-            <ArrowUp size={18} />
-          </button>
         </div>
+
       </div>
     </footer>
   )

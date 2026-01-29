@@ -254,75 +254,42 @@ export function Products({ products = [] }: ProductsProps) {
           </p>
         </div>
 
-        {/* Main Category Tabs */}
-        <div className="mb-8 flex flex-wrap items-center justify-center gap-3">
+        {/* Main Category Tabs - Minimal Athletic Style */}
+        <div className="mb-12 flex flex-wrap items-center justify-center gap-8 border-b border-gray-200 pb-4">
           <button
             onClick={() => { setActiveCategory("hoodies"); resetFilters(); }}
-            className={`group relative overflow-hidden rounded-2xl px-8 py-4 font-body text-base font-bold transition-all duration-300 ${activeCategory === "hoodies"
-              ? "bg-primary text-primary-foreground shadow-lg"
-              : "bg-card text-foreground hover:bg-card-hover border border-border"
+            className={`text-sm font-bold uppercase tracking-widest transition-all relative pb-2 ${activeCategory === "hoodies" ? "text-black" : "text-gray-400 hover:text-gray-600"
               }`}
           >
-            <span className="relative z-10 flex items-center gap-2">
-              🧥 هوديز Hoodies
-              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${activeCategory === "hoodies"
-                ? "bg-primary-foreground/20 text-primary-foreground"
-                : "bg-primary/10 text-primary"
-                }`}>
-                {hoodiesCount}
-              </span>
-            </span>
+            Hoodies
+            {activeCategory === "hoodies" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-black" />}
           </button>
-          <button
-            onClick={() => { setActiveCategory("mugs"); resetFilters(); }}
-            className={`group relative overflow-hidden rounded-2xl px-8 py-4 font-body text-base font-bold transition-all duration-300 ${activeCategory === "mugs"
-              ? "bg-primary text-primary-foreground shadow-lg"
-              : "bg-card text-foreground hover:bg-card-hover border border-border"
-              }`}
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              ☕ أكواب Mugs
-              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${activeCategory === "mugs"
-                ? "bg-primary-foreground/20 text-primary-foreground"
-                : "bg-primary/10 text-primary"
-                }`}>
-                {mugsCount}
-              </span>
-            </span>
-          </button>
+
           <button
             onClick={() => { setActiveCategory("tshirts"); resetFilters(); }}
-            className={`group relative overflow-hidden rounded-2xl px-8 py-4 font-body text-base font-bold transition-all duration-300 ${activeCategory === "tshirts"
-              ? "bg-primary text-primary-foreground shadow-lg"
-              : "bg-card text-foreground hover:bg-card-hover border border-border"
+            className={`text-sm font-bold uppercase tracking-widest transition-all relative pb-2 ${activeCategory === "tshirts" ? "text-black" : "text-gray-400 hover:text-gray-600"
               }`}
           >
-            <span className="relative z-10 flex items-center gap-2">
-              👕 تيشيرتات T-Shirts
-              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${activeCategory === "tshirts"
-                ? "bg-primary-foreground/20 text-primary-foreground"
-                : "bg-primary/10 text-primary"
-                }`}>
-                {tshirtsCount}
-              </span>
-            </span>
+            T-Shirts
+            {activeCategory === "tshirts" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-black" />}
           </button>
+
+          <button
+            onClick={() => { setActiveCategory("mugs"); resetFilters(); }}
+            className={`text-sm font-bold uppercase tracking-widest transition-all relative pb-2 ${activeCategory === "mugs" ? "text-black" : "text-gray-400 hover:text-gray-600"
+              }`}
+          >
+            Mugs
+            {activeCategory === "mugs" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-black" />}
+          </button>
+
           <button
             onClick={() => { setActiveCategory("stickers"); resetFilters(); }}
-            className={`group relative overflow-hidden rounded-2xl px-8 py-4 font-body text-base font-bold transition-all duration-300 ${activeCategory === "stickers"
-              ? "bg-primary text-primary-foreground shadow-lg"
-              : "bg-card text-foreground hover:bg-card-hover border border-border"
+            className={`text-sm font-bold uppercase tracking-widest transition-all relative pb-2 ${activeCategory === "stickers" ? "text-black" : "text-gray-400 hover:text-gray-600"
               }`}
           >
-            <span className="relative z-10 flex items-center gap-2">
-              🏷️ ملصقات Stickers
-              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${activeCategory === "stickers"
-                ? "bg-primary-foreground/20 text-primary-foreground"
-                : "bg-primary/10 text-primary"
-                }`}>
-                {stickersCount}
-              </span>
-            </span>
+            Stickers
+            {activeCategory === "stickers" && <span className="absolute bottom-0 left-0 w-full h-[2px] bg-black" />}
           </button>
         </div>
 
@@ -406,102 +373,67 @@ export function Products({ products = [] }: ProductsProps) {
 
         {/* Products Grid */}
         {displayedProducts.length > 0 ? (
-          <div className={`grid gap-3 md:gap-4 grid-cols-2 md:grid-cols-3 ${gridCols === 4 ? 'lg:grid-cols-4 xl:grid-cols-4' : 'lg:grid-cols-3 xl:grid-cols-3'}`}>
+          <div className={`grid gap-x-6 gap-y-12 grid-cols-2 lg:grid-cols-4`}>
             {displayedProducts.map((product, index) => (
               <div
                 key={product.id}
-                className="group animate-fade-in-up"
+                className="group flex flex-col gap-4 animate-fade-in-up"
                 style={{ animationDelay: `${Math.min(index * 50, 300)}ms` }}
               >
-                {/* Product Card */}
-                <div className="relative overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] group">
-
-                  {/* Badges */}
-                  <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 items-end">
-                    {/* Category Badge */}
-                    <span className={`px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-wider text-white shadow-sm ${product.subCategory === 'anime' ? 'bg-purple-600' :
-                      product.subCategory === 'sports' ? 'bg-blue-600' :
-                        product.subCategory === 'movies' ? 'bg-red-600' :
-                          'bg-zinc-800'
-                      }`}>
-                      {product.subCategory === 'anime' ? 'ANIME' :
-                        product.subCategory === 'sports' ? 'SPORT' :
-                          product.subCategory === 'movies' ? 'MOVIE' :
-                            'STREETWEAR'}
+                {/* Image Container - Athletic Tall Ratio */}
+                <div
+                  className="relative aspect-[4/5] w-full overflow-hidden bg-[#F5F5F7] cursor-pointer group"
+                  onClick={() => openLightbox(product)}
+                >
+                  {/* Minimal Badge */}
+                  {(product.isBestseller || product.isNew) && (
+                    <span className="absolute top-0 right-0 z-10 bg-black text-white text-[10px] uppercase font-bold px-3 py-1.5 min-w-[60px] text-center">
+                      {product.isBestseller ? 'Best Seller' : 'New'}
                     </span>
-
-                    {/* AR/EN Badge */}
-                    <span className="px-1.5 py-0.5 rounded-sm bg-black/50 backdrop-blur-sm border border-white/10 text-[9px] font-bold text-white/90">
-                      AR / EN
-                    </span>
-
-                    {product.isBestseller && (
-                      <span className="flex items-center gap-1 rounded-md bg-amber-500 px-2 py-1 text-[10px] font-bold text-white shadow-sm">
-                        <Star size={10} fill="currentColor" />
-                        BESTSELLER
-                      </span>
-                    )}
-                  </div>
+                  )}
 
                   {/* Product Image */}
-                  <div
-                    className="relative aspect-[4/5] cursor-pointer overflow-hidden bg-[#F1F5F9]"
-                    onClick={() => openLightbox(product)}
-                  >
-                    <Image
-                      src={product.image || "/placeholder.svg"}
-                      alt={product.titleAr}
-                      fill
-                      className="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
-                    />
+                  <Image
+                    src={product.image || "/placeholder.svg"}
+                    alt={product.titleAr}
+                    fill
+                    className="object-contain p-4 mix-blend-multiply transition-transform duration-700 ease-in-out group-hover:scale-110"
+                  />
 
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/5">
-                      <button className="bg-white text-black text-xs font-bold px-4 py-2 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                        VIEW DETAILS
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Product Info */}
-                  <div className="p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="font-body font-bold text-base text-foreground leading-tight text-right">
-                          {product.titleAr}
-                        </h3>
-                        <p className="font-sans text-xs font-bold text-muted-foreground uppercase tracking-wide mt-1">
-                          {product.title}
-                        </p>
-                      </div>
-                      <span className="font-sans text-lg font-black text-primary">
-                        {product.price}<span className="text-xs ml-0.5">JD</span>
-                      </span>
-                    </div>
-
-                    {/* Add to Cart Button */}
+                  {/* Quick Action Overlay (Desktop) */}
+                  <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out hidden lg:block">
                     <button
                       onClick={(e) => handleQuickAdd(product, e)}
-                      disabled={showAddedFeedback === product.id}
-                      className={`w-full rounded-lg py-2.5 font-bold text-sm transition-all flex items-center justify-center gap-2 ${showAddedFeedback === product.id
-                        ? "bg-success text-white"
-                        : "bg-foreground text-background hover:bg-accent hover:text-accent-foreground"
-                        }`}
+                      className="w-full bg-black text-white uppercase text-xs font-bold py-3.5 tracking-widest hover:bg-zinc-800 transition-colors"
                     >
-                      {showAddedFeedback === product.id ? (
-                        <>
-                          <Check size={16} />
-                          ADDED
-                        </>
-                      ) : (
-                        <>
-                          <ShoppingCart size={16} />
-                          ADD TO CART
-                        </>
-                      )}
+                      {showAddedFeedback === product.id ? 'ADDED' : 'QUICK ADD +'}
                     </button>
                   </div>
                 </div>
+
+                {/* Product Info - Minimal Text */}
+                <div className="flex flex-col gap-1 items-start text-right" dir="rtl">
+                  <div className="flex justify-between w-full items-start">
+                    <h3 className="font-heading font-extrabold text-base uppercase leading-tight text-black line-clamp-1">
+                      {product.titleAr}
+                    </h3>
+                    <span className="font-mono font-bold text-sm text-black">
+                      {product.price} JD
+                    </span>
+                  </div>
+                  <p className="font-body text-xs text-zinc-500 font-medium">
+                    {product.category.toUpperCase()} • {product.subCategory.toUpperCase()}
+                  </p>
+
+                  {/* Mobile Quick Add */}
+                  <button
+                    onClick={(e) => handleQuickAdd(product, e)}
+                    className="lg:hidden w-full mt-3 bg-black text-white uppercase text-[10px] font-bold py-3 tracking-widest"
+                  >
+                    إضافة للسلة
+                  </button>
+                </div>
+
               </div>
             ))}
           </div>

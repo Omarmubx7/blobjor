@@ -1,10 +1,6 @@
 "use client"
-
 import Image from "next/image"
-import { Rocket, Sparkles, Truck, BadgePercent, ChevronDown, Star } from "lucide-react"
-import { useEffect, useState } from "react"
-
-// Force rebuild
+import { ArrowRight, ArrowLeft } from "lucide-react"
 
 interface HeroProps {
   content?: {
@@ -14,11 +10,6 @@ interface HeroProps {
 }
 
 export function Hero({ content }: HeroProps) {
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    setIsVisible(true)
-  }, [])
 
   const handleScrollToShop = () => {
     const element = document.querySelector("#shop")
@@ -27,72 +18,53 @@ export function Hero({ content }: HeroProps) {
     }
   }
 
-  const handleScrollToCustom = () => {
-    window.location.href = "/design-lab"
-  }
-
-  const defaultTitle = (
-    <>
-      <span className="block text-foreground mb-2">Sports & Anime Hoodies</span>
-      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-        for fans, gamers, and athletes
-      </span>
-    </>
-  )
-
-  const defaultSubtitle = "Sports & Anime Streetwear for Jordan and the Middle East"
-
   return (
-    <section id="hero" className="relative min-h-[90vh] overflow-hidden bg-background pt-24 lg:pt-32">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-full w-full max-w-7xl">
-          <div className="absolute top-20 right-0 h-[500px] w-[500px] bg-primary/5 rounded-full blur-[100px]" />
-          <div className="absolute bottom-0 left-0 h-[500px] w-[500px] bg-accent/5 rounded-full blur-[100px]" />
+    <section className="relative h-screen w-full overflow-hidden bg-black text-white">
+      {/* Background Image - Lifestyle/Athletic */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-black/40 z-10" /> {/* Overlay for text contrast */}
+        {/* Placeholder for High-Res Lifestyle Image */}
+        <div className="w-full h-full bg-neutral-900 flex items-center justify-center">
+          {/* TODO: Replace with actual User Uploaded Image */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)] opacity-20" />
       </div>
 
-      <div className="container-custom relative flex flex-col items-center justify-center text-center">
+      {/* Content Container */}
+      <div className="relative z-20 h-full flex flex-col justify-end pb-32 px-6 md:px-12 lg:px-24">
+        <div className="max-w-4xl animate-fade-in-up">
 
-        {/* Main Content */}
-        <div className="relative z-10 max-w-4xl mx-auto mb-12 animate-fade-in-up">
-
-          {/* Headlines */}
-          <h1 className="font-sans font-black text-4xl md:text-7xl lg:text-8xl leading-tight mb-6">
-            {content?.title ? (
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                {content.title}
-              </span>
-            ) : defaultTitle}
+          {/* Main Headline - Massive & Bold */}
+          <h1 className="font-heading font-black text-6xl md:text-8xl lg:text-9xl uppercase leading-[0.9] tracking-tighter mb-6 text-white text-right" style={{ textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
+            {content?.title || "اصنع المستحيل"}
+            <span className="block text-4xl md:text-6xl lg:text-7xl mt-2 text-gray-300 font-extrabold">
+              BE BOLD. BE YOU.
+            </span>
           </h1>
 
-          <p className="font-sans text-lg md:text-2xl font-bold uppercase tracking-widest text-muted-foreground mb-10">
-            {content?.subtitle || defaultSubtitle}
+          {/* Subtitle */}
+          <p className="font-body text-xl md:text-2xl text-gray-200 font-medium mb-10 max-w-2xl ml-auto text-right" dir="rtl">
+            {content?.subtitle || "صمّم منتجاتك الخاصة بجودة عالمية. أسلوبك، تصميمك، لمستك الخاصة."}
           </p>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          {/* CTA Buttons - Athletic Style */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-end items-end sm:items-center">
             <button
-              onClick={handleScrollToShop}
-              className="btn-primary py-4 px-10 text-lg group w-full sm:w-auto"
+              onClick={() => window.location.href = "/design-lab"}
+              className="group btn-secondary border-white text-white hover:bg-white hover:text-black py-4 px-10 text-lg uppercase tracking-widest"
             >
-              <Rocket size={20} className="group-hover:-translate-y-1 transition-transform" />
-              اطلب الآن
+              <span>صمّم هوديتك</span>
             </button>
             <button
-              onClick={handleScrollToCustom}
-              className="btn-secondary py-4 px-10 text-lg w-full sm:w-auto hover:border-primary hover:text-primary"
+              onClick={handleScrollToShop}
+              className="group btn-primary bg-white text-black hover:bg-gray-200 hover:text-black hover:scale-105 py-4 px-12 text-xl uppercase tracking-widest flex items-center gap-3"
             >
-              <Sparkles size={20} />
-              صمّم هوديتك
+              <span>اطلب الآن</span>
+              <ArrowLeft className="w-6 h-6 group-hover:-translate-x-2 transition-transform duration-300" />
             </button>
           </div>
 
         </div>
-
-
-
       </div>
     </section>
   )
