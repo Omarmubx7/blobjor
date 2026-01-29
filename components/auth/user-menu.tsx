@@ -69,7 +69,7 @@ export function UserMenu({ user }: UserMenuProps) {
                                 <span>حسابي</span>
                             </Link>
                             <button
-                                onClick={() => signOut({ callbackUrl: 'https://www.blobjor.me/' })}
+                                onClick={() => signOut({ callbackUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.blobjor.me' })}
                                 className="flex items-center gap-2 w-full p-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                             >
                                 <LogOut size={16} />
