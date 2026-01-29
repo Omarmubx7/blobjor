@@ -6,7 +6,7 @@ import {
   Upload, Type, Layers, ShoppingBag, Download,
   RotateCw, ZoomIn, ZoomOut, Trash2, Maximize2,
   Check, ChevronDown, AlignLeft, AlignCenter, AlignRight,
-  Move, X, Undo2, Redo2, Eye, EyeOff, ArrowRight
+  Move, X, Undo2, Redo2, Eye, EyeOff, ArrowRight, Copy
 } from 'lucide-react'
 import * as fabric from 'fabric' // Fabric.js v6+
 import { SizeChartModal } from './size-chart-modal'
@@ -460,7 +460,7 @@ export default function CustomDesignerPro() {
   // --- UI Render ---
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white font-sans">
+    <div className="min-h-screen flex flex-col bg-black text-white font-sans selection:bg-white selection:text-black">
 
       {/* Font Loader */}
       <style>{`
@@ -468,94 +468,90 @@ export default function CustomDesignerPro() {
       `}</style>
 
       {/* HEADER */}
-      <div className="h-16 border-b border-white/10 bg-slate-900/50 flex items-center justify-between px-6 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="p-2 -mr-2 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white" title="رجوع">
-            <ArrowRight size={24} />
+      <div className="h-20 border-b border-zinc-800 bg-black flex items-center justify-between px-8 sticky top-0 z-50">
+        <div className="flex items-center gap-6">
+          <Link href="/" className="group flex items-center justify-center w-10 h-10 border border-zinc-800 hover:bg-white hover:text-black hover:border-white transition-all rounded-sm" title="Back">
+            <ArrowRight size={20} />
           </Link>
-          <div className="bg-gradient-to-tr from-cyan-500 to-blue-600 p-2 rounded-lg hidden sm:block">
-            <ShoppingBag size={20} className="text-white" />
-          </div>
-          <h1 className="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
-            BloB<span className="text-cyan-400">.JO</span> Design Lab
+
+          <div className="h-8 w-px bg-zinc-800" />
+
+          <h1 className="text-xl font-black uppercase tracking-tighter">
+            DESIGN<span className="text-zinc-500">LAB</span>
           </h1>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <button
-            className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm font-medium transition-colors flex items-center gap-2"
+            className="px-6 py-3 border border-zinc-700 hover:border-white text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-2 rounded-sm"
           >
-            <Download size={16} /> تحميل PNG
+            <Download size={14} />
+            <span className="hidden sm:inline">Download PNG</span>
           </button>
           <button
             onClick={handleSave}
             disabled={isProcessing}
-            className="px-6 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold shadow-lg shadow-cyan-500/20 transition-all flex items-center gap-2 transform active:scale-95"
+            className="px-8 py-3 bg-white text-black hover:bg-zinc-200 text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isProcessing ? <Spinner className="w-4 h-4 text-white" /> : <ShoppingBag size={18} />}
-            أضف للسلة - {currentProduct.price} JD
+            {isProcessing ? <Spinner className="w-4 h-4 text-black" /> : <ShoppingBag size={14} />}
+            ADD TO CART - {currentProduct.price} JD
           </button>
         </div>
       </div>
 
       {/* 3-PANEL LAYOUT */}
-      <div className="flex-1 overflow-hidden flex flex-col lg:grid lg:grid-cols-[280px_1fr_280px]">
+      <div className="flex-1 overflow-hidden flex flex-col lg:grid lg:grid-cols-[320px_1fr_320px]">
 
         {/* LEFT PANEL: TOOLS */}
-        <aside className="bg-slate-900 border-r border-white/10 flex flex-col z-20 shadow-xl order-2 lg:order-none h-1/3 lg:h-auto border-t lg:border-t-0">
-          {/* Tabs */}
-          <div className="flex border-b border-white/10">
+        <aside className="bg-black border-r border-zinc-800 flex flex-col z-20 order-2 lg:order-none h-1/3 lg:h-auto border-t border-zinc-900 lg:border-t-0">
+          {/* Tabs - Minimal Text */}
+          <div className="flex border-b border-zinc-800">
             {[
-              { id: 'upload', icon: Upload, label: 'رفع' },
-              { id: 'text', icon: Type, label: 'نص' },
-              { id: 'layers', icon: Layers, label: 'طبقات' }
+              { id: 'upload', label: 'UPLOAD' },
+              { id: 'text', label: 'TEXT' },
+              { id: 'layers', label: 'LAYERS' }
             ].map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex-1 py-4 flex flex-col items-center gap-1 transition-colors relative ${activeTab === tab.id ? 'text-cyan-400 bg-white/5' : 'text-white/60 hover:text-white hover:bg-white/5'
+                className={`flex-1 py-4 flex items-center justify-center relative transition-all ${activeTab === tab.id ? 'text-white bg-zinc-900' : 'text-zinc-500 hover:text-white hover:bg-zinc-900/50'
                   }`}
               >
-                <tab.icon size={20} />
-                <span className="text-xs font-medium">{tab.label}</span>
+                <span className="text-xs font-black tracking-widest">{tab.label}</span>
                 {activeTab === tab.id && (
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.5)]" />
+                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white" />
                 )}
               </button>
             ))}
           </div>
 
           {/* Tools Component */}
-          <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
 
             {/* UPLOAD TOOL */}
             {activeTab === 'upload' && (
-              <div className="space-y-6">
-                <div className="border-2 border-dashed border-white/20 rounded-xl p-8 hover:border-cyan-400/50 hover:bg-white/5 transition-all group text-center cursor-pointer relative">
+              <div className="space-y-8">
+                <div className="border-2 border-dashed border-zinc-700 bg-zinc-900/50 p-10 hover:border-white hover:bg-zinc-900 transition-all group text-center cursor-pointer relative rounded-sm">
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handleImageUpload}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
-                  <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-cyan-500/20 group-hover:scale-110 transition-all">
-                    <Upload size={32} className="text-white/70 group-hover:text-cyan-400" />
+                  <div className="w-12 h-12 bg-black border border-zinc-700 flex items-center justify-center mx-auto mb-4 group-hover:bg-white group-hover:border-white transition-all rounded-sm">
+                    <Upload size={20} className="text-zinc-400 group-hover:text-black" />
                   </div>
-                  <h3 className="font-bold mb-1">اضغط لرفع صورة</h3>
-                  <p className="text-xs text-white/50">PNG, JPG بحد أقصى 10MB</p>
+                  <h3 className="font-bold text-sm uppercase tracking-wide mb-1">Upload Image</h3>
+                  <p className="text-[10px] text-zinc-500 font-mono uppercase">PNG, JPG (MAX 10MB)</p>
                 </div>
 
-                <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4 space-y-2">
-                  <div className="flex gap-2 text-amber-200 font-bold text-xs">
-                    ⚠️ ملاحظة هامة
-                  </div>
-                  <p className="text-[10px] text-amber-200/80 leading-relaxed">
-                    يرجى التأكد من أن الصورة المرفقة عالية الوضوح والدقة. الصور غير الواضحة قد تؤخر عملية التصميم والطباعة. الحفاظ على الجودة يوفر الوقت ويضمن أفضل نتيجة!
-                  </p>
-                </div>
-
-                <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 text-xs text-blue-200">
-                  💡 نصيحة: استخدم صوراً بصيغة PNG وخلفية شفافة للحصول على أفضل نتيجة طباعة.
+                <div className="space-y-4">
+                  <p className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold border-b border-zinc-800 pb-2">Guidelines</p>
+                  <ul className="text-[11px] text-zinc-400 space-y-2 list-disc pl-4 font-medium">
+                    <li>High resolution images work best.</li>
+                    <li>Transparent PNGs are recommended.</li>
+                    <li>Avoid copyrighted material.</li>
+                  </ul>
                 </div>
               </div>
             )}
@@ -563,16 +559,16 @@ export default function CustomDesignerPro() {
             {/* TEXT TOOL */}
             {activeTab === 'text' && (
               <div className="space-y-6">
-                <div className="flex bg-white/10 p-1 rounded-lg">
+                <div className="flex bg-zinc-900 p-1 rounded-sm border border-zinc-800">
                   <button
                     onClick={() => setTextLang('ar')}
-                    className={`flex-1 py-1.5 rounded-md text-sm font-medium transition-all ${textLang === 'ar' ? 'bg-slate-800 text-white shadow-sm' : 'text-white/60'}`}
+                    className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider transition-all rounded-sm ${textLang === 'ar' ? 'bg-black text-white shadow-sm border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
                   >
-                    عربي
+                    Arabic
                   </button>
                   <button
                     onClick={() => setTextLang('en')}
-                    className={`flex-1 py-1.5 rounded-md text-sm font-medium transition-all ${textLang === 'en' ? 'bg-slate-800 text-white shadow-sm' : 'text-white/60'}`}
+                    className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-wider transition-all rounded-sm ${textLang === 'en' ? 'bg-black text-white shadow-sm border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
                   >
                     English
                   </button>
@@ -583,12 +579,12 @@ export default function CustomDesignerPro() {
                   onChange={(e) => setTextInput(e.target.value)}
                   dir={textLang === 'ar' ? 'rtl' : 'ltr'}
                   placeholder={textLang === 'ar' ? "اكتب النص هنا..." : "Type text here..."}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg p-3 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all min-h-[100px]"
+                  className="w-full bg-black border-2 border-zinc-800 p-4 focus:outline-none focus:border-white focus:ring-0 transition-all min-h-[120px] text-sm font-medium rounded-sm placeholder:text-zinc-600"
                 />
 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-xs text-white/50 font-medium">الخط</label>
+                    <label className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">Font Family</label>
                     <div className="relative">
                       <select
                         value={selectedFont}
@@ -603,32 +599,32 @@ export default function CustomDesignerPro() {
                             }
                           }
                         }}
-                        className="w-full appearance-none bg-slate-800 border border-white/10 rounded-lg p-3 text-sm focus:outline-none focus:border-cyan-500 text-white"
+                        className="w-full appearance-none bg-black border border-zinc-800 p-3 text-sm focus:outline-none focus:border-white text-white rounded-sm font-bold"
                         style={{ fontFamily: selectedFont }}
                       >
-                        <optgroup label="✨ Fonts">
+                        <optgroup label="Typefaces">
                           {(textLang === 'ar' ? FONTS.arabic : FONTS.english).map(font => (
                             <option key={font} value={font} style={{ fontFamily: font }}>{font}</option>
                           ))}
                         </optgroup>
                       </select>
-                      <ChevronDown size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 pointer-events-none" />
+                      <ChevronDown size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
                     </div>
                   </div>
 
                   <div className="flex gap-4">
                     <div className="flex-1 space-y-2">
-                      <label className="text-xs text-white/50 font-medium">الحجم</label>
+                      <label className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">Size</label>
                       <input
                         type="number"
                         value={fontSize}
                         onChange={(e) => setFontSize(Number(e.target.value))}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg p-2 text-sm text-center focus:border-cyan-500 outline-none"
+                        className="w-full bg-black border border-zinc-800 p-3 text-sm text-center focus:border-white outline-none rounded-sm font-bold"
                       />
                     </div>
                     <div className="flex-1 space-y-2">
-                      <label className="text-xs text-white/50 font-medium">اللون</label>
-                      <div className="relative h-[38px] rounded-lg overflow-hidden border border-white/10">
+                      <label className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">Color</label>
+                      <div className="relative h-[46px] overflow-hidden border border-zinc-800 rounded-sm">
                         <input
                           type="color"
                           value={textColor}
@@ -643,28 +639,29 @@ export default function CustomDesignerPro() {
                 <button
                   onClick={handleAddText}
                   disabled={!textInput.trim()}
-                  className="w-full py-3 bg-cyan-600 hover:bg-cyan-500 disabled:bg-white/10 disabled:text-white/30 text-white rounded-lg font-bold shadow-lg shadow-cyan-900/20 transition-all active:scale-95"
+                  className="w-full py-4 bg-white text-black hover:bg-zinc-200 disabled:bg-zinc-800 disabled:text-zinc-600 font-black uppercase tracking-widest transition-all text-xs rounded-sm"
                 >
-                  أضف النص
+                  ADD TEXT LAYER
                 </button>
               </div>
             )}
 
             {/* LAYERS TOOL */}
             {activeTab === 'layers' && (
-              <div className="space-y-2">
+              <div className="space-y-4">
                 {layers.length === 0 ? (
-                  <div className="text-center py-10 text-white/30 text-sm">
-                    لا توجد طبقات حتى الآن
+                  <div className="text-center py-12 border-2 border-dashed border-zinc-800 rounded-sm">
+                    <Layers size={24} className="mx-auto text-zinc-700 mb-2" />
+                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">No Layers</p>
                   </div>
                 ) : (
                   layers.map((layer, index) => (
-                    <div key={layer.id} className="bg-white/5 p-3 rounded-lg flex items-center gap-3 group hover:bg-white/10 transition-colors">
-                      <div className="w-8 h-8 rounded bg-white/10 flex items-center justify-center text-xs">
-                        {layer.type === 'i-text' ? 'T' : 'IMG'}
+                    <div key={layer.id} className="bg-zinc-900 border border-zinc-800 p-3 flex items-center gap-3 group hover:border-zinc-600 transition-colors rounded-sm">
+                      <div className="w-8 h-8 bg-black border border-zinc-800 flex items-center justify-center text-[10px] font-bold text-zinc-400">
+                        {layer.type === 'i-text' ? 'Aa' : 'IMG'}
                       </div>
-                      <span className="flex-1 truncate text-sm">{layer.text}</span>
-                      <button className="text-white/30 hover:text-white p-1">
+                      <span className="flex-1 truncate text-xs font-bold text-zinc-300 group-hover:text-white transition-colors">{layer.text}</span>
+                      <button className="text-zinc-600 hover:text-red-500 p-2 transition-colors">
                         <Trash2 size={14} />
                       </button>
                     </div>
@@ -676,22 +673,22 @@ export default function CustomDesignerPro() {
         </aside>
 
         {/* CENTER PANEL: CANVAS */}
-        <main className="relative bg-slate-950/50 flex items-center justify-center p-4 lg:p-10 perspective-1000 overflow-hidden order-1 lg:order-none flex-1">
+        <main className="relative bg-zinc-950 flex items-center justify-center p-4 lg:p-10 perspective-1000 overflow-hidden order-1 lg:order-none flex-1">
           {/* Toolbar */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full px-4 py-2 flex items-center gap-2 z-30 shadow-2xl">
-            <button className="p-2 hover:bg-white/10 rounded-full text-white/80" onClick={handleClone} title="نسخ">
-              <CopyIcon size={18} />
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-black border border-zinc-800 rounded-sm px-2 py-2 flex items-center gap-1 z-30 shadow-xl">
+            <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-400 hover:text-white transition-colors" onClick={handleClone} title="Clone">
+              <CopyIcon size={16} />
             </button>
-            <div className="w-px h-4 bg-white/20 mx-1" />
-            <button className="p-2 hover:bg-red-500/20 hover:text-red-400 rounded-full text-white/80" onClick={handleDelete} title="حذف">
-              <Trash2 size={18} />
+            <div className="w-px h-4 bg-zinc-800 mx-1" />
+            <button className="p-2 hover:bg-red-900/50 hover:text-red-500 rounded-sm text-zinc-400 transition-colors" onClick={handleDelete} title="Delete">
+              <Trash2 size={16} />
             </button>
           </div>
 
           {/* Canvas Wrapper */}
-          <div className="flex-1 flex items-center justify-center p-10 overflow-hidden relative">
+          <div className="flex-1 flex items-center justify-center p-8 overflow-hidden relative">
             <div
-              className="relative shadow-2xl rounded-3xl overflow-hidden transition-all duration-500"
+              className="relative shadow-2xl transition-all duration-500"
               style={{
                 width: productType === 'hoodie' ? '400px' : '300px',
                 height: productType === 'hoodie' ? '480px' : '300px',
@@ -701,12 +698,12 @@ export default function CustomDesignerPro() {
               <img
                 src={currentColor.image}
                 alt="Product"
-                className="absolute inset-0 w-full h-full object-contain z-0 pointer-events-none"
+                className="absolute inset-0 w-full h-full object-contain z-0 pointer-events-none drop-shadow-2xl"
               />
 
               {/* Print Area Overlay + Canvas */}
               <div
-                className="absolute z-10 border-2 border-dashed border-white/30 hover:border-cyan-400/50 transition-colors"
+                className="absolute z-10 border border-dashed border-zinc-500/30 hover:border-white/50 transition-colors"
                 style={{
                   width: printArea.width,
                   height: printArea.height,
@@ -721,118 +718,132 @@ export default function CustomDesignerPro() {
           </div>
 
           {/* Zoom/Pan Controls */}
-          <div className="absolute bottom-6 left-6 flex flex-col gap-2">
-            <div className="bg-white/10 backdrop-blur border border-white/10 p-1.5 rounded-lg flex flex-col gap-1">
-              <button className="p-2 hover:bg-white/10 rounded-md text-white/70 hover:text-white"><ZoomIn size={20} /></button>
-              <button className="p-2 hover:bg-white/10 rounded-md text-white/70 hover:text-white"><ZoomOut size={20} /></button>
-              <button className="p-2 hover:bg-white/10 rounded-md text-white/70 hover:text-white"><Maximize2 size={20} /></button>
+          <div className="absolute bottom-8 left-8 flex flex-col gap-2">
+            <div className="bg-black border border-zinc-800 p-1 rounded-sm flex flex-col gap-1">
+              <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-500 hover:text-white transition-colors"><ZoomIn size={18} /></button>
+              <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-500 hover:text-white transition-colors"><ZoomOut size={18} /></button>
+              <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-500 hover:text-white transition-colors"><Maximize2 size={18} /></button>
             </div>
           </div>
         </main>
 
         {/* RIGHT PANEL: PRODUCT OPTIONS */}
-        <aside className="bg-slate-900 border-l border-white/10 flex flex-col z-20 shadow-xl p-6 gap-8 overflow-y-auto custom-scrollbar order-3 lg:order-none h-auto lg:h-full border-t lg:border-t-0 pb-20 lg:pb-6">
+        <aside className="bg-black border-l border-zinc-800 flex flex-col z-20 order-3 lg:order-none h-auto lg:h-full border-t border-zinc-900 lg:border-t-0 pb-20 lg:pb-6">
 
-          {/* Product Info */}
-          <div>
-            <h2 className="text-white/50 text-xs font-bold uppercase tracking-wider mb-4">المنتج</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {Object.values(PRODUCTS).map(p => (
-                <button
-                  key={p.id}
-                  onClick={() => setProductType(p.id as any)}
-                  className={`p-4 rounded-xl border transition-all flex flex-col items-center gap-2 ${productType === p.id
-                    ? 'bg-cyan-500/10 border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.15)]'
-                    : 'bg-white/5 border-transparent hover:border-white/20'
-                    }`}
-                >
-                  <span className="text-2xl">{p.id === 'hoodie' ? '🧥' : '☕'}</span>
-                  <span className="font-bold text-sm">{p.name}</span>
-                  <span className="text-xs text-cyan-400">{p.price} JD</span>
-                </button>
-              ))}
-            </div>
+          <div className="p-6 border-b border-zinc-800">
+            <h2 className="text-white font-black text-lg uppercase tracking-tight">Configuration</h2>
+            <p className="text-zinc-500 text-xs mt-1">Select your product base</p>
           </div>
 
-          {/* Colors */}
-          <div>
-            <h2 className="text-white/50 text-xs font-bold uppercase tracking-wider mb-4">اللون</h2>
-            <div className="flex flex-wrap gap-3">
-              {currentProduct.colors.map(c => (
-                <button
-                  key={c.id}
-                  onClick={() => setSelectedColor(c.id)}
-                  className={`w-10 h-10 rounded-full border-2 transition-all relative ${selectedColor === c.id
-                    ? 'border-cyan-400 scale-110 shadow-lg'
-                    : 'border-white/10 hover:scale-105'
-                    }`}
-                  style={{ backgroundColor: c.hex }}
-                  title={c.name}
-                >
-                  {selectedColor === c.id && <Check size={16} className={`absolute inset-0 m-auto ${c.id === 'white' ? 'text-black' : 'text-white'}`} />}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Sizes (Hoodie Only) */}
-          {productType === 'hoodie' && (
+          <div className="flex-1 p-6 overflow-y-auto custom-scrollbar space-y-8">
+            {/* Product Info */}
             <div>
-              <h2 className="text-white/50 text-xs font-bold uppercase tracking-wider mb-4">المقاس</h2>
-              <div className="flex flex-wrap gap-2">
-                {currentProduct.sizes.map(s => (
+              <h2 className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Product Type</h2>
+              <div className="grid grid-cols-2 gap-4">
+                {Object.values(PRODUCTS).map(p => (
                   <button
-                    key={s}
-                    onClick={() => setSelectedSize(s)}
-                    className={`w-10 h-10 rounded-lg text-sm font-bold flex items-center justify-center transition-all ${selectedSize === s
-                      ? 'bg-cyan-500 text-white shadow-lg'
-                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                    key={p.id}
+                    onClick={() => setProductType(p.id as any)}
+                    className={`p-4 border transition-all flex flex-col items-center gap-3 rounded-sm ${productType === p.id
+                      ? 'bg-white border-white text-black'
+                      : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-600'
                       }`}
                   >
-                    {s}
+                    <span className="text-2xl">{p.id === 'hoodie' ? '🧥' : '☕'}</span>
+                    <span className="font-bold text-xs uppercase tracking-wider">{p.name}</span>
+                    <span className={`text-[10px] font-mono ${productType === p.id ? 'text-zinc-600' : 'text-zinc-600'}`}>{p.price} JD</span>
                   </button>
                 ))}
               </div>
+            </div>
 
-              {/* Size Chart Button */}
-              <button
-                onClick={() => setSizeChartOpen(true)}
-                className="mt-4 w-full py-2.5 rounded-lg border border-white/10 hover:border-white/30 bg-white/5 hover:bg-white/10 text-sm font-medium transition-all flex items-center justify-center gap-2 text-white/80"
-              >
-                <Maximize2 size={16} /> جدول المقاسات
-              </button>
+            {/* Colors */}
+            <div>
+              <h2 className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Base Color</h2>
+              <div className="flex flex-wrap gap-3">
+                {currentProduct.colors.map(c => (
+                  <button
+                    key={c.id}
+                    onClick={() => setSelectedColor(c.id)}
+                    className={`w-10 h-10 rounded-full border-2 transition-all relative flex items-center justify-center ${selectedColor === c.id
+                      ? 'border-white scale-110'
+                      : 'border-zinc-800 hover:scale-105'
+                      }`}
+                    style={{ backgroundColor: c.hex }}
+                    title={c.name}
+                  >
+                    {selectedColor === c.id && <Check size={14} className={c.id === 'white' ? 'text-black' : 'text-white'} />}
+                  </button>
+                ))}
+              </div>
             </div>
-          )}
 
-          {/* Summary */}
-          <div className="mt-auto bg-white/5 rounded-xl p-4 border border-white/10">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-white/50">سعر المنتج</span>
-              <span className="font-medium">{currentProduct.price} JD</span>
-            </div>
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-white/50">الطباعة</span>
-              <span className="font-medium text-cyan-400">مجاناً</span>
-            </div>
-            <div className="h-px bg-white/10 my-3" />
-            <div className="flex justify-between items-center">
-              <span className="font-bold">المجموع</span>
-              <span className="text-xl font-bold">{currentProduct.price} JD</span>
-            </div>
+            {/* Sizes (Hoodie Only) */}
+            {productType === 'hoodie' && (
+              <div>
+                <h2 className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-4">Size</h2>
+                <div className="grid grid-cols-4 gap-2">
+                  {currentProduct.sizes.map(s => (
+                    <button
+                      key={s}
+                      onClick={() => setSelectedSize(s)}
+                      className={`py-3 text-xs font-bold transition-all rounded-sm border ${selectedSize === s
+                        ? 'bg-white text-black border-white'
+                        : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:border-zinc-600'
+                        }`}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Size Chart Button */}
+                <button
+                  onClick={() => setSizeChartOpen(true)}
+                  className="mt-6 w-full py-3 text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-white border-b border-zinc-800 hover:border-white transition-all flex items-center justify-between group"
+                >
+                  <span>View Size Guide</span>
+                  <ArrowRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                </button>
+              </div>
+            )}
           </div>
-
         </aside>
-
-      </div>
-
-      {/* Modals */}
-      <SizeChartModal
-        open={sizeChartOpen}
-        onClose={() => setSizeChartOpen(false)}
-        productType={productType}
-      />
-
+        <Maximize2 size={16} /> جدول المقاسات
+      </button>
     </div>
+  )
+}
+
+{/* Summary */ }
+<div className="mt-auto bg-white/5 rounded-xl p-4 border border-white/10">
+  <div className="flex justify-between items-center mb-2">
+    <span className="text-sm text-white/50">سعر المنتج</span>
+    <span className="font-medium">{currentProduct.price} JD</span>
+  </div>
+  <div className="flex justify-between items-center mb-2">
+    <span className="text-sm text-white/50">الطباعة</span>
+    <span className="font-medium text-cyan-400">مجاناً</span>
+  </div>
+  <div className="h-px bg-white/10 my-3" />
+  <div className="flex justify-between items-center">
+    <span className="font-bold">المجموع</span>
+    <span className="text-xl font-bold">{currentProduct.price} JD</span>
+  </div>
+</div>
+
+        </aside >
+
+      </div >
+
+  {/* Modals */ }
+  < SizeChartModal
+open = { sizeChartOpen }
+onClose = {() => setSizeChartOpen(false)}
+productType = { productType }
+  />
+
+    </div >
   )
 }
 

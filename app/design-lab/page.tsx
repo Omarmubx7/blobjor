@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function DesignLabPage() {
   return (
-    <main className="min-h-screen bg-slate-900">
+    <main className="min-h-screen bg-black pt-[80px]">
       <DesignerWrapper />
     </main>
   )
