@@ -340,20 +340,7 @@ export function Products({ products = [] }: ProductsProps) {
           </div>
 
           {/* Sub-category tabs */}
-          <div className={`mt-4 flex flex-wrap gap-2 ${showFilters ? 'block' : 'hidden lg:flex'}`}>
-            {subCategories.map(sub => (
-              <button
-                key={sub.value}
-                onClick={() => setActiveSubCategory(sub.value)}
-                className={`rounded-full px-4 py-2 font-body text-sm font-medium transition-all ${activeSubCategory === sub.value
-                  ? "bg-accent text-accent-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
-                  }`}
-              >
-                {sub.label}
-              </button>
-            ))}
-          </div>
+
         </div>
 
         {/* Results count */}
