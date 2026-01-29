@@ -1,57 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { uploadBase64Image } from '@/lib/cloudinary'
 
 export async function POST(request: NextRequest) {
     try {
         const formData = await request.formData()
 
-        // Helper to upload file to Cloudinary
-        const uploadFile = async (file: File, folder: string = 'designs') => {
-            const buffer = Buffer.from(await file.arrayBuffer())
-            const base64 = buffer.toString('base64')
-            const mimeType = file.type || 'image/png'
-            const dataURI = `data:${mimeType};base64,${base64}`
-            return await uploadBase64Image(dataURI, folder)
-        }
+        // The client now uploads to Cloudinary and sends URLs
+        const previewUrl = formData.get('preview_url') as string
+        const printUrl = formData.get('print_url') as string
+        // asset_urls is sent as a JSON string
+        const assetUrlsString = formData.get('asset_urls') as string
+        const assetUrls = assetUrlsString ? JSON.parse(assetUrlsString) : []
 
-        // Save Preview Image (Mockup)
-        const previewFile = formData.get('preview_image') as File
-        let previewPath = ''
-
-        if (previewFile) {
-            const result = await uploadFile(previewFile, 'designs/previews')
-            previewPath = result.url
-        }
-
-        // Save Print Image (High-Res Design Only)
-        const printFile = formData.get('print_image') as File
-        let printPath = ''
-
-        if (printFile) {
-            const result = await uploadFile(printFile, 'designs/prints')
-            printPath = result.url
-        }
-
-        // Save Uploaded Images (Assets)
-        const uploadedImagesPaths: string[] = []
-        for (const [key, value] of formData.entries()) {
-            if (key.startsWith('uploaded_image_') && value instanceof File) {
-                const result = await uploadFile(value, 'designs/assets')
-                uploadedImagesPaths.push(result.url)
-            }
-        }
-
-        // Get Metadata
-        // const designJson = formData.get('design_json')
+        // Get Metadata (if needed for DB in future)
         // const productType = formData.get('product_type')
         // const price = formData.get('price')
+        // const designJson = formData.get('design_json')
 
         return NextResponse.json({
             success: true,
             design_id: `design-${Date.now()}`,
-            preview_url: previewPath,
-            print_url: printPath,
-            asset_urls: uploadedImagesPaths
+            preview_url: previewUrl,
+            print_url: printUrl,
+            asset_urls: assetUrls
         })
 
     } catch (error) {

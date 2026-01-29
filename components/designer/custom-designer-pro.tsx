@@ -308,6 +308,48 @@ export default function CustomDesignerPro() {
     })
   }
 
+  // Helper: Upload to Cloudinary (Client-Side)
+  const uploadToCloudinary = async (blob: Blob, folder: string = 'designs'): Promise<string> => {
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'YOUR_CLOUD_NAME'
+    const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || 'YOUR_API_KEY'
+
+    // 1. Get Signature
+    const timestamp = Math.round((new Date).getTime() / 1000)
+    const signParams = {
+      timestamp: timestamp,
+      folder: `blob-jo/${folder}`,
+    }
+
+    const signResponse = await fetch('/api/cloudinary/sign', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ paramsToSign: signParams })
+    })
+
+    const { signature } = await signResponse.json()
+    if (!signature) throw new Error('Failed to sign upload request')
+
+    // 2. Upload
+    const formData = new FormData()
+    formData.append('file', blob)
+    formData.append('api_key', apiKey)
+    formData.append('timestamp', timestamp.toString())
+    formData.append('signature', signature)
+    formData.append('folder', `blob-jo/${folder}`)
+
+    const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`
+
+    const response = await fetch(uploadUrl, {
+      method: 'POST',
+      body: formData
+    })
+
+    const data = await response.json()
+    if (data.error) throw new Error(data.error.message)
+    return data.secure_url
+  }
+
+
   const handleSave = async () => {
     if (!fabricRef.current) return
     setIsProcessing(true)
@@ -322,43 +364,50 @@ export default function CustomDesignerPro() {
       if (!printDataUrl) throw new Error('Failed to generate print file')
       const printBlob = await fetch(printDataUrl).then(r => r.blob())
 
-      // 2. Prepare FormData
-      const formData = new FormData()
-      formData.append('preview_image', previewBlob, `preview-${Date.now()}.png`)
-      formData.append('print_image', printBlob, `print-${Date.now()}.png`)
-      formData.append('product_type', productType)
-      formData.append('product_color', selectedColor)
-      formData.append('product_size', selectedSize)
-      formData.append('price', currentProduct.price.toString())
+      // 2. Upload to Cloudinary (Client-Side)
+      const previewUrl = await uploadToCloudinary(previewBlob, 'designs/previews')
+      const printUrl = await uploadToCloudinary(printBlob, 'designs/prints')
 
-      // 3. Collect & Append Original Uploaded Images
+      // 3. Collect & Upload Original Images (Assets)
       const objects = fabricRef.current.getObjects()
-      let imgIndex = 0
       const designJsonObjects = []
+      const assetUrls = []
 
       for (const obj of objects) {
-        // Save metadata
         designJsonObjects.push(obj.toObject())
 
-        // If it's an image, append the file
+        // If it's an image, upload the original blob
         if (obj.type === 'image') {
-          // @ts-ignore - Fabric types can be tricky
+          // @ts-ignore
           const src = obj.getSrc ? obj.getSrc() : (obj as any)._element?.src
-
           if (src && src.startsWith('data:')) {
             const blob = await fetch(src).then(r => r.blob())
-            formData.append(`uploaded_image_${imgIndex}`, blob, `upload-${imgIndex}.png`)
-            imgIndex++
+            const uploadedAssetUrl = await uploadToCloudinary(blob, 'designs/assets')
+            assetUrls.push(uploadedAssetUrl)
+
+            // Update the object src to the cloud URL? 
+            // Better to keep local for now, but in DB we might want cloud URL.
+            // For now, we just track the uploaded asset URLs.
+          } else if (src && src.startsWith('http')) {
+            assetUrls.push(src)
           }
         }
       }
+
+      // 4. Send Metadata to API
+      const formData = new FormData()
+      formData.append('preview_url', previewUrl)
+      formData.append('print_url', printUrl)
+      formData.append('asset_urls', JSON.stringify(assetUrls))
+      formData.append('product_type', productType)
+      formData.append('product_color', selectedColor)
+      formData.append('price', currentProduct.price.toString())
 
       formData.append('design_json', JSON.stringify({
         objects: designJsonObjects,
         printArea
       }))
 
-      // 4. Send to API
       const response = await fetch('/api/orders/create-design', {
         method: 'POST',
         body: formData
@@ -372,17 +421,17 @@ export default function CustomDesignerPro() {
 
       // 5. Add to Cart
       addItem({
-        id: Date.now(), // Generate a unique ID for cart item
+        id: Date.now(),
         title: `${currentProduct.name} - تصميم مخصص`,
         titleAr: `${currentProduct.name} - تصميم مخصص`,
         price: currentProduct.price,
-        image: result.preview_url, // Use the generated realistic preview
+        image: previewUrl,
         size: selectedSize,
         category: productType === 'hoodie' ? 'hoodies' : 'mugs',
         isCustomDesign: true,
         customDesign: {
-          designImageUrl: result.print_url, // High-res print file
-          mockupImageUrl: result.preview_url,
+          designImageUrl: printUrl,
+          mockupImageUrl: previewUrl,
           config: {
             position_x: 0,
             position_y: 0,
@@ -390,7 +439,7 @@ export default function CustomDesignerPro() {
             rotation: 0,
             side: 'front',
             canvasJson: { objects: designJsonObjects, printArea },
-            assetUrls: result.asset_urls
+            assetUrls: assetUrls
           },
           productColor: currentColor.hex,
           notes: 'تصميم مخصص من Design Lab'
