@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://blobjor.me'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.blobjor.me'
 
 export const siteConfig = {
   name: 'blobjor.me',

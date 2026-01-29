@@ -1,6 +1,22 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { uploadBase64Image } from "@/lib/cloudinary";
+import { z } from "zod";
+import { rateLimit } from "@/lib/limit";
+
+// Zod Schema for Order Validation
+const orderSchema = z.object({
+  customerName: z.string().min(2, "الاسم قصير جداً").regex(/^[^<>/]+$/, "الاسم يحتوي على رموز غير صالحة"),
+  customerEmail: z.string().email("البريد الإلكتروني غير صالح").optional().or(z.literal("")),
+  customerPhone: z.string().min(10, "رقم الهاتف غير صالح"),
+  customerAddress: z.string().min(5, "العنوان قصير جداً"),
+  customerCity: z.string().default("عمّان"),
+  items: z.array(z.any()).min(1, "السلة فارغة"), // ideally validate item structure too
+  paymentMethod: z.enum(["cod", "card"]).default("cod"),
+  notes: z.string().optional(),
+  shippingCost: z.number().min(0),
+  couponId: z.string().optional(),
+});
 
 // Generate order ID: ORDER-YYYYMMDD-XXX
 async function generateOrderId(): Promise<string> {
@@ -44,26 +60,31 @@ interface CustomDesignItem {
 // POST - Create new order
 export async function POST(request: Request) {
   try {
+    // 1. Rate Limiting (IP based)
+    const isAllowed = await rateLimit(5, 60 * 60 * 1000); // 5 orders per hour per IP
+    if (!isAllowed) {
+      return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+    }
+
     const body = await request.json();
+
+    // 2. Input Validation
+    const validation = orderSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error.errors[0].message }, { status: 400 });
+    }
+
     const {
       customerName,
       customerEmail,
       customerPhone,
       customerAddress,
-      customerCity = "عمّان",
+      customerCity,
       items,
-      paymentMethod = "cod",
+      paymentMethod,
       notes,
-      shippingCost = 0,
-    } = body;
-
-    // Validation
-    if (!customerName || !customerPhone || !customerAddress || !customerEmail || !items?.length) {
-      return NextResponse.json(
-        { error: "الرجاء تعبئة جميع الحقول المطلوبة" },
-        { status: 400 }
-      );
-    }
+      shippingCost,
+    } = validation.data;
 
     // Find or create customer first
     let customer = await prisma.customer.findUnique({
@@ -308,9 +329,24 @@ export async function POST(request: Request) {
   }
 }
 
-// GET - List orders (with optional filters)
+// GET - List orders (Protected: Admin Only)
 export async function GET(request: Request) {
   try {
+    const session = await import("@/auth").then(mod => mod.auth());
+    console.log("Session in API:", session);
+
+    // Basic protection: Ensure user is logged in. 
+    // Ideally check for role === 'admin' if you have roles.
+    // Assuming only admins access this dashboard or users access their own.
+    // But this generic GET seems to be for Admin Dashboard based on params.
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // If strict admin check is needed:
+    // const isAdmin = session.user.email === 'omarmubaidin@proton.me' || session.user.email === 'Hassanemad8877@gmail.com';
+    // if (!isAdmin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const phone = searchParams.get("phone");

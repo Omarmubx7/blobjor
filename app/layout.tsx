@@ -54,7 +54,7 @@ export default async function RootLayout({
     <html lang="ar" dir="rtl" className="scroll-smooth">
       {/* ... head ... */}
       <head>
-        <link rel="canonical" href={process.env.NEXT_PUBLIC_SITE_URL || 'https://blobjor.me'} />
+        <link rel="canonical" href={process.env.NEXT_PUBLIC_SITE_URL || 'https://www.blobjor.me'} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
