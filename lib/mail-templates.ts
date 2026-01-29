@@ -17,18 +17,18 @@ export const getWelcomeEmailTemplate = (name: string) => `
 <body>
   <div class="container">
     <div class="header">
-      <a href="https://blob.jo" class="logo">BloB.JO</a>
+      <a href="https://blobjor.me" class="logo">blobjor.me</a>
     </div>
     <div class="content">
       <h2>أهلاً بك يا ${name}! 👋</h2>
-      <p>شكراً لانضمامك إلى عائلة BloB.JO. نحن سعيدون جداً بوجودك معنا.</p>
+      <p>شكراً لانضمامك إلى عائلة blobjor.me. نحن سعيدون جداً بوجودك معنا.</p>
       <p>اكتشف مجموعتنا المميزة من المنتجات المصممة خصيصاً لك، أو ابدأ في تصميم منتجك الخاص الآن.</p>
       <div style="text-align: center;">
-        <a href="https://blob.jo/products" class="button">تصفح المنتجات</a>
+        <a href="https://blobjor.me/products" class="button">تصفح المنتجات</a>
       </div>
     </div>
     <div class="footer">
-      <p>© ${new Date().getFullYear()} BloB.JO. جميع الحقوق محفوظة.</p>
+      <p>© ${new Date().getFullYear()} blobjor.me. جميع الحقوق محفوظة.</p>
     </div>
   </div>
 </body>
@@ -68,7 +68,7 @@ export const getOrderConfirmationEmailTemplate = (order: any) => {
 <body>
   <div class="container">
     <div class="header">
-      <a href="https://blob.jo" class="logo">BloB.JO</a>
+      <a href="https://blobjor.me" class="logo">blobjor.me</a>
     </div>
     <div class="content">
       <h2>شكراً لطلبك! 🎉</h2>
@@ -92,7 +92,7 @@ export const getOrderConfirmationEmailTemplate = (order: any) => {
     </div>
     <div class="footer">
       <p>لديك سؤال؟ تواصل معنا عبر الواتساب: +962791234567</p>
-      <p>© ${new Date().getFullYear()} BloB.JO</p>
+      <p>© ${new Date().getFullYear()} blobjor.me</p>
     </div>
   </div>
 </body>
@@ -118,7 +118,7 @@ export const getResetPasswordEmailTemplate = (otp: string) => `
 <body>
   <div class="container">
     <div class="header">
-      <a href="https://blob.jo" class="logo">BloB.JO</a>
+      <a href="https://blobjor.me" class="logo">blobjor.me</a>
     </div>
     <div class="content">
       <h2>إعادة تعيين كلمة المرور 🔒</h2>
@@ -137,7 +137,7 @@ export const getResetPasswordEmailTemplate = (otp: string) => `
       </p>
     </div>
     <div class="footer">
-      <p>© ${new Date().getFullYear()} BloB.JO. جميع الحقوق محفوظة.</p>
+      <p>© ${new Date().getFullYear()} blobjor.me. جميع الحقوق محفوظة.</p>
     </div>
   </div>
 </body>

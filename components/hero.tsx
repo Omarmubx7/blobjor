@@ -59,7 +59,7 @@ export function Hero({ content }: HeroProps) {
         <div className="relative z-10 max-w-4xl mx-auto mb-12 animate-fade-in-up">
 
           {/* Headlines */}
-          <h1 className="font-sans font-black text-5xl md:text-7xl lg:text-8xl leading-tight mb-6">
+          <h1 className="font-sans font-black text-4xl md:text-7xl lg:text-8xl leading-tight mb-6">
             {content?.title ? (
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
                 {content.title}

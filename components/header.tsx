@@ -100,7 +100,7 @@ export function Header({ user }: { user?: any }) {
           <div className="flex flex-col">
             <span className={`font-sans text-2xl font-black tracking-tight transition-colors ${isScrolled ? "text-foreground" : "text-foreground"
               }`}>
-              BloB
+              blobjor.me
             </span>
             <span className={`text-[10px] font-medium tracking-wider transition-colors ${isScrolled ? "text-muted-foreground" : "text-muted-foreground"
               }`}>
@@ -245,7 +245,7 @@ export function Header({ user }: { user?: any }) {
           <a href="#hero" onClick={(e) => { e.preventDefault(); handleNavClick("#hero"); }} className="flex items-center gap-3">
             <Image src="/Bloblogo.png" alt="BloB Logo" width={48} height={48} className="h-12 w-12 object-contain" />
             <div className="flex flex-col">
-              <span className="font-sans text-2xl font-black tracking-tight text-foreground">BloB</span>
+              <span className="font-sans text-2xl font-black tracking-tight text-foreground">blobjor.me</span>
               <span className="text-[10px] font-medium tracking-wider text-muted-foreground">PRINT ON DEMAND</span>
             </div>
           </a>

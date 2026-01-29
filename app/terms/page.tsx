@@ -9,7 +9,7 @@ export default function TermsPage() {
 
                 <section className="space-y-4">
                     <h2 className="text-xl font-semibold">1. مقدمة</h2>
-                    <p>أهلاً بك في منصة BloB.JO. باستخامك لموقعنا، فإنك توافق على الالتزام بهذه الشروط والأحكام.</p>
+                    <p>أهلاً بك في منصة blobjor.me. باستخامك لموقعنا، فإنك توافق على الالتزام بهذه الشروط والأحكام.</p>
                 </section>
 
                 <section className="space-y-4">
@@ -19,7 +19,7 @@ export default function TermsPage() {
 
                 <section className="space-y-4">
                     <h2 className="text-xl font-semibold">3. الملكية الفكرية</h2>
-                    <p>جميع التصاميم والمحتوى على الموقع هي ملك لـ BloB.JO أو مرخصيها.</p>
+                    <p>جميع التصاميم والمحتوى على الموقع هي ملك لـ blobjor.me أو مرخصيها.</p>
                 </section>
 
                 <section className="space-y-4">

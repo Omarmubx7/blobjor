@@ -58,7 +58,7 @@ export function Footer() {
               />
               <div className="flex flex-col">
                 <span className="font-sans text-3xl font-black text-primary-foreground">
-                  BloB
+                  blobjor.me
                 </span>
                 <span className="text-xs font-medium tracking-wider text-primary-foreground/60">
                   PRINT ON DEMAND
@@ -69,7 +69,7 @@ export function Footer() {
               طباعة حسب الطلب - حول أفكارك لواقع. جودة عالية، توصيل سريع، أسعار مناسبة.
             </p>
             <p className="mt-2 font-body text-sm font-semibold text-accent">
-              BE BOLD. BE YOU. BE BLOB.
+              BE BOLD. BE YOU. BE BLOBJOR.ME
             </p>
 
             {/* Social Icons */}
@@ -175,7 +175,7 @@ export function Footer() {
       <div className="border-t border-primary-foreground/10">
         <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-4 px-4 py-6 lg:flex-row lg:px-8">
           <p className="flex items-center gap-1 font-body text-xs text-primary-foreground/50">
-            صُنع بـ <Heart size={14} className="text-destructive fill-destructive" /> في الأردن © 2025 BloB
+            صُنع بـ <Heart size={14} className="text-destructive fill-destructive" /> في الأردن © 2025 blobjor.me
           </p>
 
           <div className="flex items-center gap-6">

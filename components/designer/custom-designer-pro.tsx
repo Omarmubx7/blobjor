@@ -1,11 +1,12 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'
+import Link from 'next/link'
 import {
   Upload, Type, Layers, ShoppingBag, Download,
   RotateCw, ZoomIn, ZoomOut, Trash2, Maximize2,
   Check, ChevronDown, AlignLeft, AlignCenter, AlignRight,
-  Move, X, Undo2, Redo2, Eye, EyeOff
+  Move, X, Undo2, Redo2, Eye, EyeOff, ArrowRight
 } from 'lucide-react'
 import * as fabric from 'fabric' // Fabric.js v6+
 import { SizeChartModal } from './size-chart-modal'
@@ -469,10 +470,13 @@ export default function CustomDesignerPro() {
       {/* HEADER */}
       <div className="h-16 border-b border-white/10 bg-slate-900/50 flex items-center justify-between px-6 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-3">
-          <div className="bg-gradient-to-tr from-cyan-500 to-blue-600 p-2 rounded-lg">
+          <Link href="/" className="p-2 -mr-2 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white" title="رجوع">
+            <ArrowRight size={24} />
+          </Link>
+          <div className="bg-gradient-to-tr from-cyan-500 to-blue-600 p-2 rounded-lg hidden sm:block">
             <ShoppingBag size={20} className="text-white" />
           </div>
-          <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
+          <h1 className="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
             BloB<span className="text-cyan-400">.JO</span> Design Lab
           </h1>
         </div>
@@ -495,10 +499,10 @@ export default function CustomDesignerPro() {
       </div>
 
       {/* 3-PANEL LAYOUT */}
-      <div className="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-[280px_1fr_280px]">
+      <div className="flex-1 overflow-hidden flex flex-col lg:grid lg:grid-cols-[280px_1fr_280px]">
 
         {/* LEFT PANEL: TOOLS */}
-        <aside className="bg-slate-900 border-r border-white/10 flex flex-col z-20 shadow-xl">
+        <aside className="bg-slate-900 border-r border-white/10 flex flex-col z-20 shadow-xl order-2 lg:order-none h-1/3 lg:h-auto border-t lg:border-t-0">
           {/* Tabs */}
           <div className="flex border-b border-white/10">
             {[
@@ -672,7 +676,7 @@ export default function CustomDesignerPro() {
         </aside>
 
         {/* CENTER PANEL: CANVAS */}
-        <main className="relative bg-slate-950 flex flex-col">
+        <main className="relative bg-slate-950/50 flex items-center justify-center p-4 lg:p-10 perspective-1000 overflow-hidden order-1 lg:order-none flex-1">
           {/* Toolbar */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full px-4 py-2 flex items-center gap-2 z-30 shadow-2xl">
             <button className="p-2 hover:bg-white/10 rounded-full text-white/80" onClick={handleClone} title="نسخ">
@@ -727,7 +731,7 @@ export default function CustomDesignerPro() {
         </main>
 
         {/* RIGHT PANEL: PRODUCT OPTIONS */}
-        <aside className="bg-slate-900 border-l border-white/10 flex flex-col z-20 shadow-xl p-6 gap-8 overflow-y-auto custom-scrollbar">
+        <aside className="bg-slate-900 border-l border-white/10 flex flex-col z-20 shadow-xl p-6 gap-8 overflow-y-auto custom-scrollbar order-3 lg:order-none h-auto lg:h-full border-t lg:border-t-0 pb-20 lg:pb-6">
 
           {/* Product Info */}
           <div>

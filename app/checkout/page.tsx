@@ -265,7 +265,7 @@ export default function CheckoutPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <Link href="/" className="flex items-center gap-3 group">
             <Image src="/Bloblogo.png" alt="BloB Logo" width={40} height={40} className="h-10 w-10 object-contain" />
-            <span className="font-sans text-xl font-black">BloB</span>
+            <span className="font-sans text-xl font-black">blobjor.me</span>
           </Link>
           <div className="flex items-center gap-2">
             <Package size={18} className="text-primary" />

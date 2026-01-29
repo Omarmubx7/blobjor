@@ -14,11 +14,11 @@ import {
 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'اتصل بنا | BloB.JO',
-  description: 'تواصل مع فريق BloB.JO - نحن هنا لمساعدتك. راسلنا أو اتصل بنا للاستفسارات والطلبات الخاصة',
+  title: 'اتصل بنا | blobjor.me',
+  description: 'تواصل مع فريق blobjor.me - نحن هنا لمساعدتك. راسلنا أو اتصل بنا للاستفسارات والطلبات الخاصة',
   openGraph: {
-    title: 'اتصل بنا | BloB.JO',
-    description: 'تواصل مع فريق BloB.JO - نحن هنا لمساعدتك',
+    title: 'اتصل بنا | blobjor.me',
+    description: 'تواصل مع فريق blobjor.me - نحن هنا لمساعدتك',
     type: 'website',
   },
 }

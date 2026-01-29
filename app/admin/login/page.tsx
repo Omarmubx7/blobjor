@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
         <CardHeader className="space-y-4 text-center pb-2">
           {/* Logo */}
           <div className="mx-auto w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mb-2">
-            <span className="text-3xl font-bold text-primary">BloB</span>
+            <span className="text-3xl font-bold text-primary">blobjor.me</span>
           </div>
 
           <CardTitle className="text-2xl font-bold">
@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@blob.jo"
+                  placeholder="admin@blobjor.me"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pr-10 text-right"
@@ -149,7 +149,7 @@ export default function AdminLoginPage() {
           {/* Footer */}
           <div className="mt-6 pt-6 border-t border-muted/50 text-center">
             <p className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} BloB.JO - جميع الحقوق محفوظة
+              © {new Date().getFullYear()} blobjor.me - جميع الحقوق محفوظة
             </p>
           </div>
         </CardContent>

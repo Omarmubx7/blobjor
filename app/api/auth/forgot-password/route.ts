@@ -40,9 +40,9 @@ export async function POST(request: Request) {
 
         // 4. Send Email
         await resend.emails.send({
-            from: 'BloB.JO <info@blob.jo>',
+            from: 'blobjor.me <info@blobjor.me>',
             to: customer.email!,
-            subject: 'رمز التحقق لإعادة تعيين كلمة المرور - BloB.JO',
+            subject: 'رمز التحقق لإعادة تعيين كلمة المرور - blobjor.me',
             html: getResetPasswordEmailTemplate(otp),
         })
 

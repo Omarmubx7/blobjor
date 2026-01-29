@@ -20,7 +20,7 @@ export async function sendEmail({
 
     try {
         const data = await resend.emails.send({
-            from: `BloB.JO <${FROM_EMAIL}>`,
+            from: `blobjor.me <${FROM_EMAIL}>`,
             to: [to],
             subject: subject,
             html: html,

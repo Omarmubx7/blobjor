@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://blob.jo'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://blobjor.me'
 
 export const siteConfig = {
-  name: 'BloB.JO',
-  nameAr: 'بلوب',
-  tagline: 'BE BOLD. BE YOU. BE BLOB.',
-  taglineAr: 'كن جريئاً. كن أنت. كن بلوب.',
+  name: 'blobjor.me',
+  nameAr: 'blobjor.me',
+  tagline: 'BE BOLD. BE YOU. BE BLOBJOR.ME',
+  taglineAr: 'كن جريئاً. كن أنت. كن blobjor.me',
   description: 'طباعة حسب الطلب في الأردن - هوديات، أكواب، وتصاميم مخصصة بجودة عالية. توصيل سريع لكل المملكة، أسعار مناسبة.',
   descriptionEn: 'Print on demand in Jordan - Premium hoodies, mugs, and custom designs. Fast delivery across Jordan.',
   url: siteUrl,
@@ -34,22 +34,22 @@ export const siteConfig = {
     'custom hoodies jordan',
     'custom mugs jordan',
     'print on demand jordan',
-    'BloB',
-    'بلوب',
+    'blobjor.me',
+    'blobjor',
   ],
 }
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'BloB.JO | طباعة حسب الطلب في الأردن - حول أفكارك لواقع',
-    template: '%s | BloB.JO',
+    default: 'blobjor.me | طباعة حسب الطلب في الأردن - حول أفكارك لواقع',
+    template: '%s | blobjor.me',
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
-  authors: [{ name: 'BloB.JO', url: siteUrl }],
-  creator: 'BloB.JO',
-  publisher: 'BloB.JO',
+  authors: [{ name: 'blobjor.me', url: siteUrl }],
+  creator: 'blobjor.me',
+  publisher: 'blobjor.me',
   formatDetection: {
     email: false,
     address: false,
@@ -65,21 +65,21 @@ export const defaultMetadata: Metadata = {
     type: 'website',
     locale: 'ar_JO',
     url: siteUrl,
-    siteName: 'BloB.JO',
-    title: 'BloB.JO | طباعة حسب الطلب في الأردن',
+    siteName: 'blobjor.me',
+    title: 'blobjor.me | طباعة حسب الطلب في الأردن',
     description: siteConfig.description,
     images: [
       {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'BloB.JO - طباعة حسب الطلب في الأردن',
+        alt: 'blobjor.me - طباعة حسب الطلب في الأردن',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BloB.JO | طباعة حسب الطلب في الأردن',
+    title: 'blobjor.me | طباعة حسب الطلب في الأردن',
     description: siteConfig.description,
     images: [siteConfig.ogImage],
     creator: '@blobjo',
@@ -112,7 +112,7 @@ export function getOrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${siteUrl}/#organization`,
-    name: 'BloB.JO',
+    name: 'blobjor.me',
     alternateName: 'بلوب',
     url: siteUrl,
     logo: {
@@ -150,8 +150,8 @@ export function getWebsiteSchema() {
     '@type': 'WebSite',
     '@id': `${siteUrl}/#website`,
     url: siteUrl,
-    name: 'BloB.JO',
-    alternateName: 'بلوب - طباعة حسب الطلب',
+    name: 'blobjor.me',
+    alternateName: 'blobjor.me - طباعة حسب الطلب',
     description: siteConfig.description,
     publisher: {
       '@id': `${siteUrl}/#organization`,
@@ -167,6 +167,7 @@ export function getWebsiteSchema() {
     },
   }
 }
+
 
 // Product JSON-LD Schema
 export function getProductSchema(product: {
@@ -189,7 +190,7 @@ export function getProductSchema(product: {
     url: `${siteUrl}/products/${product.slug}`,
     brand: {
       '@type': 'Brand',
-      name: 'BloB.JO',
+      name: 'blobjor.me',
     },
     offers: {
       '@type': 'Offer',
