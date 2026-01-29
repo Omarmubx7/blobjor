@@ -50,14 +50,14 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background p-4" dir="rtl">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMjIiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
-      
+
       <Card className="w-full max-w-md relative shadow-2xl border-muted/50">
         <CardHeader className="space-y-4 text-center pb-2">
           {/* Logo */}
           <div className="mx-auto w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mb-2">
             <span className="text-3xl font-bold text-primary">BloB</span>
           </div>
-          
+
           <CardTitle className="text-2xl font-bold">
             لوحة التحكم
           </CardTitle>
@@ -65,7 +65,7 @@ export default function AdminLoginPage() {
             أدخل بيانات اعتماد المسؤول للوصول إلى لوحة التحكم
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="pt-4">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
                 {error}
               </div>
             )}
-            
+
             {/* Email Field */}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@blobjp.com"
+                  placeholder="admin@blob.jo"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pr-10 text-right"
@@ -95,7 +95,7 @@ export default function AdminLoginPage() {
                 />
               </div>
             </div>
-            
+
             {/* Password Field */}
             <div className="space-y-2">
               <Label htmlFor="password" className="text-sm font-medium">
@@ -128,7 +128,7 @@ export default function AdminLoginPage() {
                 </button>
               </div>
             </div>
-            
+
             {/* Submit Button */}
             <Button
               type="submit"
@@ -145,7 +145,7 @@ export default function AdminLoginPage() {
               )}
             </Button>
           </form>
-          
+
           {/* Footer */}
           <div className="mt-6 pt-6 border-t border-muted/50 text-center">
             <p className="text-xs text-muted-foreground">

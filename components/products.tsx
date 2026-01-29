@@ -10,7 +10,7 @@ import { SizeChartModal } from "@/components/designer/size-chart-modal"
 
 import { Product as PrismaProduct, ProductImage, Category as PrismaCategory } from "@prisma/client"
 
-type Category = "hoodies" | "mugs" | "scarves" | "keychains" | "oldmoney"
+type Category = "hoodies" | "mugs" | "tshirts" | "stickers"
 type SortOption = "newest" | "price-low" | "price-high" | "popular"
 type SubCategory = "all" | "anime" | "movies" | "series" | "sports" | "jordan" | "other"
 
@@ -104,9 +104,8 @@ export function Products({ products = [] }: ProductsProps) {
   // Calculate counts for badges
   const hoodiesCount = products.filter(p => p.category === "hoodies").length
   const mugsCount = products.filter(p => p.category === "mugs").length
-  const scarvesCount = products.filter(p => p.category === "scarves").length
-  const keychainsCount = products.filter(p => p.category === "keychains").length
-  const oldmoneyCount = products.filter(p => p.category === "oldmoney").length
+  const tshirtsCount = products.filter(p => p.category === "tshirts").length
+  const stickersCount = products.filter(p => p.category === "stickers").length
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -292,53 +291,36 @@ export function Products({ products = [] }: ProductsProps) {
             </span>
           </button>
           <button
-            onClick={() => { setActiveCategory("scarves"); resetFilters(); }}
-            className={`group relative overflow-hidden rounded-2xl px-8 py-4 font-body text-base font-bold transition-all duration-300 ${activeCategory === "scarves"
+            onClick={() => { setActiveCategory("tshirts"); resetFilters(); }}
+            className={`group relative overflow-hidden rounded-2xl px-8 py-4 font-body text-base font-bold transition-all duration-300 ${activeCategory === "tshirts"
               ? "bg-primary text-primary-foreground shadow-lg"
               : "bg-card text-foreground hover:bg-card-hover border border-border"
               }`}
           >
             <span className="relative z-10 flex items-center gap-2">
-              🧣 أوشحة Scarves
-              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${activeCategory === "scarves"
+              👕 تيشيرتات T-Shirts
+              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${activeCategory === "tshirts"
                 ? "bg-primary-foreground/20 text-primary-foreground"
                 : "bg-primary/10 text-primary"
                 }`}>
-                {scarvesCount}
+                {tshirtsCount}
               </span>
             </span>
           </button>
           <button
-            onClick={() => { setActiveCategory("keychains"); resetFilters(); }}
-            className={`group relative overflow-hidden rounded-2xl px-8 py-4 font-body text-base font-bold transition-all duration-300 ${activeCategory === "keychains"
+            onClick={() => { setActiveCategory("stickers"); resetFilters(); }}
+            className={`group relative overflow-hidden rounded-2xl px-8 py-4 font-body text-base font-bold transition-all duration-300 ${activeCategory === "stickers"
               ? "bg-primary text-primary-foreground shadow-lg"
               : "bg-card text-foreground hover:bg-card-hover border border-border"
               }`}
           >
             <span className="relative z-10 flex items-center gap-2">
-              🔑 ميداليات Keychains
-              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${activeCategory === "keychains"
+              🏷️ ملصقات Stickers
+              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${activeCategory === "stickers"
                 ? "bg-primary-foreground/20 text-primary-foreground"
                 : "bg-primary/10 text-primary"
                 }`}>
-                {keychainsCount}
-              </span>
-            </span>
-          </button>
-          <button
-            onClick={() => { setActiveCategory("oldmoney"); resetFilters(); }}
-            className={`group relative overflow-hidden rounded-2xl px-8 py-4 font-body text-base font-bold transition-all duration-300 ${activeCategory === "oldmoney"
-              ? "bg-primary text-primary-foreground shadow-lg"
-              : "bg-card text-foreground hover:bg-card-hover border border-border"
-              }`}
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              👔 أولد موني Old Money
-              <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${activeCategory === "oldmoney"
-                ? "bg-primary-foreground/20 text-primary-foreground"
-                : "bg-primary/10 text-primary"
-                }`}>
-                {oldmoneyCount}
+                {stickersCount}
               </span>
             </span>
           </button>

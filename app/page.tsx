@@ -32,7 +32,9 @@ export default async function Home() {
       // Adjust mapping:
       const s = p.category.slug;
       if (s === "mugs") categorySlug = "mugs";
-      else if (s === "hoodies" || s === "tshirts") categorySlug = "hoodies"; // Group tshirts with hoodies for this UI or add tshirts to type
+      else if (s === "tshirts") categorySlug = "tshirts";
+      else if (s === "stickers") categorySlug = "stickers";
+      else if (s === "hoodies") categorySlug = "hoodies";
     }
 
     // Determine subcategory based on name/description (simple heuristic)

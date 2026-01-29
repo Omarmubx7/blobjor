@@ -30,7 +30,7 @@ export interface CartItem {
   image: string
   size: string
   quantity: number
-  category: "hoodies" | "mugs" | "scarves" | "keychains" | "oldmoney"
+  category: "hoodies" | "mugs" | "tshirts" | "stickers"
   // Custom design fields
   isCustomDesign?: boolean
   customDesign?: CustomDesignData

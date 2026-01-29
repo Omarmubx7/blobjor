@@ -66,15 +66,50 @@ export async function loginAdmin(email: string, password: string): Promise<{
       return { success: false, error: 'الحساب غير مفعل' }
     }
 
+    // Check if account is locked
+    if (admin.lockedUntil && admin.lockedUntil > new Date()) {
+      const minutesLeft = Math.ceil((admin.lockedUntil.getTime() - Date.now()) / 60000)
+      return {
+        success: false,
+        error: `الحساب مقفل مؤقتاً بسبب تكرار محاولات الدخول الخاطئة. يرجى المحاولة بعد ${minutesLeft} دقيقة.`
+      }
+    }
+
     const isValid = await verifyPassword(password, admin.passwordHash)
+
     if (!isValid) {
+      // Increment failed attempts
+      const failedAttempts = admin.failedAttempts + 1
+      let lockedUntil = null
+
+      // Lock if 5 attempts reached
+      if (failedAttempts >= 5) {
+        lockedUntil = new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
+      }
+
+      await prisma.adminUser.update({
+        where: { id: admin.id },
+        data: {
+          failedAttempts,
+          lockedUntil
+        },
+      })
+
+      if (lockedUntil) {
+        return { success: false, error: 'تم قفل الحساب لمدة 15 دقيقة بسبب تكرار المحاولات الخاطئة' }
+      }
+
       return { success: false, error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' }
     }
 
-    // Update last login
+    // Reset failed attempts and update last login
     await prisma.adminUser.update({
       where: { id: admin.id },
-      data: { lastLogin: new Date() },
+      data: {
+        lastLogin: new Date(),
+        failedAttempts: 0,
+        lockedUntil: null
+      },
     })
 
     const payload: AdminPayload = {
@@ -135,7 +170,7 @@ export async function isAuthenticated(): Promise<boolean> {
 export async function hasRole(requiredRole: string): Promise<boolean> {
   const admin = await getCurrentAdmin()
   if (!admin) return false
-  
+
   if (admin.role === 'super_admin') return true
   return admin.role === requiredRole
 }
@@ -144,11 +179,11 @@ export async function hasRole(requiredRole: string): Promise<boolean> {
 export async function verifySession(request: NextRequest): Promise<AdminPayload | null> {
   try {
     const token = request.cookies.get(COOKIE_NAME)?.value
-    
+
     if (!token) {
       return null
     }
-    
+
     return await verifyToken(token)
   } catch {
     return null
