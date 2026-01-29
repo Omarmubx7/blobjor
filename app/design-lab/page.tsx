@@ -1,6 +1,4 @@
 import { Metadata } from "next"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 import DesignerWrapper from "@/components/designer/designer-wrapper"
 
 export const metadata: Metadata = {
@@ -16,9 +14,7 @@ export const metadata: Metadata = {
 export default function DesignLabPage() {
   return (
     <main className="min-h-screen bg-slate-900">
-      <Header />
       <DesignerWrapper />
-      <Footer />
     </main>
   )
 }
