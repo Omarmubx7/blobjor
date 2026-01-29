@@ -143,3 +143,73 @@ export const getResetPasswordEmailTemplate = (otp: string) => `
 </body>
 </html>
 `;
+
+
+export const getAdminNewOrderEmailTemplate = (order: any, customer: any) => `
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <style>
+    body { font-family: sans-serif; direction: rtl; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; border: 1px solid #ccc; padding: 20px; border-radius: 8px; }
+    .header { background: #f3f4f6; padding: 10px; text-align: center; font-weight: bold; margin-bottom: 20px; }
+    .item { border-bottom: 1px solid #eee; padding: 10px 0; display: flex; justify-content: space-between; }
+    .total { font-weight: bold; font-size: 1.2em; margin-top: 20px; text-align: left; }
+    .customer-info { margin-bottom: 20px; background: #fffbe6; padding: 15px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">طلب جديد! 🚀 (#${order.id})</div>
+    
+    <div class="customer-info">
+      <strong>معلومات العميل:</strong><br>
+      الاسم: ${customer.name}<br>
+      الهاتف: ${customer.phone}<br>
+      العنوان: ${customer.city} - ${customer.address}<br>
+    </div>
+
+    <h3>تفاصيل الطلب:</h3>
+    ${order.items.map((item: any) => `
+      <div class="item">
+        <div>
+          ${item.productName} (x${item.quantity})
+          ${item.size ? `| ${item.size}` : ''} 
+          ${item.color ? `| ${item.color}` : ''}
+        </div>
+        <div>${item.subtotal} د.أ</div>
+      </div>
+    `).join('')}
+
+    <div class="total">
+      الإجمالي: ${order.totalPrice} د.أ
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+      <a href="https://blobjor.me/admin/orders/${order.id}" style="background: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">عرض الطلب في لوحة التحكم</a>
+    </div>
+  </div>
+</body>
+</html>
+`;
+
+export const getVerificationEmailTemplate = (name: string, otp: string) => `
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <style>
+    body { font-family: sans-serif; direction: rtl; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px; border-radius: 8px; }
+    .otp { font-size: 24px; font-weight: bold; color: #3b82f6; text-align: center; margin: 20px 0; letter-spacing: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>مرحباً ${name}،</h2>
+    <p>يرجى استخدام رمز التحقق التالي لتأكيد بريدك الإلكتروني:</p>
+    <div class="otp">${otp}</div>
+    <p>هذا الرمز صالح لمدة 10 دقائق.</p>
+  </div>
+</body>
+</html>
+`;

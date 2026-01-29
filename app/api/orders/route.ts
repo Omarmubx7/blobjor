@@ -266,6 +266,34 @@ export async function POST(request: Request) {
       },
     });
 
+    // Send Emails (Async - don't block response)
+    (async () => {
+      try {
+        const { getOrderConfirmationEmailTemplate, getAdminNewOrderEmailTemplate } = await import('@/lib/mail-templates');
+        const { sendEmail } = await import('@/lib/mail');
+
+        // 1. Send Order Confirmation to Customer (if email exists)
+        if (customerEmail) {
+          await sendEmail({
+            to: customerEmail,
+            subject: `تأكيد الطلب #${order.id} - blobjor.me`,
+            html: getOrderConfirmationEmailTemplate(order),
+          });
+        }
+
+        // 2. Send New Order Notification to Admin
+        const ADMIN_EMAIL = 'omarmubaidin@proton.me'; // Updated per user request
+        await sendEmail({
+          to: ADMIN_EMAIL,
+          subject: `طلب جديد: #${order.id} - ${customerName}`,
+          html: getAdminNewOrderEmailTemplate(order, { name: customerName, phone: customerPhone, address: customerAddress, city: customerCity }),
+        });
+
+      } catch (emailError) {
+        console.error("Failed to send order emails:", emailError);
+      }
+    })();
+
     return NextResponse.json({
       success: true,
       order,

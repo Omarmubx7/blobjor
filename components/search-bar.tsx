@@ -26,7 +26,7 @@ export function SearchBar() {
                     placeholder="ابحث عن منتج..."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="w-40 sm:w-60 rounded-full border border-border bg-background/50 px-4 py-2 text-sm pl-10 transition-all focus:w-48 sm:focus:w-72 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    className="w-full sm:w-60 rounded-full border border-border bg-background/50 px-4 py-2 text-sm pl-10 transition-all focus:w-full sm:focus:w-72 focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
                 <button
                     type="submit"

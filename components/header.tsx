@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Menu, X, ShoppingBag, Instagram, MessageCircle, Sparkles, Package, Palette } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter, usePathname } from "next/navigation"
 import { useCart } from "@/contexts/cart-context"
 import { UserMenu } from "@/components/auth/user-menu"
 import { SearchBar } from "@/components/search-bar"
@@ -19,6 +20,7 @@ const navLinks: NavLink[] = [
   { href: "#hero", label: "الرئيسية", labelEn: "Home" },
   { href: "#shop", label: "منتجاتنا", labelEn: "Products" },
   { href: "#how-it-works", label: "كيف يعمل", labelEn: "How It Works" },
+  { href: "/about", label: "من نحن", labelEn: "About Us", isPage: true },
   { href: "#contact", label: "اتصل", labelEn: "Contact" },
 ]
 
@@ -61,18 +63,35 @@ export function Header({ user }: { user?: any }) {
     }
   }, [isMenuOpen])
 
+  const router = useRouter()
+  const pathname = usePathname()
+
   const handleNavClick = (href: string, isPage?: boolean) => {
     setIsMenuOpen(false)
+
     if (isPage) {
-      // Page links are handled by Next.js Link
+      if (href.startsWith('http')) {
+        window.open(href, '_blank')
+      } else {
+        router.push(href)
+      }
       return
     }
-    setActiveSection(href)
+
     if (href.startsWith("#")) {
-      const element = document.querySelector(href)
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" })
+      if (pathname === "/") {
+        // We are on home page, scroll to section
+        setActiveSection(href)
+        const element = document.querySelector(href)
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" })
+        }
+      } else {
+        // We are not on home page, navigate to home with hash
+        router.push(`/${href}`)
       }
+    } else {
+      router.push(href)
     }
   }
 
@@ -259,6 +278,9 @@ export function Header({ user }: { user?: any }) {
 
         {/* Menu Navigation */}
         <nav className="flex flex-col p-6">
+          <div className="mb-6">
+            <SearchBar />
+          </div>
           {navLinks.map((link, index) =>
             link.isPage ? (
               <Link
