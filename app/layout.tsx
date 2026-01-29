@@ -4,6 +4,7 @@ import { Montserrat, Cairo } from 'next/font/google'
 import { CartProvider } from '@/contexts/cart-context'
 import { ToastProvider } from '@/contexts/toast-context'
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 
 import { defaultMetadata, getOrganizationSchema, getWebsiteSchema, getLocalBusinessSchema } from '@/lib/seo-config'
 import './globals.css'
@@ -81,6 +82,7 @@ export default async function RootLayout({
               <MainLayout user={user}>
                 {children}
                 <SpeedInsights />
+                <Analytics />
               </MainLayout>
             </AuthProvider>
           </CartProvider>
