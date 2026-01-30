@@ -47,113 +47,102 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-muted/30 to-background p-4" dir="rtl">
+    return (
+    <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4 relative overflow-hidden" dir="rtl">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMjIiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-900 via-zinc-950 to-zinc-950 opacity-80" />
 
-      <Card className="w-full max-w-md relative shadow-2xl border-muted/50">
-        <CardHeader className="space-y-4 text-center pb-2">
-          {/* Logo */}
-          <div className="mx-auto w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mb-2">
-            <span className="text-3xl font-bold text-primary">blobjor.me</span>
+      <div className="w-full max-w-md bg-black border border-zinc-800 p-8 pt-12 relative z-10 shadow-2xl">
+        <div className="absolute top-0 left-0 w-full h-1 bg-zinc-800" />
+
+        {/* Header */}
+        <div className="flex flex-col items-center mb-10 text-center">
+          <span className="font-mono text-zinc-500 text-xs mb-4 uppercase tracking-widest border border-zinc-800 px-3 py-1 rounded-full">System Access</span>
+          <h1 className="font-heading font-black text-4xl text-white tracking-tight">BLOBJOR ADMIN</h1>
+          <p className="font-body text-zinc-500 text-sm mt-2">لوحة التحكم المركزية</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Email Field */}
+          <div className="space-y-2">
+            <label className="block text-[10px] font-black text-zinc-400 uppercase tracking-widest px-1">البريد الإلكتروني</label>
+            <div className="relative">
+              <Mail className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pr-10 pl-4 py-4 bg-zinc-900 border border-zinc-800 text-white placeholder:text-zinc-700 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all text-right font-mono text-sm"
+                placeholder="admin@blobjor.me"
+                required
+                disabled={isLoading}
+              />
+            </div>
           </div>
 
-          <CardTitle className="text-2xl font-bold">
-            لوحة التحكم
-          </CardTitle>
-          <CardDescription className="text-muted-foreground">
-            أدخل بيانات اعتماد المسؤول للوصول إلى لوحة التحكم
-          </CardDescription>
-        </CardHeader>
+          {/* Password Field */}
+          <div className="space-y-2">
+            <label className="block text-[10px] font-black text-zinc-400 uppercase tracking-widest px-1">كلمة المرور</label>
+            <div className="relative">
+              <Lock className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pr-10 pl-10 py-4 bg-zinc-900 border border-zinc-800 text-white placeholder:text-zinc-700 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all text-right font-mono text-sm"
+                placeholder="••••••••"
+                required
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+          </div>
 
-        <CardContent className="pt-4">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Error Message */}
-            {error && (
-              <div className="bg-destructive/10 border border-destructive/30 text-destructive rounded-lg p-3 text-sm text-center animate-in fade-in slide-in-from-top-2">
-                {error}
-              </div>
+          {/* Error Message */}
+          {error && (
+            <div className="p-4 bg-red-950/30 border border-red-900/50 text-red-500 text-xs font-bold text-center tracking-wide flex items-center justify-center gap-2">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              {error}
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-4 bg-white text-black font-black uppercase tracking-widest text-sm hover:bg-zinc-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>جاري التحقق...</span>
+              </>
+            ) : (
+              'تسجيل الدخول'
             )}
+          </button>
+        </form>
 
-            {/* Email Field */}
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
-                البريد الإلكتروني
-              </Label>
-              <div className="relative">
-                <Mail className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="admin@blobjor.me"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pr-10 text-right"
-                  required
-                  disabled={isLoading}
-                  autoComplete="email"
-                />
-              </div>
-            </div>
-
-            {/* Password Field */}
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium">
-                كلمة المرور
-              </Label>
-              <div className="relative">
-                <Lock className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pr-10 pl-10 text-right"
-                  required
-                  disabled={isLoading}
-                  autoComplete="current-password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  tabIndex={-1}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              className="w-full h-11 text-base font-medium"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-                  جارٍ تسجيل الدخول...
-                </>
-              ) : (
-                'تسجيل الدخول'
-              )}
-            </Button>
-          </form>
-
-          {/* Footer */}
-          <div className="mt-6 pt-6 border-t border-muted/50 text-center">
-            <p className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} blobjor.me - جميع الحقوق محفوظة
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+        <div className="mt-8 pt-8 border-t border-zinc-800 text-center">
+          <p className="text-[10px] text-zinc-600 uppercase tracking-widest">
+            Restricted Area · Authorized Personnel Only
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

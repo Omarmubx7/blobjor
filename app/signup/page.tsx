@@ -40,96 +40,99 @@ export default function SignupPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 px-4 py-12">
-            <div className="w-full max-w-md bg-white dark:bg-slate-950 p-8 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800">
+        <div className="min-h-screen flex items-center justify-center bg-black px-4 py-12 relative overflow-hidden">
+            {/* Background Texture */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
 
-                {/* Logo */}
-                <div className="flex justify-center mb-8">
-                    <div className="bg-gradient-to-tr from-cyan-500 to-blue-600 p-3 rounded-xl shadow-lg shadow-cyan-500/20">
-                        <ShoppingBag size={32} className="text-white" />
-                    </div>
+            <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 p-8 pt-12 relative z-10 transition-all duration-500 hover:border-zinc-700">
+
+                {/* Logo Area */}
+                <div className="flex flex-col items-center mb-10">
+                    <Link href="/" className="font-heading font-black text-4xl text-white tracking-tighter mb-2 hover:scale-105 transition-transform">BLOBJOR</Link>
+                    <h1 className="font-body text-zinc-400 text-xs font-bold uppercase tracking-widest text-center mt-2">
+                        JOIN THE MOVEMENT
+                    </h1>
                 </div>
 
-                <h1 className="text-2xl font-bold text-center text-slate-900 dark:text-white mb-2">إنشاء حساب جديد</h1>
-                <p className="text-center text-slate-500 dark:text-slate-400 mb-8 text-sm">انضم إلينا لتبدأ التصميم والتسوق</p>
-
-                <form action={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-2">الاسم الكامل</label>
+                <form action={handleSubmit} className="space-y-5">
+                    <div className="space-y-1">
+                        <label className="block text-[10px] font-black text-zinc-400 uppercase tracking-widest px-1">الاسم الكامل</label>
                         <input
                             name="name"
                             type="text"
                             required
-                            className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
+                            className="w-full px-4 py-3 bg-black border border-zinc-800 text-white placeholder:text-zinc-700 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all text-right font-mono text-sm"
                             placeholder="الاسم"
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-2">رقم الهاتف</label>
+                    <div className="space-y-1">
+                        <label className="block text-[10px] font-black text-zinc-400 uppercase tracking-widest px-1">رقم الهاتف</label>
                         <input
                             name="phone"
                             type="tel"
                             required
-                            className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
+                            className="w-full px-4 py-3 bg-black border border-zinc-800 text-white placeholder:text-zinc-700 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all text-right font-mono text-sm"
                             placeholder="079xxxxxxx"
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-2">البريد الإلكتروني</label>
+                    <div className="space-y-1">
+                        <label className="block text-[10px] font-black text-zinc-400 uppercase tracking-widest px-1">البريد الإلكتروني</label>
                         <input
                             name="email"
                             type="email"
                             required
-                            className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
+                            className="w-full px-4 py-3 bg-black border border-zinc-800 text-white placeholder:text-zinc-700 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all text-right font-mono text-sm"
                             placeholder="name@example.com"
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">كلمة المرور</label>
+                        <div className="space-y-1">
+                            <label className="block text-[10px] font-black text-zinc-400 uppercase tracking-widest px-1">كلمة المرور</label>
                             <input
                                 name="password"
                                 type="password"
                                 required
-                                className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
+                                className="w-full px-4 py-3 bg-black border border-zinc-800 text-white placeholder:text-zinc-700 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all text-right font-mono text-sm"
                                 placeholder="••••••••"
                             />
                         </div>
-                        <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">تأكيد كلمة المرور</label>
+                        <div className="space-y-1">
+                            <label className="block text-[10px] font-black text-zinc-400 uppercase tracking-widest px-1">تأكيد كلمة المرور</label>
                             <input
                                 name="confirmPassword"
                                 type="password"
                                 required
-                                className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
+                                className="w-full px-4 py-3 bg-black border border-zinc-800 text-white placeholder:text-zinc-700 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all text-right font-mono text-sm"
                                 placeholder="••••••••"
                             />
                         </div>
                     </div>
 
                     {error && (
-                        <div className="p-3 rounded-lg bg-red-50 text-red-600 text-sm text-center">
+                        <div className="p-4 bg-red-900/20 border border-red-900/50 text-red-500 text-xs font-bold text-center tracking-wide">
                             {error}
                         </div>
                     )}
 
                     <button
                         disabled={isPending}
-                        className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-lg shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2"
+                        className="w-full py-4 bg-white text-black font-black uppercase tracking-widest text-sm hover:bg-zinc-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 mt-4"
                     >
-                        {isPending && <Loader2 className="animate-spin" size={18} />}
-                        إنشاء الحساب
+                        {isPending && <Loader2 className="animate-spin" size={16} />}
+                        <span>إنشاء الحساب</span>
                     </button>
                 </form>
 
-                <div className="mt-6 text-center text-sm text-slate-500">
-                    لديك حساب بالفعل؟ {' '}
-                    <Link href="/login" className="text-cyan-500 font-bold hover:underline">
-                        تسجيل الدخول
-                    </Link>
+                <div className="mt-8 pt-8 border-t border-zinc-800 text-center">
+                    <p className="text-xs text-zinc-500 font-medium">
+                        عندك حساب؟ {' '}
+                        <Link href="/login" className="text-white font-bold underline decoration-zinc-700 underline-offset-4 hover:decoration-white transition-all">
+                            سجل دخولك
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>
