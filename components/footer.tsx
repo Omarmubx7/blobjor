@@ -52,10 +52,10 @@ export function Footer() {
           <div className="flex flex-col gap-6">
             <h4 className="font-bold text-sm uppercase tracking-widest text-zinc-500">روابط سريعة</h4>
             <div className="flex flex-col gap-3">
-              <Link href="/" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">الرئيسية</Link>
               <Link href="/track-order" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">تتبع الطلب</Link>
               <Link href="/size-charts" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">جدول المقاسات</Link>
               <Link href="/faq" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">الأسئلة الشائعة</Link>
+              <Link href="/#shop" className="text-sm font-bold text-white hover:text-zinc-400 transition-colors">المنتجات</Link>
             </div>
           </div>
 
@@ -72,7 +72,7 @@ export function Footer() {
           {/* Column 4: Newsletter (Simplified) */}
           <div className="flex flex-col gap-6">
             <h4 className="font-bold text-sm uppercase tracking-widest text-zinc-500">النشرة البريدية</h4>
-            <p className="text-sm text-zinc-400">اشترك للحصول على آخر العروض والتصاميم الحصرية.</p>
+            <p className="text-sm text-zinc-400">اشترك لتوصلك أحدث التصاميم والعروض الحصرية.</p>
             <div className="flex gap-2">
               <input type="email" placeholder="بريدك الإلكتروني" className="bg-zinc-900 border-none text-white text-sm px-4 py-3 w-full focus:ring-1 focus:ring-white" />
               <button className="bg-white text-black text-sm font-bold uppercase px-4 py-3 hover:bg-gray-200">اشترك</button>

@@ -7,23 +7,23 @@ import { useState } from "react"
 const faqs = [
     {
         question: "كم يستغرق وقت التوصيل؟",
-        answer: "التوصيل يستغرق 2-4 أيام عمل داخل عمّان، و3-5 أيام لباقي المحافظات.",
+        answer: "التوصيل داخل عمّان: 24-48 ساعة. باقي المحافظات: 48-72 ساعة. بنحاول نوصلك أسرع شي!",
     },
     {
         question: "ما هي طرق الدفع المتاحة؟",
-        answer: "نقبل الدفع نقداً عند الاستلام ومحافظ زين كاش و CliQ والتحويل البنكي.",
+        answer: "الدفع عند الاستلام (الكاش)، محافظ زين كاش (Zain Cash)، CliQ، أو التحويل البنكي.",
     },
     {
-        question: "هل يمكنني إرجاع أو استبدال المنتجات؟",
-        answer: "المنتجات المخصصة لا يمكن إرجاعها إلا في حالة وجود عيب تصنيعي. المنتجات الجاهزة يمكن استبدالها خلال 3 أيام إذا لم تُستخدم.",
+        question: "سياسة الإرجاع والتبديل؟",
+        answer: "المنتجات الجاهزة: يمكن استبدالها خلال 3 أيام شرط عدم الاستخدام. المنتجات المصممة (Custom): لا يمكن إرجاعها إلا في حال وجود خطأ مصنعي.",
     },
     {
-        question: "كيف يمكنني تتبع طلبي؟",
-        answer: "يمكنك استخدام صفحة 'تتبع طلبك' في الموقع وإدخال رقم هاتفك أو رقم الطلب لمعرفة حالة طلبك.",
+        question: "كيف أقدر أتتبع طلبي؟",
+        answer: "من صفحة 'تتبع الطلب' بالموقع، أو تواصل معنا واتساب وبنحكيلك وين صارت شحنتك.",
     },
     {
-        question: "هل يوجد توصيل لكل المحافظات؟",
-        answer: "نعم، نقوم بالتوصيل لجميع محافظات المملكة.",
+        question: "هل عندكم محل أقدر أجي عليه؟",
+        answer: "حالياً إحنا متجر إلكتروني فقط، بس توصيلنا بيغطي كل الأردن لباب بيتك.",
     },
 ]
 
@@ -56,8 +56,8 @@ export function FAQ() {
                         <div
                             key={index}
                             className={`overflow-hidden rounded-2xl border transition-all duration-300 ${openIndex === index
-                                    ? "border-primary/50 bg-primary/5 shadow-md"
-                                    : "border-border bg-card hover:border-primary/20"
+                                ? "border-primary/50 bg-primary/5 shadow-md"
+                                : "border-border bg-card hover:border-primary/20"
                                 }`}
                         >
                             <button
@@ -93,7 +93,7 @@ export function FAQ() {
 
                 <div className="mt-10 text-center">
                     <p className="mb-4 font-body text-sm text-muted-foreground">
-                        لم تجد إجابة لسؤالك؟
+                        Need Help? محتاج مساعدة؟
                     </p>
                     <a
                         href="https://wa.me/962787257247"

@@ -36,30 +36,33 @@ export function Hero({ content }: HeroProps) {
 
           {/* Main Headline - Massive & Bold */}
           <h1 className="font-heading font-black text-6xl md:text-8xl lg:text-9xl uppercase leading-[0.9] tracking-tighter mb-6 text-white text-right" style={{ textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
-            {content?.title || "اصنع المستحيل"}
-            <span className="block text-4xl md:text-6xl lg:text-7xl mt-2 text-gray-300 font-extrabold">
-              BE BOLD. BE YOU.
+            <span className="block text-4xl md:text-6xl lg:text-7xl mb-2 text-gray-300 font-extrabold">
+              DESIGN IT. WEAR IT. OWN IT
             </span>
+            BE BOLD. BE YOU.
           </h1>
 
           {/* Subtitle */}
           <p className="font-body text-xl md:text-2xl text-gray-200 font-medium mb-10 max-w-2xl ml-auto text-right" dir="rtl">
-            {content?.subtitle || "صمّم منتجاتك الخاصة بجودة عالمية. أسلوبك، تصميمك، لمستك الخاصة."}
+            تصاميمك وهودياتك بتوصل لكل مكان بالأردن. عبر عن حالك بستايلك الخاص.
           </p>
 
           {/* CTA Buttons - Athletic Style */}
           <div className="flex flex-col sm:flex-row gap-4 justify-end items-end sm:items-center">
             <button
-              onClick={() => window.location.href = "/design-lab"}
+              onClick={() => {
+                const element = document.querySelector("#shop")
+                if (element) element.scrollIntoView({ behavior: "smooth" })
+              }}
               className="group btn-secondary border-white text-white hover:bg-white hover:text-black py-4 px-10 text-lg uppercase tracking-widest"
             >
-              <span>صمّم هوديتك</span>
+              <span>تصفح المنتجات</span>
             </button>
             <button
-              onClick={handleScrollToShop}
+              onClick={() => window.location.href = "/design-lab"}
               className="group btn-primary bg-white text-black hover:bg-gray-200 hover:text-black hover:scale-105 py-4 px-12 text-xl uppercase tracking-widest flex items-center gap-3"
             >
-              <span>اطلب الآن</span>
+              <span>ابدأ التصميم</span>
               <ArrowLeft className="w-6 h-6 group-hover:-translate-x-2 transition-transform duration-300" />
             </button>
           </div>

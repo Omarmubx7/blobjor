@@ -9,28 +9,28 @@ const steps = [
     id: "01",
     titleAr: "اختر التصميم",
     titleEn: "CHOOSE DESIGN",
-    descriptionAr: "تصفح مجموعتنا المميزة من تصاميم الأنمي والرياضة أو صمم الخاص بك.",
+    descriptionAr: "اختر من تصاميمنا الحصرية (أنمي، رياضة، مسلسلات) أو ارفع تصميمك الخاص.",
     icon: Palette,
   },
   {
     id: "02",
     titleAr: "اختر المقاس واللون",
     titleEn: "SIZE & COLOR",
-    descriptionAr: "حدد المقاس المناسب واللون اللي يعجبك من خياراتنا المتنوعة.",
+    descriptionAr: "حدد المقاس واللون اللي بيناسب ستايلك من تشكيلتنا الواسعة.",
     icon: Ruler,
   },
   {
     id: "03",
     titleAr: "نطبع ونشحن",
     titleEn: "PRINT & SHIP",
-    descriptionAr: "بنطبع طلبك بأحدث التقنيات وبنشحنه إلك بأسرع وقت.",
+    descriptionAr: "بنطبع طلبك بجودة عالية وبنشحنه إلك وين ما كنت بالأردن.",
     icon: Truck,
   },
   {
     id: "04",
     titleAr: "استلم طلبك",
     titleEn: "RECEIVE ORDER",
-    descriptionAr: "استلم شحنتك واستمتع بمنتجك الجديد المميز من BloB.",
+    descriptionAr: "الدفع عند الاستلام. استلم طلبك وعيش جوّك!",
     icon: Smile,
   },
 ]
@@ -113,7 +113,7 @@ export function HowItWorks() {
             href="/design-lab"
             className="group relative inline-flex items-center gap-4 px-12 py-6 bg-white text-black font-black text-lg uppercase tracking-widest hover:bg-zinc-200 transition-all rounded-sm"
           >
-            <span>Start Designing</span>
+            <span>START DESIGNING</span>
             <ArrowRight className="group-hover:translate-x-2 transition-transform" />
           </Link>
         </div>

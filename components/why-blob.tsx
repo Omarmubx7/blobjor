@@ -1,29 +1,29 @@
 "use client"
 
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
-import { ShieldCheck, Zap, Heart, MapPin } from "lucide-react"
+import { ShieldCheck, Zap, Heart, MapPin, MessageCircle } from "lucide-react"
 import Image from "next/image"
 
 const features = [
     {
         icon: MapPin,
         title: "صناعة أردنية 100%",
-        description: "فخورين بإنتاجنا المحلي. كل قطعة بتنطبع وبتتجهز في عمان.",
+        description: "كل قطعة بتنطبع وبتتجهز في مشغلنا بعمّان، بكل حب.",
     },
     {
         icon: ShieldCheck,
-        title: "جودة ما بتمزح",
-        description: "بنستخدم أفضل أنواع الأقمشة وطباعتنا ثابتة ما بتروح مع الغسيل.",
+        title: "جودة عالية وثبات ألوان",
+        description: "أقمشة مرتبة وطباعة بتدوم، ما بتروح مع الغسيل.",
     },
     {
         icon: Zap,
-        title: "توصيل طيارة",
-        description: "طلبك بيوصلك خلال 48 - 72 ساعة لكل محافظات المملكة.",
+        title: "توصيل سريع",
+        description: "خلال 48–72 ساعة طلبك بيكون عندك، وين ما كنت بالأردن.",
     },
     {
-        icon: Heart,
-        title: "خدمة من القلب",
-        description: "فريقنا جاهز يخدمك ويساعدك في أي وقت. رضاك هو هدفنا.",
+        icon: MessageCircle, // Changed icon to match customer service context better if possible, but keeping consistent imports
+        title: "خدمة عملاء واتساب",
+        description: "فريقنا جاهز يساعدك بأي وقت على الواتساب.",
     },
 ]
 
