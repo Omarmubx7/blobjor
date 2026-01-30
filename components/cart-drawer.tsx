@@ -62,9 +62,8 @@ export function CartDrawer() {
                 {items.map((item) => (
                   <div
                     key={`${item.id}-${item.size}`}
-                    className={`flex gap-4 rounded-2xl border bg-card p-4 transition-all hover:shadow-md ${
-                      item.isCustomDesign ? "border-accent/50 bg-accent/5" : "border-border"
-                    }`}
+                    className={`flex gap-4 rounded-2xl border bg-card p-4 transition-all hover:shadow-md ${item.isCustomDesign ? "border-accent/50 bg-accent/5" : "border-border"
+                      }`}
                   >
                     {/* Product Image */}
                     <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-muted">
@@ -102,8 +101,8 @@ export function CartDrawer() {
                             </span>
                           )}
                           {item.customDesign?.productColor && (
-                            <span 
-                              className="h-4 w-4 rounded-full border border-border" 
+                            <span
+                              className="h-4 w-4 rounded-full border border-border"
                               style={{ backgroundColor: item.customDesign.productColor }}
                               title={`اللون: ${item.customDesign.productColor}`}
                             />
@@ -161,11 +160,7 @@ export function CartDrawer() {
               </div>
 
               {/* Free Shipping Note */}
-              <div className="mb-4 rounded-xl bg-accent/10 p-3 text-center">
-                <p className="font-body text-sm text-accent">
-                  🚚 توصيل مجاني داخل عمّان
-                </p>
-              </div>
+
 
               {/* CTAs */}
               <div className="space-y-3">

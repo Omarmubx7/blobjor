@@ -13,14 +13,63 @@ import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { ShoppingCart, Palette, Filter } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: 'المنتجات | BloB.JO',
-  description: 'تصفح مجموعتنا من المنتجات عالية الجودة للطباعة حسب الطلب - هوديز، تيشيرتات، أكواب وأكثر',
-  openGraph: {
-    title: 'المنتجات | BloB.JO',
-    description: 'تصفح مجموعتنا من المنتجات عالية الجودة للطباعة حسب الطلب',
-    type: 'website',
-  },
+export async function generateMetadata(
+  { searchParams }: { searchParams: Promise<{ category?: string, search?: string }> }
+): Promise<Metadata> {
+  const { category, search } = await searchParams
+
+  const baseTitle = 'تسوق الهوديات والتيشيرتات | متجر BLOBJOR الأردن'
+  const baseDesc = 'تصفح تشكيلة واسعة من الهوديات، التيشيرتات، والأكواب بتصاميم أنمي، مسلسلات، وعبارات مميزة. جودة عالية وتوصيل سريع في عمان والأردن.'
+
+  if (search) {
+    return {
+      title: `نتائج البحث عن "${search}" | BLOBJOR`,
+      description: `نتائج البحث عن ${search} في متجر BLOBJOR.`,
+      openGraph: {
+        title: `نتائج البحث عن "${search}" | BLOBJOR`,
+        description: `نتائج البحث عن ${search} في متجر BLOBJOR.`,
+      }
+    }
+  }
+
+  if (category) {
+    let title = baseTitle
+    let description = baseDesc
+
+    if (category === 'hoodies') {
+      title = 'هوديات انمي و شتوي في الأردن | متجر هوديات - BLOBJOR'
+      description = 'تسوق أحدث تشكيلة هوديات شتوي وانمي في الأردن. خامات قطن 100% وطباعة عالية الجودة. توصيل لجميع المحافظات.'
+    } else if (category === 'tshirts' || category === 't-shirts') {
+      title = 'تيشيرتات انمي وطباعة مخصصة | متجر تيشيرتات - BLOBJOR'
+      description = 'تيشيرتات قطن 100% بتصاميم انمي، جيمينج، ومسلسلات. طباعة ديجيتال عالية الدقة لا تذهب مع الغسيل.'
+    } else if (category === 'mugs') {
+      title = 'أكواب مطبوعة وهدايا | اكواب انمي - BLOBJOR'
+      description = 'أكواب بتصاميم مميزة لهدايا الأصدقاء، اكواب انمي وجيمينج. توصيل سريع في عمان.'
+    } else if (category === 'stickers') {
+      title = 'ستيكرات لابتوب وجوال | BLOBJOR Stickers'
+      description = 'ستيكرات مقاومة للماء والخدش، تصاميم انمي ومميز لابتوبك وموبايلك.'
+    }
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        type: 'website',
+      }
+    }
+  }
+
+  return {
+    title: baseTitle,
+    description: baseDesc,
+    openGraph: {
+      title: baseTitle,
+      description: baseDesc,
+      type: 'website',
+    },
+  }
 }
 
 async function getProducts(categorySlug?: string, searchQuery?: string) {

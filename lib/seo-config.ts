@@ -7,7 +7,7 @@ export const siteConfig = {
   nameAr: 'BLOBJOR',
   tagline: 'DESIGN IT. WEAR IT. OWN IT.',
   taglineAr: 'صمّمها، البسها، عيشها.',
-  description: 'BLOBJOR (بلوب) - المتجر الأول للطباعة حسب الطلب في الأردن. هوديات، تيشيرتات، وأكواب بتصاميم أنمي، ألعاب، ومسلسلات. صمم هوديك الخاص الآن! توصيل لجميع المحافظات.',
+  description: 'BLOBJOR المتجر الأول في الأردن للطباعة حسب الطلب. تسوق كولكشن الأنمي والترند، أو صمم هوديك الخاص. توصيل لجميع المحافظات خلال 48 ساعة. ابدأ التصميم الآن!',
   descriptionEn: 'BLOBJOR is Jordan\'s #1 Print on Demand store. Custom hoodies, anime t-shirts, mugs & stickers in Amman. Create your own design or shop our exclusive streetwear collection. Fast delivery.',
   url: siteUrl,
   ogImage: `${siteUrl}/og-image.jpg`,
@@ -24,13 +24,13 @@ export const siteConfig = {
     // Brand
     'blob', 'blobjor', 'blob jordan', 'بلوب', 'بلوب جور', 'blob shop',
     // Core Services
-    'print on demand jordan', 'طباعة حسب الطلب', 'طباعة هوديات عمان', 'طباعة تيشيرتات الاردن',
+    'print on demand jordan', 'طباعة حسب الطلب', 'طباعة هوديات عمان', 'طباعة تيشيرتات الاردن', 'صمم هوديك بنفسك', 'طباعة هودي حسب الطلب', 'تصميم تيشيرت اونلاين',
     // Products (Arabic)
-    'هوديات', 'تيشيرتات', 'اكواب', 'ستيكرات', 'هودي انمي', 'تيشيرت اوفر سايز',
+    'هوديات', 'تيشيرتات', 'اكواب', 'ستيكرات', 'هودي انمي', 'تيشيرت اوفر سايز', 'متجر هوديات الأردن', 'هوديات شتوي عمان', 'هودي سادة للطباعة', 'هوديات اوفر سايز الأردن', 'طباعة صور على التيشيرت', 'تيشيرتات قطن 100%',
     // Products (English)
     'custom hoodies amman', 'anime hoodies jordan', 'graphic tees jordan', 'custom mugs amman',
     // Intent/Location
-    'gift ideas jordan', 'online shopping jordan', 'توصيل هدايا الاردن', 'متجر ملابس انمي',
+    'gift ideas jordan', 'online shopping jordan', 'توصيل هدايا الاردن', 'متجر ملابس انمي', 'هدايا مخصصة الأردن',
     // Specific Niches
     'naruto hoodie jordan', 'one piece merch jordan', 'islamic design hoodies', 'jordanian streetwear',
   ],
@@ -53,10 +53,10 @@ export const defaultMetadata: Metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: siteUrl,
+    canonical: './',
     languages: {
-      'ar-JO': siteUrl,
-      'en-JO': `${siteUrl}/en`,
+      'ar-JO': './',
+      'en-JO': './en',
     },
   },
   openGraph: {
