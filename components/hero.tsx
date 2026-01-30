@@ -34,17 +34,20 @@ export function Hero({ content }: HeroProps) {
       <div className="relative z-20 h-full flex flex-col justify-end pb-32 px-6 md:px-12 lg:px-24">
         <div className="max-w-4xl animate-fade-in-up">
 
+
           {/* Main Headline - Massive & Bold */}
           <h1 className="font-heading font-black text-6xl md:text-8xl lg:text-9xl uppercase leading-[0.9] tracking-tighter mb-6 text-white text-right" style={{ textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
             <span className="block text-4xl md:text-6xl lg:text-7xl mb-2 text-gray-300 font-extrabold">
               DESIGN IT. WEAR IT. OWN IT
             </span>
-            BE BOLD. BE YOU.
+            <span className="text-white">
+              طباعة حسب الطلب في الأردن
+            </span>
           </h1>
 
           {/* Subtitle */}
           <p className="font-body text-xl md:text-2xl text-gray-200 font-medium mb-10 max-w-2xl ml-auto text-right" dir="rtl">
-            تصاميمك وهودياتك بتوصل لكل مكان بالأردن. عبر عن حالك بستايلك الخاص.
+            من قلب عمّان، بنوصلك ستايلك وين ما تكون. هوديات، تيشيرتات، واكسسوارات بتصاميمك الخاصة أو من كولكشن بلوب الحصري.
           </p>
 
           {/* CTA Buttons - Athletic Style */}

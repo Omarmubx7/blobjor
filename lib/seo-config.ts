@@ -7,8 +7,8 @@ export const siteConfig = {
   nameAr: 'BLOBJOR',
   tagline: 'DESIGN IT. WEAR IT. OWN IT.',
   taglineAr: 'صمّمها، البسها، عيشها.',
-  description: 'BLOBJOR (بلوب) - البراند الأول للطباعة حسب الطلب في الأردن. هوديات، تيشيرتات، وأكواب بتصاميم أنمي، أفلام، وعبارات ترند. صمم منتجك الخاص الآن! توصيل سريع.',
-  descriptionEn: 'BLOBJOR is the leading Print on Demand brand in Jordan. Custom hoodies, t-shirts, and mugs. Shop anime merch, movie designs, or create your own custom streetwear. High quality & fast delivery.',
+  description: 'BLOBJOR (بلوب) - المتجر الأول للطباعة حسب الطلب في الأردن. هوديات، تيشيرتات، وأكواب بتصاميم أنمي، ألعاب، ومسلسلات. صمم هوديك الخاص الآن! توصيل لجميع المحافظات.',
+  descriptionEn: 'BLOBJOR is Jordan\'s #1 Print on Demand store. Custom hoodies, anime t-shirts, mugs & stickers in Amman. Create your own design or shop our exclusive streetwear collection. Fast delivery.',
   url: siteUrl,
   ogImage: `${siteUrl}/og-image.jpg`,
   links: {
@@ -21,35 +21,32 @@ export const siteConfig = {
     addressEn: 'Amman, Jordan',
   },
   keywords: [
-    'blob',
-    'blobjor',
-    'blob jordan',
-    'بلوب',
-    'بلوب الأردن',
-    'print on demand jordan',
-    'طباعة حسب الطلب',
-    'هوديات الأردن',
-    'تيشيرتات طباعة',
-    'custom hoodies amman',
-    'anime merch jordan',
-    'streetwear jordan',
-    'online shopping jordan',
-    'متجر هوديات',
-    'تصميم هودي',
+    // Brand
+    'blob', 'blobjor', 'blob jordan', 'بلوب', 'بلوب جور', 'blob shop',
+    // Core Services
+    'print on demand jordan', 'طباعة حسب الطلب', 'طباعة هوديات عمان', 'طباعة تيشيرتات الاردن',
+    // Products (Arabic)
+    'هوديات', 'تيشيرتات', 'اكواب', 'ستيكرات', 'هودي انمي', 'تيشيرت اوفر سايز',
+    // Products (English)
+    'custom hoodies amman', 'anime hoodies jordan', 'graphic tees jordan', 'custom mugs amman',
+    // Intent/Location
+    'gift ideas jordan', 'online shopping jordan', 'توصيل هدايا الاردن', 'متجر ملابس انمي',
+    // Specific Niches
+    'naruto hoodie jordan', 'one piece merch jordan', 'islamic design hoodies', 'jordanian streetwear',
   ],
 }
 
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'blobjor.me | طباعة حسب الطلب في الأردن - حول أفكارك لواقع',
-    template: '%s | blobjor.me',
+    default: 'BLOBJOR | طباعة حسب الطلب في الأردن - هوديات وتيشيرتات مخصصة',
+    template: '%s | BLOBJOR الأردن',
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
-  authors: [{ name: 'blobjor.me', url: siteUrl }],
-  creator: 'blobjor.me',
-  publisher: 'blobjor.me',
+  authors: [{ name: 'BLOBJOR Team', url: siteUrl }],
+  creator: 'BLOBJOR',
+  publisher: 'BLOBJOR',
   formatDetection: {
     email: false,
     address: false,
@@ -59,30 +56,31 @@ export const defaultMetadata: Metadata = {
     canonical: siteUrl,
     languages: {
       'ar-JO': siteUrl,
+      'en-JO': `${siteUrl}/en`,
     },
   },
   openGraph: {
     type: 'website',
     locale: 'ar_JO',
     url: siteUrl,
-    siteName: 'blobjor.me',
-    title: 'blobjor.me | طباعة حسب الطلب في الأردن',
+    siteName: 'BLOBJOR - Print on Demand Jordan',
+    title: 'BLOBJOR | متجر الهوديات والطباعة الأول في الأردن',
     description: siteConfig.description,
     images: [
       {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'blobjor.me - طباعة حسب الطلب في الأردن',
+        alt: 'BLOBJOR - Custom Hoodies & T-Shirts in Jordan',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'blobjor.me | طباعة حسب الطلب في الأردن',
-    description: siteConfig.description,
+    title: 'BLOBJOR | Custom Hoodies & Streetwear Jordan',
+    description: siteConfig.descriptionEn,
     images: [siteConfig.ogImage],
-    creator: '@blobjo',
+    creator: '@blobjor',
   },
   robots: {
     index: true,
@@ -94,10 +92,6 @@ export const defaultMetadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-  verification: {
-    // google: 'your-google-verification-code',
-    // yandex: 'your-yandex-verification-code',
   },
   icons: {
     icon: '/favicon.ico',
@@ -266,34 +260,42 @@ export function getLocalBusinessSchema() {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     '@id': `${siteUrl}/#localbusiness`,
-    name: 'BloB.JO',
-    alternateName: 'بلوب',
+    name: 'BLOBJOR',
+    alternateName: 'بلوب للطباعة',
     image: siteConfig.ogImage,
     url: siteUrl,
     telephone: siteConfig.contact.phone,
+    email: 'support@blobjor.me',
+    description: siteConfig.description,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'عمّان',
-      addressRegion: 'Amman',
+      addressLocality: 'Amman',
+      addressRegion: 'Amman Governorate',
       addressCountry: 'JO',
+      streetAddress: 'Seventh Circle, Amman', // Generic central location or specific if known
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: 31.9454,
-      longitude: 35.9284,
+      latitude: 31.9539, // Amman Coords
+      longitude: 35.9106,
     },
     openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'],
         opens: '09:00',
-        closes: '18:00',
+        closes: '22:00',
       },
     ],
-    priceRange: '$$',
+    priceRange: 'JOD',
+    sameAs: [
+      siteConfig.links.instagram,
+      `https://wa.me/${siteConfig.links.whatsapp.replace('+', '')}`,
+    ],
     areaServed: {
       '@type': 'Country',
       name: 'Jordan',
     },
+    paymentAccepted: ['Cash on Delivery', 'CliQ', 'Zain Cash'],
   }
 }

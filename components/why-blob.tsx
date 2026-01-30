@@ -7,23 +7,23 @@ import Image from "next/image"
 const features = [
     {
         icon: MapPin,
-        title: "صناعة أردنية 100%",
-        description: "كل قطعة بتنطبع وبتتجهز في مشغلنا بعمّان، بكل حب.",
+        title: "صناعة وجودة أردنية",
+        description: "بنستخدم أجود أنواع القطن والأقمشة، ومعاملنا ومشاغلنا كلها في عمّان لدعم الصناعة المحلية.",
     },
     {
         icon: ShieldCheck,
-        title: "جودة عالية وثبات ألوان",
-        description: "أقمشة مرتبة وطباعة بتدوم، ما بتروح مع الغسيل.",
+        title: "كفالة ألوان وطباعة",
+        description: "طباعة DTF و DTG عالية الجودة، ما بتروح مع الغسيل وبنضمنلك اياها.",
     },
     {
         icon: Zap,
-        title: "توصيل سريع",
-        description: "خلال 48–72 ساعة طلبك بيكون عندك، وين ما كنت بالأردن.",
+        title: "توصيل لكل المحافظات",
+        description: "طلبك عندك خلال 48-72 ساعة، سواء كنت في إربد، الزرقاء، العقبة، أو أي مكان بالأردن.",
     },
     {
-        icon: MessageCircle, // Changed icon to match customer service context better if possible, but keeping consistent imports
-        title: "خدمة عملاء واتساب",
-        description: "فريقنا جاهز يساعدك بأي وقت على الواتساب.",
+        icon: MessageCircle,
+        title: "خدمة ما بعد البيع",
+        description: "فريقنا معك واتساب 24/7. عندك استفسار عن القياس؟ بدك تبدل؟ احنا جاهزين.",
     },
 ]
 
