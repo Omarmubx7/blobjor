@@ -5,10 +5,39 @@ import prisma from "@/lib/prisma"
 import { Products, ProductDisplay } from "@/components/products"
 import { FAQ } from "@/components/faq"
 import { Mission } from "@/components/mission"
+import { getFAQSchema } from "@/lib/seo-config"
 
 export const dynamic = 'force-dynamic'
 
+// Define FAQs here to generate schema (must match the display component manually or fetch from source)
+// Since FAQ component has static data, we duplicate it here for Schema generation to ensure consistency
+const faqs = [
+  {
+    question: "كم يستغرق وقت التوصيل؟",
+    answer: "التوصيل داخل عمّان: 24-48 ساعة. باقي المحافظات: 48-72 ساعة. بنحاول نوصلك أسرع شي!",
+  },
+  {
+    question: "ما هي طرق الدفع المتاحة؟",
+    answer: "الدفع عند الاستلام (الكاش)، محافظ زين كاش (Zain Cash)، CliQ، أو التحويل البنكي.",
+  },
+  {
+    question: "سياسة الإرجاع والتبديل؟",
+    answer: "المنتجات الجاهزة: يمكن استبدالها خلال 3 أيام شرط عدم الاستخدام. المنتجات المصممة (Custom): لا يمكن إرجاعها إلا في حال وجود خطأ مصنعي.",
+  },
+  {
+    question: "كيف أقدر أتتبع طلبي؟",
+    answer: "من صفحة 'تتبع الطلب' بالموقع، أو تواصل معنا واتساب وبنحكيلك وين صارت شحنتك.",
+  },
+  {
+    question: "هل عندكم محل أقدر أجي عليه؟",
+    answer: "حالياً إحنا متجر إلكتروني فقط، بس توصيلنا بيغطي كل الأردن لباب بيتك.",
+  },
+]
+
 export default async function Home() {
+  // Generate FAQ Schema
+  const faqSchema = getFAQSchema(faqs)
+
   const products = await prisma.product.findMany({
     where: { isActive: true },
     include: {
@@ -35,6 +64,7 @@ export default async function Home() {
       else if (s === "tshirts") categorySlug = "tshirts";
       else if (s === "stickers") categorySlug = "stickers";
       else if (s === "hoodies") categorySlug = "hoodies";
+      else if (s === "accessories") categorySlug = "stickers"; // fallback
     }
 
     // Determine subcategory based on name/description (simple heuristic)
@@ -70,6 +100,10 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <Hero content={heroSection} />
       <HowItWorks />
       <WhyBlob />
