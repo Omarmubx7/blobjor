@@ -84,7 +84,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-zinc-900">
           <p className="text-xs text-zinc-600 font-medium">
-            © 2025 blobjor.me · صُنع في الأردن 🇯🇴
+            © 2025 blobjor.me · صُنع في الأردن 🇯🇴 · Made by mubx.dev
           </p>
           <div className="flex gap-6">
             <Link href="#" className="text-xs text-zinc-600 hover:text-white transition-colors">سياسة الخصوصية</Link>

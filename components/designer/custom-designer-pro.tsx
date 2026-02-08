@@ -25,7 +25,7 @@ const PRODUCTS = {
   hoodie: {
     id: 'hoodie',
     name: 'هودي',
-    price: 12,
+    price: 15,
     colors: [
       { id: 'purple', hex: '#8B5CF6', name: 'أرجواني', image: '/images/hoodie-purple.png' },
       { id: 'maroon', hex: '#7F1D1D', name: 'أحمر داكن', image: '/images/hoodie-maroon.png' },
