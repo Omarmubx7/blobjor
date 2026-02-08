@@ -1,0 +1,15 @@
+🔍 Verifying prices...
+
+--- Hoodies (Should be 15) ---
+Naruto: 15
+One Piece Black: 15
+One Piece: 15
+One Piece White: 15
+Batman Black: 15
+
+--- Mugs (Should be unchanged) ---
+Anime Mug: 3
+Baby Yoda Mug: 3
+Batman Mug: 3
+Friends Mug: 3
+Heisenberg Mug: 3

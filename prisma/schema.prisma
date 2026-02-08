@@ -1,6 +1,3 @@
-// BloB.JO Production Schema - PostgreSQL
-// طباعة حسب الطلب في الأردن
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,22 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============================================
-// ADMIN & AUTHENTICATION
-// ============================================
-
 model AdminUser {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  passwordHash String    @map("password_hash")
-  name         String
-  role         String    @default("admin") // admin, super_admin
-  isActive     Boolean   @default(true) @map("is_active")
-  lastLogin    DateTime? @map("last_login")
-  failedAttempts Int      @default(0) @map("failed_attempts")
-  lockedUntil  DateTime? @map("locked_until")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  id             String    @id @default(cuid())
+  email          String    @unique
+  passwordHash   String    @map("password_hash")
+  name           String
+  role           String    @default("admin")
+  isActive       Boolean   @default(true) @map("is_active")
+  lastLogin      DateTime? @map("last_login")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  failedAttempts Int       @default(0) @map("failed_attempts")
+  lockedUntil    DateTime? @map("locked_until")
 
   @@map("admin_users")
 }
@@ -42,14 +35,10 @@ model AdminSession {
   @@map("admin_sessions")
 }
 
-// ============================================
-// PRODUCT CATALOG
-// ============================================
-
 model Category {
   id            String    @id @default(cuid())
-  name          String    // Arabic name (primary)
-  nameEn        String?   @map("name_en") // English name
+  name          String
+  nameEn        String?   @map("name_en")
   slug          String    @unique
   description   String?
   descriptionEn String?   @map("description_en")
@@ -66,32 +55,31 @@ model Category {
 }
 
 model Product {
-  id                String         @id @default(cuid())
+  id                String           @id @default(cuid())
   name              String
-  nameAr            String?        @map("name_ar")
-  slug              String         @unique
+  nameAr            String?          @map("name_ar")
+  slug              String           @unique
   description       String?
-  descriptionAr     String?        @map("description_ar")
-  price             Float          // Current price in JOD
-  compareAtPrice    Float?         @map("compare_at_price") // Original price for discounts
-  categoryId        String?        @map("category_id")
-  category          Category?      @relation(fields: [categoryId], references: [id])
-  colors            String?        // JSON array of colors
-  sizes             String?        // JSON array of sizes
-  printAreas        String?        @map("print_areas") // JSON array of print areas
-  isActive          Boolean        @default(true) @map("is_active")
-  isFeatured        Boolean        @default(false) @map("is_featured")
-  allowCustomDesign Boolean        @default(false) @map("allow_custom_design")
-
-  sortOrder         Int            @default(0) @map("sort_order")
-  seoTitle          String?        @map("seo_title")
-  seoDescription    String?        @map("seo_description")
-  createdAt         DateTime       @default(now()) @map("created_at")
-  updatedAt         DateTime       @updatedAt @map("updated_at")
+  descriptionAr     String?          @map("description_ar")
+  price             Float
+  compareAtPrice    Float?           @map("compare_at_price")
+  categoryId        String?          @map("category_id")
+  colors            String?
+  sizes             String?
+  printAreas        String?          @map("print_areas")
+  isActive          Boolean          @default(true) @map("is_active")
+  isFeatured        Boolean          @default(false) @map("is_featured")
+  allowCustomDesign Boolean          @default(false) @map("allow_custom_design")
+  sortOrder         Int              @default(0) @map("sort_order")
+  seoTitle          String?          @map("seo_title")
+  seoDescription    String?          @map("seo_description")
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+  customDesigns     CustomDesign[]
+  orderItems        OrderItem[]
   images            ProductImage[]
   variants          ProductVariant[]
-  orderItems        OrderItem[]
-  customDesigns     CustomDesign[]
+  category          Category?        @relation(fields: [categoryId], references: [id])
 
   @@index([slug])
   @@index([categoryId])
@@ -101,16 +89,16 @@ model Product {
 }
 
 model ProductVariant {
-  id        String   @id @default(cuid())
-  productId String   @map("product_id")
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  color     String   // e.g., "Black", "Red"
-  size      String   // e.g., "S", "M", "XL"
-  stock     Int      @default(0)
-  sku       String?  @unique
-  isActive  Boolean  @default(true) @map("is_active")
+  id        String  @id @default(cuid())
+  productId String  @map("product_id")
+  color     String
+  size      String
+  stock     Int     @default(0)
+  sku       String? @unique
+  isActive  Boolean @default(true) @map("is_active")
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  @@unique([productId, color, size]) // Prevent duplicate variants
+  @@unique([productId, color, size])
   @@index([productId])
   @@map("product_variants")
 }
@@ -118,9 +106,8 @@ model ProductVariant {
 model ProductImage {
   id        String   @id @default(cuid())
   productId String   @map("product_id")
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  url       String   // Full image URL
-  publicId  String?  @map("public_id") // Cloudinary public_id
+  url       String
+  publicId  String?  @map("public_id")
   altText   String?  @map("alt_text")
   altTextAr String?  @map("alt_text_ar")
   width     Int?
@@ -128,35 +115,32 @@ model ProductImage {
   isPrimary Boolean  @default(false) @map("is_primary")
   sortOrder Int      @default(0) @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([productId])
   @@index([isPrimary])
   @@map("product_images")
 }
 
-// ============================================
-// CUSTOMERS & ORDERS
-// ============================================
-
 model Customer {
-  id            String         @id @default(cuid())
-  name          String
-  email         String?        @unique
-  phone         String         @unique
-  passwordHash  String?        @map("password_hash") // Optional because existing users might not have it
-  role          String         @default("customer") // customer, admin
-  emailVerified DateTime?      @map("email_verified")
-  resetToken    String?        @unique @map("reset_token")
-  resetTokenExpiry DateTime?   @map("reset_token_expiry")
-  image         String?
-  address       String?
-  city          String         @default("عمّان")
-  totalOrders   Int            @default(0) @map("total_orders")
-  totalSpent    Float          @default(0) @map("total_spent")
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
-  orders        Order[]
-  customDesigns CustomDesign[]
+  id               String         @id @default(cuid())
+  name             String
+  email            String?        @unique
+  phone            String         @unique
+  passwordHash     String?        @map("password_hash")
+  role             String         @default("customer")
+  emailVerified    DateTime?      @map("email_verified")
+  image            String?
+  address          String?
+  city             String         @default("عمّان")
+  totalOrders      Int            @default(0) @map("total_orders")
+  totalSpent       Float          @default(0) @map("total_spent")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+  resetToken       String?        @unique @map("reset_token")
+  resetTokenExpiry DateTime?      @map("reset_token_expiry")
+  customDesigns    CustomDesign[]
+  orders           Order[]
 
   @@index([phone])
   @@index([email])
@@ -164,9 +148,8 @@ model Customer {
 }
 
 model Order {
-  id              String          @id // ORDER-20260122-001
+  id              String          @id
   customerId      String?         @map("customer_id")
-  customer        Customer?       @relation(fields: [customerId], references: [id])
   customerName    String          @map("customer_name")
   customerEmail   String?         @map("customer_email")
   customerPhone   String          @map("customer_phone")
@@ -174,22 +157,20 @@ model Order {
   customerCity    String          @default("عمّان") @map("customer_city")
   totalPrice      Float           @map("total_price")
   shippingCost    Float           @default(0) @map("shipping_cost")
-  status          String          @default("pending") // pending, confirmed, printing, ready, shipped, delivered, cancelled
+  status          String          @default("pending")
   paymentMethod   String          @default("cod") @map("payment_method")
   paymentStatus   String          @default("pending") @map("payment_status")
   notes           String?
   adminNotes      String?         @map("admin_notes")
   createdAt       DateTime        @default(now()) @map("created_at")
   updatedAt       DateTime        @updatedAt @map("updated_at")
-  
   couponId        String?         @map("coupon_id")
-  coupon          Coupon?         @relation(fields: [couponId], references: [id])
   discount        Float           @default(0)
-
   items           OrderItem[]
+  coupon          Coupon?         @relation(fields: [couponId], references: [id])
+  customer        Customer?       @relation(fields: [customerId], references: [id])
   statusHistory   StatusHistory[]
 
-// ... existing Code ...
   @@index([status])
   @@index([createdAt])
   @@map("orders")
@@ -198,7 +179,7 @@ model Order {
 model Coupon {
   id            String    @id @default(cuid())
   code          String    @unique
-  discountType  String    @default("percentage") // percentage, fixed
+  discountType  String    @default("percentage")
   discountValue Float     @map("discount_value")
   minOrderValue Float?    @default(0) @map("min_order_value")
   maxDiscount   Float?    @map("max_discount")
@@ -208,7 +189,6 @@ model Coupon {
   isActive      Boolean   @default(true) @map("is_active")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
-  
   orders        Order[]
 
   @@map("coupons")
@@ -217,20 +197,20 @@ model Coupon {
 model OrderItem {
   id             String        @id @default(cuid())
   orderId        String        @map("order_id")
-  order          Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId      String?       @map("product_id")
-  product        Product?      @relation(fields: [productId], references: [id])
   customDesignId String?       @map("custom_design_id")
-  customDesign   CustomDesign? @relation(fields: [customDesignId], references: [id])
   productType    String        @map("product_type")
   productName    String        @map("product_name")
-  designData     String?       @map("design_data") // JSON with design details (legacy)
+  designData     String?       @map("design_data")
   color          String?
   size           String?
   quantity       Int           @default(1)
   unitPrice      Float         @map("unit_price")
   subtotal       Float
   printFileUrl   String?       @map("print_file_url")
+  customDesign   CustomDesign? @relation(fields: [customDesignId], references: [id])
+  order          Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product        Product?      @relation(fields: [productId], references: [id])
 
   @@index([orderId])
   @@index([productId])
@@ -238,26 +218,22 @@ model OrderItem {
   @@map("order_items")
 }
 
-// ============================================
-// CUSTOM DESIGNS
-// ============================================
-
 model CustomDesign {
   id             String      @id @default(cuid())
-  productId      String?     @map("product_id") // Optional for custom-only designs
-  product        Product?    @relation(fields: [productId], references: [id])
-  sessionId      String?     @map("session_id") // For guest users
+  productId      String?     @map("product_id")
+  sessionId      String?     @map("session_id")
   customerId     String?     @map("customer_id")
-  customer       Customer?   @relation(fields: [customerId], references: [id])
-  designImageUrl String      @map("design_image_url") // User's uploaded design
-  designPublicId String?     @map("design_public_id") // Cloudinary ID
-  mockupImageUrl String?     @map("mockup_image_url") // Generated preview
-  mockupPublicId String?     @map("mockup_public_id") // Cloudinary ID for mockup
-  config         String      // JSON: position, scale, rotation, side
-  notes          String?     // User notes for admin
-  status         String      @default("draft") // draft, submitted, approved, rejected
+  designImageUrl String      @map("design_image_url")
+  designPublicId String?     @map("design_public_id")
+  mockupImageUrl String?     @map("mockup_image_url")
+  mockupPublicId String?     @map("mockup_public_id")
+  config         String
+  notes          String?
+  status         String      @default("draft")
   createdAt      DateTime    @default(now()) @map("created_at")
   updatedAt      DateTime    @updatedAt @map("updated_at")
+  customer       Customer?   @relation(fields: [customerId], references: [id])
+  product        Product?    @relation(fields: [productId], references: [id])
   orderItems     OrderItem[]
 
   @@index([productId])
@@ -270,37 +246,33 @@ model CustomDesign {
 model StatusHistory {
   id        String   @id @default(cuid())
   orderId   String   @map("order_id")
-  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   oldStatus String?  @map("old_status")
   newStatus String   @map("new_status")
   notes     String?
   changedBy String?  @map("changed_by")
   changedAt DateTime @default(now()) @map("changed_at")
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([orderId])
   @@map("status_history")
 }
 
-// ============================================
-// CMS / HOMEPAGE SECTIONS
-// ============================================
-
 model HomepageSection {
-  id          String   @id @default(cuid())
-  sectionKey  String   @unique @map("section_key") // hero, how_it_works, about, faq, etc.
-  title       String?
-  titleAr     String?  @map("title_ar")
-  subtitle    String?
-  subtitleAr  String?  @map("subtitle_ar")
-  content     String?  // JSON for complex content
-  contentAr   String?  @map("content_ar")
-  imageUrl    String?  @map("image_url")
-  ctaText     String?  @map("cta_text")
-  ctaTextAr   String?  @map("cta_text_ar")
-  ctaLink     String?  @map("cta_link")
-  isActive    Boolean  @default(true) @map("is_active")
-  sortOrder   Int      @default(0) @map("sort_order")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id         String   @id @default(cuid())
+  sectionKey String   @unique @map("section_key")
+  title      String?
+  titleAr    String?  @map("title_ar")
+  subtitle   String?
+  subtitleAr String?  @map("subtitle_ar")
+  content    String?
+  contentAr  String?  @map("content_ar")
+  imageUrl   String?  @map("image_url")
+  ctaText    String?  @map("cta_text")
+  ctaTextAr  String?  @map("cta_text_ar")
+  ctaLink    String?  @map("cta_link")
+  isActive   Boolean  @default(true) @map("is_active")
+  sortOrder  Int      @default(0) @map("sort_order")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
   @@index([sectionKey])
   @@map("homepage_sections")
@@ -312,7 +284,7 @@ model FAQ {
   questionAr String   @map("question_ar")
   answer     String
   answerAr   String   @map("answer_ar")
-  category   String?  // general, shipping, custom, payment
+  category   String?
   sortOrder  Int      @default(0) @map("sort_order")
   isActive   Boolean  @default(true) @map("is_active")
   createdAt  DateTime @default(now()) @map("created_at")
@@ -323,16 +295,12 @@ model FAQ {
   @@map("faqs")
 }
 
-// ============================================
-// SITE SETTINGS
-// ============================================
-
 model Setting {
   id        String   @id @default(cuid())
   key       String   @unique
   value     String
-  type      String   @default("string") // string, number, boolean, json
-  group     String   @default("general") // general, seo, contact, shipping
+  type      String   @default("string")
+  group     String   @default("general")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@index([key])
@@ -340,24 +308,20 @@ model Setting {
   @@map("settings")
 }
 
-// ============================================
-// MEDIA LIBRARY
-// ============================================
-
 model Media {
-  id          String   @id @default(cuid())
-  filename    String
-  url         String
-  publicId    String?  @map("public_id") // Cloudinary public_id
-  mimeType    String?  @map("mime_type")
-  size        Int?     // bytes
-  width       Int?
-  height      Int?
-  alt         String?
-  altAr       String?  @map("alt_ar")
-  folder      String?  // organization folder
-  uploadedBy  String?  @map("uploaded_by")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id         String   @id @default(cuid())
+  filename   String
+  url        String
+  publicId   String?  @map("public_id")
+  mimeType   String?  @map("mime_type")
+  size       Int?
+  width      Int?
+  height     Int?
+  alt        String?
+  altAr      String?  @map("alt_ar")
+  folder     String?
+  uploadedBy String?  @map("uploaded_by")
+  createdAt  DateTime @default(now()) @map("created_at")
 
   @@index([folder])
   @@index([createdAt])
