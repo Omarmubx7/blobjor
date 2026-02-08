@@ -60,6 +60,8 @@ export default function CustomDesignerPro() {
   const [selectedColor, setSelectedColor] = useState('black')
   const [selectedSize, setSelectedSize] = useState('M')
   const [activeTab, setActiveTab] = useState<'upload' | 'text' | 'layers'>('upload')
+  const [isBackView, setIsBackView] = useState(false)
+  const [designs, setDesigns] = useState<{ front: any; back: any }>({ front: null, back: null })
   const [sizeChartOpen, setSizeChartOpen] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const { addItem, setIsCartOpen } = useCart()
@@ -80,6 +82,9 @@ export default function CustomDesignerPro() {
   // Computed
   const currentProduct = PRODUCTS[productType]
   const currentColor = currentProduct.colors.find(c => c.id === selectedColor) || currentProduct.colors[0]
+  const currentImage = isBackView
+    ? (currentColor.image.replace('.png', '-back.png'))
+    : currentColor.image
   const printArea = currentProduct.printArea
 
   // --- Initialization ---
@@ -145,6 +150,25 @@ export default function CustomDesignerPro() {
       })
     }
   }, [printArea])
+
+  // Handle Side Switch - Load correct design
+  useEffect(() => {
+    if (!fabricRef.current) return
+
+    const targetDesign = isBackView ? designs.back : designs.front
+
+    if (targetDesign) {
+      fabricRef.current.loadFromJSON(targetDesign, () => {
+        fabricRef.current?.requestRenderAll()
+        // Re-attach event listeners if needed, or they persist? 
+        // Fabric instances persist, but loadFromJSON might need re-setup depending on version. 
+        // In v6, it usually works fine.
+      })
+    } else {
+      fabricRef.current.clear()
+    }
+
+  }, [isBackView])
 
 
   // --- Actions ---
@@ -261,7 +285,7 @@ export default function CustomDesignerPro() {
     // 1. Draw Product Background
     const productImg = new Image()
     productImg.crossOrigin = 'anonymous'
-    productImg.src = currentColor.image
+    productImg.src = currentImage
     await new Promise((resolve, reject) => {
       productImg.onload = resolve
       productImg.onerror = reject
@@ -438,7 +462,7 @@ export default function CustomDesignerPro() {
             position_y: 0,
             scale: 1,
             rotation: 0,
-            side: 'front',
+            side: isBackView ? 'back' : 'front',
             canvasJson: { objects: designJsonObjects, printArea },
             assetUrls: assetUrls
           },
@@ -696,7 +720,14 @@ export default function CustomDesignerPro() {
             >
               {/* Product Image Background */}
               <img
-                src={currentColor.image}
+                src={currentImage}
+                onError={(e) => {
+                  // Fallback if back image doesn't exist yet
+                  if (isBackView) {
+                    e.currentTarget.src = currentColor.image
+                    e.currentTarget.style.transform = "scaleX(-1)"
+                  }
+                }}
                 alt="Product"
                 className="absolute inset-0 w-full h-full object-contain z-0 pointer-events-none drop-shadow-2xl"
               />
@@ -724,6 +755,32 @@ export default function CustomDesignerPro() {
               <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-500 hover:text-white transition-colors"><ZoomOut size={18} /></button>
               <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-500 hover:text-white transition-colors"><Maximize2 size={18} /></button>
             </div>
+          </div>
+
+
+          {/* View Toggle (Front/Back) */}
+          <div className="absolute bottom-8 right-8 flex flex-col gap-2">
+            <button
+              onClick={() => {
+                if (!fabricRef.current) return
+                // Save current side
+                const json = fabricRef.current.toJSON()
+                setDesigns(prev => ({
+                  ...prev,
+                  [isBackView ? 'back' : 'front']: json
+                }))
+
+                // Switch side
+                setIsBackView(!isBackView)
+
+                // Clear canvas immediately to avoid flash of wrong design
+                fabricRef.current.clear()
+              }}
+              className="bg-white text-black px-6 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:bg-zinc-200 transition-all shadow-xl flex items-center gap-2"
+            >
+              <RotateCw size={16} />
+              {isBackView ? 'Show Front' : 'Show Back'}
+            </button>
           </div>
         </main>
 
@@ -818,7 +875,7 @@ export default function CustomDesignerPro() {
         productType={productType}
       />
 
-    </div>
+    </div >
   )
 }
 
