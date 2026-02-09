@@ -712,10 +712,11 @@ export default function CustomDesignerPro() {
           {/* Canvas Wrapper */}
           <div className="flex-1 flex items-center justify-center p-8 overflow-hidden relative">
             <div
-              className="relative shadow-2xl transition-all duration-500"
+              className="relative shadow-2xl transition-all duration-500 max-w-full"
               style={{
                 width: productType === 'hoodie' ? '400px' : '300px',
                 height: productType === 'hoodie' ? '480px' : '300px',
+                aspectRatio: productType === 'hoodie' ? '400/480' : '300/300'
               }}
             >
               {/* Product Image Background */}

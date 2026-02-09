@@ -5,7 +5,7 @@ import { Resend } from 'resend'
 import { getResetPasswordEmailTemplate } from '@/lib/mail-templates'
 // crypto removed
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Resend initialized in handler
 
 export async function POST(request: Request) {
     try {
@@ -37,6 +37,13 @@ export async function POST(request: Request) {
                 resetTokenExpiry
             }
         })
+
+        if (!process.env.RESEND_API_KEY) {
+            console.error('RESEND_API_KEY is not defined')
+            return NextResponse.json({ error: 'خطأ في إعدادات الخادم' }, { status: 500 })
+        }
+
+        const resend = new Resend(process.env.RESEND_API_KEY)
 
         // 4. Send Email
         await resend.emails.send({
