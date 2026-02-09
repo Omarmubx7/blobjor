@@ -42,7 +42,7 @@ const PRODUCTS = {
   mug: {
     id: 'mug',
     name: 'كوب',
-    price: 3,
+    price: 2,
     colors: [
       { id: 'white', hex: '#ffffff', name: 'أبيض', image: '/images/mug-white.png' },
       { id: 'black', hex: '#1a1a1a', name: 'أسود', image: '/images/mug-black.png' }

@@ -395,7 +395,7 @@ export default function CheckoutPage() {
                     </div>
                     {errors.governorate && <p className="mt-1 font-body text-xs text-destructive">{errors.governorate}</p>}
                     {/* Delivery Fee Info */}
-                    <p className="mt-1 font-body text-xs text-muted-foreground">رسوم التوصيل: 2 JD لجميع المحافظات</p>
+                    <p className="mt-1 font-body text-xs text-muted-foreground">التوصيل مجاني لجميع المحافظات</p>
                   </div>
 
                   {/* Area */}
