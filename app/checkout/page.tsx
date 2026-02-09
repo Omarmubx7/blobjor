@@ -80,7 +80,7 @@ export default function CheckoutPage() {
   }, [session])
 
   // Calculate delivery fee
-  const deliveryFee = 2
+  const deliveryFee = 0
 
   // Coupon State
   const [couponCode, setCouponCode] = useState("")
