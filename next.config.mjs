@@ -36,7 +36,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.usefathom.com https://va.vercel-scripts.com https://vitals.vercel-insights.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://res.cloudinary.com https://*.blobjor.me; font-src 'self'; connect-src 'self' https://vitals.vercel-insights.com https://*.blobjor.me https://res.cloudinary.com;"
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.usefathom.com https://va.vercel-scripts.com https://vitals.vercel-insights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://res.cloudinary.com https://*.blobjor.me; font-src 'self' https://r2cdn.perplexity.ai https://fonts.gstatic.com data: chrome-extension:; connect-src 'self' https://vitals.vercel-insights.com https://*.blobjor.me https://res.cloudinary.com data:;"
           }
         ],
       },
