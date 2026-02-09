@@ -342,16 +342,26 @@ export default function CustomDesignerPro() {
       folder: `blob-jo/${folder}`,
     }
 
-    const signResponse = await fetch('/api/cloudinary/sign', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ paramsToSign: signParams })
-    })
+    let signResponse;
+    try {
+      signResponse = await fetch('/api/cloudinary/sign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paramsToSign: signParams })
+      })
+    } catch (e: any) {
+      throw new Error(`Signing API Network Error: ${e.message}`)
+    }
+
+    if (!signResponse.ok) {
+      const errText = await signResponse.text()
+      throw new Error(`Signing API Failed (${signResponse.status}): ${errText}`)
+    }
 
     const { signature, apiKey, cloudName } = await signResponse.json()
 
     if (!signature || !apiKey || !cloudName) {
-      throw new Error('Failed to sign upload request or missing config')
+      throw new Error('Missing Cloudinary config from server')
     }
 
     // 2. Upload
@@ -364,13 +374,22 @@ export default function CustomDesignerPro() {
 
     const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`
 
-    const response = await fetch(uploadUrl, {
-      method: 'POST',
-      body: formData
-    })
+    let response;
+    try {
+      response = await fetch(uploadUrl, {
+        method: 'POST',
+        body: formData
+      })
+    } catch (e: any) {
+      throw new Error(`Cloudinary Upload Network Error: ${e.message}`)
+    }
+
+    if (!response.ok) {
+      const errData = await response.json()
+      throw new Error(`Cloudinary Upload Failed: ${errData.error?.message || response.statusText}`)
+    }
 
     const data = await response.json()
-    if (data.error) throw new Error(data.error.message)
     return data.secure_url
   }
 
@@ -381,6 +400,7 @@ export default function CustomDesignerPro() {
 
     try {
       // 1. Capture Images
+      console.log('Step 1: Capturing Images...')
       const previewDataUrl = await captureRealisticPreview()
       if (!previewDataUrl) throw new Error('Failed to generate preview')
       const previewBlob = await fetch(previewDataUrl).then(r => r.blob())
@@ -390,10 +410,12 @@ export default function CustomDesignerPro() {
       const printBlob = await fetch(printDataUrl).then(r => r.blob())
 
       // 2. Upload to Cloudinary (Client-Side)
+      console.log('Step 2: Uploading to Cloudinary...')
       const previewUrl = await uploadToCloudinary(previewBlob, 'designs/previews')
       const printUrl = await uploadToCloudinary(printBlob, 'designs/prints')
 
       // 3. Collect & Upload Original Images (Assets)
+      console.log('Step 3: Processing Assets...')
       const objects = fabricRef.current.getObjects()
       const designJsonObjects = []
       const assetUrls = []
@@ -409,10 +431,6 @@ export default function CustomDesignerPro() {
             const blob = await fetch(src).then(r => r.blob())
             const uploadedAssetUrl = await uploadToCloudinary(blob, 'designs/assets')
             assetUrls.push(uploadedAssetUrl)
-
-            // Update the object src to the cloud URL? 
-            // Better to keep local for now, but in DB we might want cloud URL.
-            // For now, we just track the uploaded asset URLs.
           } else if (src && src.startsWith('http')) {
             assetUrls.push(src)
           }
@@ -420,6 +438,7 @@ export default function CustomDesignerPro() {
       }
 
       // 4. Send Metadata to API
+      console.log('Step 4: Creating Order...')
       const formData = new FormData()
       formData.append('preview_url', previewUrl)
       formData.append('print_url', printUrl)
@@ -433,15 +452,20 @@ export default function CustomDesignerPro() {
         printArea
       }))
 
-      const response = await fetch('/api/orders/create-design', {
-        method: 'POST',
-        body: formData
-      })
+      let response;
+      try {
+        response = await fetch('/api/orders/create-design', {
+          method: 'POST',
+          body: formData
+        })
+      } catch (e: any) {
+        throw new Error(`Order API Network Error: ${e.message}`)
+      }
 
       const result = await response.json()
 
       if (!result.success) {
-        throw new Error(result.error || 'Unknown error')
+        throw new Error(result.error || 'Unknown error response from create-design')
       }
 
       // 5. Add to Cart
@@ -474,10 +498,11 @@ export default function CustomDesignerPro() {
       setIsCartOpen(true) // Open cart drawer
 
     } catch (error: any) {
-      console.error('Save failed:', error)
-      alert(`Error saving design: ${error.message}`)
+      console.error('Save failed details:', error)
+      alert(`${error.message}`)
     } finally {
       setIsProcessing(false)
+
     }
   }
 
