@@ -473,9 +473,9 @@ export default function CustomDesignerPro() {
 
       setIsCartOpen(true) // Open cart drawer
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Save failed:', error)
-      alert('حدث خطأ أثناء حفظ التصميم. يرجى المحاولة مرة أخرى.')
+      alert(`Error saving design: ${error.message}`)
     } finally {
       setIsProcessing(false)
     }
@@ -735,6 +735,258 @@ export default function CustomDesignerPro() {
     </div>
   )
 
+  // --- Desktop Render ---
+  const renderDesktopInterface = () => (
+    <div className="hidden lg:grid lg:grid-cols-[320px_1fr_320px] h-full">
+      {/* LEFT PANEL: TOOLS */}
+      <aside className="bg-black border-r border-zinc-800 flex flex-col z-20">
+        <div className="flex border-b border-zinc-800">
+          {[
+            { id: 'upload', label: 'UPLOAD' },
+            { id: 'text', label: 'TEXT' },
+            { id: 'layers', label: 'LAYERS' }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`flex-1 py-4 flex items-center justify-center relative transition-all ${activeTab === tab.id ? 'text-white bg-zinc-900' : 'text-zinc-500 hover:text-white hover:bg-zinc-900/50'
+                }`}
+            >
+              <span className="text-xs font-black tracking-widest">{tab.label}</span>
+              {activeTab === tab.id && (
+                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white" />
+              )}
+            </button>
+          ))}
+        </div>
+        {renderToolsContent()}
+      </aside>
+
+      {/* CENTER: CANVAS */}
+      <main className="relative bg-zinc-950 flex items-center justify-center p-10 perspective-1000 overflow-hidden">
+        {/* Toolbar - Floating */}
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-black border border-zinc-800 rounded-sm px-2 py-2 flex items-center gap-1 z-30 shadow-xl">
+          <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-400 hover:text-white transition-colors" onClick={handleClone} title="Clone">
+            <Copy size={16} />
+          </button>
+          <div className="w-px h-4 bg-zinc-800 mx-1" />
+          <button className="p-2 hover:bg-red-900/50 hover:text-red-500 rounded-sm text-zinc-400 transition-colors" onClick={handleDelete} title="Delete">
+            <Trash2 size={16} />
+          </button>
+        </div>
+
+        <div className="flex-1 flex items-center justify-center p-8 overflow-hidden relative w-full h-full">
+          <div
+            className="relative shadow-2xl transition-all duration-500"
+            style={{
+              width: productType === 'hoodie' ? '400px' : '300px',
+              height: productType === 'hoodie' ? '480px' : '300px',
+              aspectRatio: productType === 'hoodie' ? '400/480' : '300/300'
+            }}
+          >
+            <img
+              src={currentImage}
+              onError={(e) => {
+                if (isBackView) {
+                  e.currentTarget.src = currentColor.image
+                  e.currentTarget.style.transform = "scaleX(-1)"
+                }
+              }}
+              alt="Product"
+              className="absolute inset-0 w-full h-full object-contain z-0 pointer-events-none drop-shadow-2xl"
+            />
+            <div
+              className="absolute z-10 border border-dashed border-zinc-500/30 hover:border-white/50 transition-colors"
+              style={{
+                width: printArea.width,
+                height: printArea.height,
+                left: '50%',
+                top: '45%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              <canvas ref={canvasRef} />
+            </div>
+          </div>
+        </div>
+
+        {/* View Toggle */}
+        <div className="absolute bottom-8 right-8 flex flex-col gap-2 z-30">
+          <button
+            onClick={() => {
+              if (!fabricRef.current) return
+              const json = fabricRef.current.toJSON()
+              setDesigns(prev => ({
+                ...prev,
+                [isBackView ? 'back' : 'front']: json
+              }))
+              setIsBackView(!isBackView)
+              fabricRef.current.clear()
+            }}
+            className="bg-white text-black px-6 py-3 rounded-full font-black uppercase tracking-widest text-xs hover:bg-zinc-200 transition-all shadow-xl flex items-center gap-2"
+          >
+            <RotateCw size={16} />
+            <span>{isBackView ? 'Show Front' : 'Show Back'}</span>
+          </button>
+        </div>
+
+        {/* Zoom Controls */}
+        <div className="absolute bottom-8 left-8 flex flex-col gap-2">
+          <div className="bg-black border border-zinc-800 p-1 rounded-sm flex flex-col gap-1">
+            <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-500 hover:text-white transition-colors"><ZoomIn size={18} /></button>
+            <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-500 hover:text-white transition-colors"><ZoomOut size={18} /></button>
+            <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-500 hover:text-white transition-colors"><Maximize2 size={18} /></button>
+          </div>
+        </div>
+      </main>
+
+      {/* RIGHT PANEL: CONFIG */}
+      <aside className="bg-black border-l border-zinc-800 flex flex-col z-20">
+        <div className="p-6 border-b border-zinc-800">
+          <h2 className="text-white font-black text-lg uppercase tracking-tight">Configuration</h2>
+          <p className="text-zinc-500 text-xs mt-1">Select your product base</p>
+        </div>
+        {renderConfigContent()}
+      </aside>
+    </div>
+  )
+
+  // --- Mobile Render ---
+  const renderMobileInterface = () => (
+    <div className="flex lg:hidden flex-col h-full relative">
+      {/* Main Canvas Area */}
+      <main className="flex-1 relative bg-zinc-950 flex flex-col items-center justify-center p-4 pb-24 overflow-hidden">
+        {/* Toolbar - Floating Top */}
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur border border-zinc-800 rounded-full px-4 py-2 flex items-center gap-3 z-30 shadow-xl">
+          <button className="text-zinc-400 hover:text-white transition-colors" onClick={handleClone}>
+            <Copy size={18} />
+          </button>
+          <div className="w-px h-4 bg-zinc-700" />
+          <button className="text-zinc-400 hover:text-red-500 transition-colors" onClick={handleDelete}>
+            <Trash2 size={18} />
+          </button>
+        </div>
+
+        {/* Canvas Container */}
+        <div className="relative w-full max-w-[320px] aspect-[3/4] flex items-center justify-center">
+          <div
+            className="relative shadow-2xl transition-all duration-500"
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            {/* Product Image */}
+            <img
+              src={currentImage}
+              onError={(e) => {
+                if (isBackView) {
+                  e.currentTarget.src = currentColor.image
+                  e.currentTarget.style.transform = "scaleX(-1)"
+                }
+              }}
+              alt="Product"
+              className="absolute inset-0 w-full h-full object-contain z-0 pointer-events-none"
+            />
+
+            {/* Canvas Overlay - Needs to be responsive/scaled for mobile */}
+            {/* Note: In a real mobile implementation, we'd need to scale the canvas CSS or Fabric canvas dimensions */}
+            {/* For now, relying on the same canvas ref but centered */}
+            <div
+              className="absolute z-10 border border-dashed border-zinc-500/30"
+              style={{
+                width: printArea.width,
+                height: printArea.height,
+                left: '50%',
+                top: '45%',
+                transform: 'translate(-50%, -50%) scale(0.7)', // Scale down for mobile view
+                transformOrigin: 'center center'
+              }}
+            >
+              <canvas ref={canvasRef} />
+            </div>
+          </div>
+        </div>
+
+        {/* View Toggle - Bottom Right Floating */}
+        <button
+          onClick={() => {
+            if (!fabricRef.current) return
+            const json = fabricRef.current.toJSON()
+            setDesigns(prev => ({
+              ...prev,
+              [isBackView ? 'back' : 'front']: json
+            }))
+            setIsBackView(!isBackView)
+            fabricRef.current.clear()
+          }}
+          className="absolute bottom-24 right-4 bg-white/90 backdrop-blur text-black w-12 h-12 rounded-full flex items-center justify-center shadow-lg z-30"
+        >
+          <RotateCw size={20} />
+        </button>
+      </main>
+
+      {/* Bottom Navigation */}
+      <div className="bg-black border-t border-zinc-900 z-50 flex justify-around items-end h-20 pb-4 shrink-0">
+        <button
+          onClick={() => { setActiveTab('upload'); setMobileDrawerOpen('tools') }}
+          className={`flex flex-col items-center gap-1 p-2 ${mobileDrawerOpen === 'tools' && activeTab === 'upload' ? 'text-white' : 'text-zinc-500'}`}
+        >
+          <Upload size={24} />
+          <span className="text-[10px] font-bold uppercase">Upload</span>
+        </button>
+        <button
+          onClick={() => { setActiveTab('text'); setMobileDrawerOpen('tools') }}
+          className={`flex flex-col items-center gap-1 p-2 ${mobileDrawerOpen === 'tools' && activeTab === 'text' ? 'text-white' : 'text-zinc-500'}`}
+        >
+          <Type size={24} />
+          <span className="text-[10px] font-bold uppercase">Text</span>
+        </button>
+        <button
+          onClick={() => setMobileDrawerOpen('config')}
+          className={`flex flex-col items-center gap-1 p-2 -mt-8`}
+        >
+          <div className={`w-14 h-14 rounded-full flex items-center justify-center border-4 border-black ${mobileDrawerOpen === 'config' ? 'bg-white text-black' : 'bg-zinc-800 text-zinc-400'}`}>
+            <div className="w-5 h-5 rounded-full" style={{ backgroundColor: currentColor.hex, border: currentColor.id === 'white' ? '1px solid #ccc' : 'none' }} />
+          </div>
+          <span className="text-[10px] font-bold uppercase text-zinc-400">Props</span>
+        </button>
+        <button
+          onClick={() => { setActiveTab('layers'); setMobileDrawerOpen('tools') }}
+          className={`flex flex-col items-center gap-1 p-2 ${mobileDrawerOpen === 'tools' && activeTab === 'layers' ? 'text-white' : 'text-zinc-500'}`}
+        >
+          <Layers size={24} />
+          <span className="text-[10px] font-bold uppercase">Layers</span>
+        </button>
+      </div>
+
+      {/* Drawers */}
+      {mobileDrawerOpen !== 'none' && (
+        <div className="absolute inset-0 z-40 bg-black/80 backdrop-blur-sm animate-fade-in" onClick={() => setMobileDrawerOpen('none')}>
+          <div
+            className="absolute bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-800 rounded-t-2xl max-h-[70vh] flex flex-col animate-slide-in-up"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="w-full flex justify-center pt-3 pb-1">
+              <div className="w-12 h-1.5 bg-zinc-700 rounded-full" />
+            </div>
+
+            <div className="px-6 py-4 border-b border-zinc-800 flex justify-between items-center">
+              <h2 className="font-black uppercase tracking-widest text-sm">
+                {mobileDrawerOpen === 'config' ? 'Configuration' : activeTab}
+              </h2>
+              <button onClick={() => setMobileDrawerOpen('none')}><X size={20} className="text-zinc-500" /></button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto">
+              {mobileDrawerOpen === 'config' ? renderConfigContent() : renderToolsContent()}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+
   return (
     <div className="h-[calc(100vh-80px)] lg:h-screen flex flex-col bg-black text-white font-sans selection:bg-white selection:text-black">
 
@@ -777,172 +1029,9 @@ export default function CustomDesignerPro() {
       </div>
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex-1 overflow-hidden flex flex-col lg:grid lg:grid-cols-[320px_1fr_320px] relative">
-
-        {/* DESKTOP LEFT: TOOLS */}
-        <aside className="hidden lg:flex bg-black border-r border-zinc-800 flex-col z-20">
-          <div className="flex border-b border-zinc-800">
-            {[
-              { id: 'upload', label: 'UPLOAD' },
-              { id: 'text', label: 'TEXT' },
-              { id: 'layers', label: 'LAYERS' }
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex-1 py-4 flex items-center justify-center relative transition-all ${activeTab === tab.id ? 'text-white bg-zinc-900' : 'text-zinc-500 hover:text-white hover:bg-zinc-900/50'
-                  }`}
-              >
-                <span className="text-xs font-black tracking-widest">{tab.label}</span>
-                {activeTab === tab.id && (
-                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white" />
-                )}
-              </button>
-            ))}
-          </div>
-          {renderToolsContent()}
-        </aside>
-
-        {/* CENTER: CANVAS */}
-        <main className="relative bg-zinc-950 flex items-center justify-center p-4 lg:p-10 perspective-1000 overflow-hidden flex-1 order-1">
-          {/* Toolbar - Floating */}
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-black border border-zinc-800 rounded-sm px-2 py-2 flex items-center gap-1 z-30 shadow-xl">
-            <button className="p-2 hover:bg-zinc-900 rounded-sm text-zinc-400 hover:text-white transition-colors" onClick={handleClone} title="Clone">
-              <Copy size={16} />
-            </button>
-            <div className="w-px h-4 bg-zinc-800 mx-1" />
-            <button className="p-2 hover:bg-red-900/50 hover:text-red-500 rounded-sm text-zinc-400 transition-colors" onClick={handleDelete} title="Delete">
-              <Trash2 size={16} />
-            </button>
-          </div>
-
-          <div className="flex-1 flex items-center justify-center p-4 pb-20 lg:p-8 lg:pb-8 overflow-hidden relative w-full">
-            <div
-              className="relative shadow-2xl transition-all duration-500 max-w-full"
-              style={{
-                width: productType === 'hoodie' ? '400px' : '300px',
-                height: productType === 'hoodie' ? '480px' : '300px',
-                aspectRatio: productType === 'hoodie' ? '400/480' : '300/300'
-              }}
-            >
-              <img
-                src={currentImage}
-                onError={(e) => {
-                  if (isBackView) {
-                    e.currentTarget.src = currentColor.image
-                    e.currentTarget.style.transform = "scaleX(-1)"
-                  }
-                }}
-                alt="Product"
-                className="absolute inset-0 w-full h-full object-contain z-0 pointer-events-none drop-shadow-2xl"
-              />
-              <div
-                className="absolute z-10 border border-dashed border-zinc-500/30 hover:border-white/50 transition-colors"
-                style={{
-                  width: printArea.width,
-                  height: printArea.height,
-                  left: '50%',
-                  top: '45%',
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-                <canvas ref={canvasRef} />
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile View Toggle & Zoom */}
-          <div className="absolute bottom-24 lg:bottom-8 right-4 lg:right-8 flex flex-col gap-2 z-30">
-            <button
-              onClick={() => {
-                if (!fabricRef.current) return
-                const json = fabricRef.current.toJSON()
-                setDesigns(prev => ({
-                  ...prev,
-                  [isBackView ? 'back' : 'front']: json
-                }))
-                setIsBackView(!isBackView)
-                fabricRef.current.clear()
-              }}
-              className="bg-white/90 backdrop-blur text-black w-12 h-12 rounded-full flex items-center justify-center shadow-lg lg:w-auto lg:h-auto lg:px-6 lg:py-3 lg:rounded-full lg:font-black lg:uppercase lg:tracking-widest lg:text-xs hover:bg-white transition-all"
-            >
-              <RotateCw size={20} className="lg:mr-2" />
-              <span className="hidden lg:inline">{isBackView ? 'Show Front' : 'Show Back'}</span>
-            </button>
-          </div>
-        </main>
-
-        {/* DESKTOP RIGHT: CONFIG */}
-        <aside className="hidden lg:flex bg-black border-l border-zinc-800 flex-col z-20">
-          <div className="p-6 border-b border-zinc-800">
-            <h2 className="text-white font-black text-lg uppercase tracking-tight">Configuration</h2>
-            <p className="text-zinc-500 text-xs mt-1">Select your product base</p>
-          </div>
-          {renderConfigContent()}
-        </aside>
-
-        {/* MOBILE BOTTOM NAV */}
-        <div className="lg:hidden absolute bottom-0 left-0 right-0 bg-black border-t border-zinc-900 z-50 flex justify-around items-end h-20 pb-4">
-          <button
-            onClick={() => { setActiveTab('upload'); setMobileDrawerOpen('tools') }}
-            className={`flex flex-col items-center gap-1 p-2 ${mobileDrawerOpen === 'tools' && activeTab === 'upload' ? 'text-white' : 'text-zinc-500'}`}
-          >
-            <Upload size={24} />
-            <span className="text-[10px] font-bold uppercase">Upload</span>
-          </button>
-          <button
-            onClick={() => { setActiveTab('text'); setMobileDrawerOpen('tools') }}
-            className={`flex flex-col items-center gap-1 p-2 ${mobileDrawerOpen === 'tools' && activeTab === 'text' ? 'text-white' : 'text-zinc-500'}`}
-          >
-            <Type size={24} />
-            <span className="text-[10px] font-bold uppercase">Text</span>
-          </button>
-          <button
-            onClick={() => setMobileDrawerOpen('config')}
-            className={`flex flex-col items-center gap-1 p-2 -mt-8`}
-          >
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center border-4 border-black ${mobileDrawerOpen === 'config' ? 'bg-white text-black' : 'bg-zinc-800 text-zinc-400'}`}>
-              <div className="w-5 h-5 rounded-full" style={{ backgroundColor: currentColor.hex, border: currentColor.id === 'white' ? '1px solid #ccc' : 'none' }} />
-            </div>
-            <span className="text-[10px] font-bold uppercase text-zinc-400">Props</span>
-          </button>
-          <button
-            onClick={() => { setActiveTab('layers'); setMobileDrawerOpen('tools') }}
-            className={`flex flex-col items-center gap-1 p-2 ${mobileDrawerOpen === 'tools' && activeTab === 'layers' ? 'text-white' : 'text-zinc-500'}`}
-          >
-            <Layers size={24} />
-            <span className="text-[10px] font-bold uppercase">Layers</span>
-          </button>
-        </div>
-
-        {/* MOBILE DRAWER */}
-        {mobileDrawerOpen !== 'none' && (
-          <div className="lg:hidden absolute inset-0 z-40 bg-black/80 backdrop-blur-sm" onClick={() => setMobileDrawerOpen('none')}>
-            <div
-              className="absolute bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-800 rounded-t-2xl max-h-[70vh] flex flex-col animate-slide-in-up"
-              onClick={e => e.stopPropagation()}
-            >
-              {/* Drawer Handle */}
-              <div className="w-full flex justify-center pt-3 pb-1">
-                <div className="w-12 h-1.5 bg-zinc-700 rounded-full" />
-              </div>
-
-              {/* Drawer Header */}
-              <div className="px-6 py-4 border-b border-zinc-800 flex justify-between items-center">
-                <h2 className="font-black uppercase tracking-widest text-sm">
-                  {mobileDrawerOpen === 'config' ? 'Configuration' : activeTab}
-                </h2>
-                <button onClick={() => setMobileDrawerOpen('none')}><X size={20} className="text-zinc-500" /></button>
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 overflow-y-auto">
-                {mobileDrawerOpen === 'config' ? renderConfigContent() : renderToolsContent()}
-              </div>
-            </div>
-          </div>
-        )}
-
+      <div className="flex-1 overflow-hidden relative">
+        {renderDesktopInterface()}
+        {renderMobileInterface()}
       </div>
 
       <SizeChartModal
