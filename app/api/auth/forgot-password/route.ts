@@ -1,35 +1,58 @@
-
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { Resend } from 'resend'
 import { getResetPasswordEmailTemplate } from '@/lib/mail-templates'
-// crypto removed
+import { rateLimit } from '@/lib/limit'
+import { z } from 'zod'
+import crypto from 'crypto'
 
-// Resend initialized in handler
+// Schema for input validation
+const forgotPasswordSchema = z.object({
+    email: z.string().email('صيغة البريد الإلكتروني غير صحيحة').transform(e => e.toLowerCase()),
+})
 
 export async function POST(request: Request) {
     try {
-        const { email } = await request.json()
-
-        if (!email) {
-            return NextResponse.json({ error: 'البريد الإلكتروني مطلوب' }, { status: 400 })
+        // 1. DDoS Prevention: Rate Limiting
+        const isAllowed = await rateLimit(3, 60 * 60 * 1000) // 3 requests per hour per IP
+        if (!isAllowed) {
+            return NextResponse.json(
+                { error: 'تم تجاوز الحد المسموح به من المحاولات. يرجى المحاولة لاحقاً.' },
+                { status: 429 }
+            )
         }
 
-        // 1. Find user
+        const body = await request.json()
+
+        // 2. Input Validation
+        const result = forgotPasswordSchema.safeParse(body)
+        if (!result.success) {
+            return NextResponse.json(
+                { error: result.error.errors[0].message },
+                { status: 400 }
+            )
+        }
+
+        const { email } = result.data
+
+        // 3. Find user
         const customer = await prisma.customer.findUnique({
-            where: { email: email.toLowerCase() }
+            where: { email }
         })
 
+        // Timing attack mitigation: Simulate work if user not found (basic)
         if (!customer) {
-            // Security: Don't reveal if email exists
+            // Wait for a random time between 100-300ms to mimic DB write
+            await new Promise(resolve => setTimeout(resolve, 100 + Math.random() * 200))
             return NextResponse.json({ success: true, message: 'إذا كان البريد الإلكتروني مسجلاً، فسيتم إرسال رابط إعادة التعيين.' })
         }
 
-        // 2. Generate OTP (6 digits)
-        const otp = Math.floor(100000 + Math.random() * 900000).toString()
+        // 4. Secure OTP Generation
+        // Generate a cryptographically strong 6-digit OTP
+        const otp = crypto.randomInt(100000, 1000000).toString()
         const resetTokenExpiry = new Date(Date.now() + 3600000) // 1 hour
 
-        // 3. Save to DB (using resetToken field to store OTP)
+        // 5. Save to DB
         await prisma.customer.update({
             where: { id: customer.id },
             data: {
@@ -45,7 +68,7 @@ export async function POST(request: Request) {
 
         const resend = new Resend(process.env.RESEND_API_KEY)
 
-        // 4. Send Email
+        // 6. Send Email
         await resend.emails.send({
             from: 'blobjor.me <info@blobjor.me>',
             to: customer.email!,

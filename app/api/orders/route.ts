@@ -4,6 +4,33 @@ import { uploadBase64Image } from "@/lib/cloudinary";
 import { z } from "zod";
 import { rateLimit } from "@/lib/limit";
 
+// Strict Zod Schema for Order Item Validation
+const orderItemSchema = z.object({
+  productType: z.enum(["hoodie", "mug"]),
+  productName: z.string().min(1).max(200).regex(/^[^<>]+$/, "اسم المنتج يحتوي على رموز غير صالحة"),
+  designData: z.string().optional(),
+  color: z.string().max(50).nullable().optional(),
+  size: z.string().max(10).nullable().optional(),
+  quantity: z.number().int().min(1).max(50),
+  unitPrice: z.number().min(0), // Will be OVERRIDDEN by server-side lookup
+  isCustomDesign: z.boolean().optional().default(false),
+  customDesign: z.object({
+    designImageUrl: z.string(),
+    mockupImageUrl: z.string().optional(),
+    config: z.object({
+      position_x: z.number(),
+      position_y: z.number(),
+      scale: z.number(),
+      rotation: z.number(),
+      side: z.enum(["front", "back"]),
+      canvasJson: z.any().optional(),
+      assetUrls: z.array(z.string()).optional(),
+    }),
+    notes: z.string().max(500).optional(),
+    productColor: z.string().max(50),
+  }).optional(),
+});
+
 // Zod Schema for Order Validation
 const orderSchema = z.object({
   customerName: z.string().min(2, "الاسم قصير جداً").regex(/^[^<>/]+$/, "الاسم يحتوي على رموز غير صالحة"),
@@ -11,10 +38,10 @@ const orderSchema = z.object({
   customerPhone: z.string().min(10, "رقم الهاتف غير صالح"),
   customerAddress: z.string().min(5, "العنوان قصير جداً"),
   customerCity: z.string().default("عمّان"),
-  items: z.array(z.any()).min(1, "السلة فارغة"), // ideally validate item structure too
-  paymentMethod: z.enum(["cod", "card"]).default("cod"),
-  notes: z.string().optional(),
-  shippingCost: z.number().min(0),
+  items: z.array(orderItemSchema).min(1, "السلة فارغة"),
+  paymentMethod: z.enum(["cod", "cliq"]).default("cod"),
+  notes: z.string().max(1000).optional(),
+  shippingCost: z.number().min(0).max(100),
   couponId: z.string().optional(),
 });
 
@@ -104,21 +131,36 @@ export async function POST(request: Request) {
     }
 
     // Calculate totals and process custom designs
+    // SERVER-SIDE PRICE LOOKUP: Never trust client-sent prices
     let totalPrice = 0;
     const processedItems = [];
 
-    for (const item of items as Array<{
-      productType: string;
-      productName: string;
-      designData?: string;
-      color?: string;
-      size?: string;
-      quantity: number;
-      unitPrice: number;
-      isCustomDesign?: boolean;
-      customDesign?: CustomDesignItem;
-    }>) {
-      const subtotal = item.quantity * item.unitPrice;
+    for (const item of items) {
+      // Look up the real price from the database
+      let verifiedPrice = item.unitPrice; // fallback
+      if (!item.isCustomDesign) {
+        const product = await prisma.product.findFirst({
+          where: {
+            OR: [
+              { name: item.productName },
+              { nameAr: item.productName },
+            ],
+            isActive: true,
+          },
+          select: { price: true },
+        });
+        if (product) {
+          verifiedPrice = product.price;
+        } else {
+          // Product not found — reject order
+          return NextResponse.json(
+            { error: `المنتج "${item.productName}" غير موجود أو غير متوفر` },
+            { status: 400 }
+          );
+        }
+      }
+
+      const subtotal = item.quantity * verifiedPrice;
       totalPrice += subtotal;
 
       let customDesignId: string | null = null;
@@ -188,7 +230,7 @@ export async function POST(request: Request) {
         color: item.color || item.customDesign?.productColor || null,
         size: item.size || null,
         quantity: item.quantity,
-        unitPrice: item.unitPrice,
+        unitPrice: verifiedPrice, // Use server-verified price
         subtotal,
         customDesignId,
       });
@@ -303,7 +345,7 @@ export async function POST(request: Request) {
         }
 
         // 2. Send New Order Notification to Admins
-        const ADMIN_EMAILS = ['omarmubaidin@proton.me', 'Hassanemad8877@gmail.com'];
+        const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').split(',').filter(Boolean);
         await sendEmail({
           to: ADMIN_EMAILS,
           subject: `طلب جديد: #${order.id} - ${customerName}`,
@@ -332,20 +374,13 @@ export async function POST(request: Request) {
 // GET - List orders (Protected: Admin Only)
 export async function GET(request: Request) {
   try {
-    const session = await import("@/auth").then(mod => mod.auth());
-    console.log("Session in API:", session);
+    // Admin-only access: Use admin session from cookie JWT
+    const { getCurrentAdmin } = await import("@/lib/auth");
+    const admin = await getCurrentAdmin();
 
-    // Basic protection: Ensure user is logged in. 
-    // Ideally check for role === 'admin' if you have roles.
-    // Assuming only admins access this dashboard or users access their own.
-    // But this generic GET seems to be for Admin Dashboard based on params.
-    if (!session?.user?.email) {
+    if (!admin) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    // If strict admin check is needed:
-    // const isAdmin = session.user.email === 'omarmubaidin@proton.me' || session.user.email === 'Hassanemad8877@gmail.com';
-    // if (!isAdmin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");

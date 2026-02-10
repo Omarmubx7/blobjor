@@ -1,9 +1,19 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
+import { rateLimit } from "@/lib/limit"
 
 export async function POST(req: NextRequest) {
     try {
+        // Rate limiting: 10 attempts per 15 minutes per IP
+        const isAllowed = await rateLimit(10, 15 * 60 * 1000)
+        if (!isAllowed) {
+            return NextResponse.json(
+                { valid: false, message: "تم تجاوز الحد المسموح به من المحاولات. يرجى المحاولة لاحقاً." },
+                { status: 429 }
+            )
+        }
+
         const body = await req.json()
         const { code, totalAmount } = body
 
